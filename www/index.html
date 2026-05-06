@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Mathe-Champion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #7C3AED;
+            --primary-light: #A78BFA;
+            --primary-dark: #5B21B6;
+            --accent: #F59E0B;
+            --accent-light: #FCD34D;
+            --background: #FFFBF0;
+            --success: #16A34A;
+            --success-light: #22C55E;
+            --error: #DC2626;
+            --error-light: #EF4444;
+            --text: #1F2937;
+            --text-light: #6B7280;
+            --card-bg: #FFFFFF;
+            --scratch-bg: #FFFEF7;
+            --scratch-line: #E5E7EB;
+            --stroke-color: #1e3a5f;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            font-size: 18px;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+
+        .header .countdown {
+            margin-top: 12px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        /* Topic Grid */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+            flex: 1;
+        }
+
+        .topic-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .topic-card:hover, .topic-card:active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.2);
+            border-color: var(--primary-light);
+        }
+
+        .topic-card .topic-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .topic-card .topic-lang {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .topic-card .stars {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .star-empty {
+            opacity: 0.3;
+        }
+
+        /* Exam Button */
+        .exam-button {
+            background: linear-gradient(135deg, var(--accent), #D97706);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+            font-family: 'Nunito', sans-serif;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .exam-button:hover, .exam-button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--scratch-line);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Question Area */
+        .question-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .hint-button {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--accent-light);
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .hint-button:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .question-text {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            line-height: 1.4;
+            padding-right: 60px;
+        }
+
+        .question-text .keyword {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        /* Column Layout for Addition/Subtraction */
+        .column-layout {
+            font-family: 'Courier New', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: right;
+            background: var(--scratch-bg);
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 200px;
+            line-height: 1.6;
+        }
+
+        .column-layout .operator {
+            float: left;
+        }
+
+        .column-layout .separator {
+            border-top: 3px solid var(--text);
+            margin-top: 8px;
+            padding-top: 8px;
+        }
+
+        /* Hint Panel */
+        .hint-panel {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .hint-panel.visible {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .hint-title {
+            font-weight: 700;
+            color: #92400E;
+            margin-bottom: 8px;
+        }
+
+        .hint-content {
+            color: #78350F;
+            font-size: 16px;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scratch Pad */
+        .scratch-pad {
+            margin: 20px 0;
+        }
+
+        .scratch-pad-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .scratch-pad-title {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .scratch-clear {
+            background: var(--error-light);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+        }
+
+        .scratch-canvas {
+            width: 100%;
+            height: 180px;
+            background: var(--scratch-bg);
+            border-radius: 12px;
+            border: 2px solid var(--scratch-line);
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        /* Numpad */
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .numpad-key {
+            background: var(--card-bg);
+            border: 2px solid var(--scratch-line);
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 64px;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .numpad-key:hover, .numpad-key:active {
+            background: var(--primary-light);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .numpad-key.backspace {
+            background: var(--error-light);
+            color: white;
+            border-color: var(--error);
+        }
+
+        .numpad-key.confirm {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .numpad-key.confirm:hover {
+            background: var(--success-light);
+        }
+
+        .answer-display {
+            background: var(--card-bg);
+            border: 3px solid var(--primary);
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-display.shake {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        /* Multiple Choice */
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .choice-button {
+            background: var(--card-bg);
+            border: 3px solid var(--scratch-line);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 80px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .choice-button:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .choice-button.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .choice-button.correct {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .choice-button.incorrect {
+            border-color: var(--error);
+            background: var(--error);
+            color: white;
+        }
+
+        /* Yes/No Buttons */
+        .yesno-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .yesno-button {
+            padding: 24px;
+            min-height: 100px;
+            font-size: 28px;
+            font-weight: 800;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .yesno-button.yes {
+            background: var(--success);
+            color: white;
+        }
+
+        .yesno-button.no {
+            background: var(--error);
+            color: white;
+        }
+
+        .yesno-button:hover {
+            transform: scale(1.02);
+        }
+
+        /* Multi-select */
+        .multiselect-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .multiselect-tile {
+            background: var(--card-bg);
+            border: 3px solid var(--scratch-line);
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 64px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .multiselect-tile.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .confirm-button {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .confirm-button:hover {
+            background: var(--success-light);
+        }
+
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: 700;
+            font-size: 20px;
+            display: none;
+        }
+
+        .feedback.visible {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+            color: #065F46;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #FEE2E2, #FECACA);
+            color: #991B1B;
+        }
+
+        /* Explanation Panel */
+        .explanation-panel {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .explanation-panel.visible {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .explanation-content {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .next-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .next-button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Star Burst Animation */
+        .star-burst {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .burst-star {
+            position: absolute;
+            font-size: 32px;
+            animation: burstOut 0.8s ease-out forwards;
+        }
+
+        @keyframes burstOut {
+            0% { transform: translate(0, 0) scale(0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: confettiFall 2s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* End Screen */
+        .end-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .end-screen h2 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .end-stars {
+            font-size: 48px;
+            margin: 20px 0;
+            letter-spacing: 8px;
+        }
+
+        .end-score {
+            font-size: 24px;
+            margin: 20px 0;
+            color: var(--text);
+        }
+
+        .end-message {
+            font-size: 20px;
+            color: var(--text-light);
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            border-radius: 12px;
+        }
+
+        .end-message.special {
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+            color: #065F46;
+            font-weight: 700;
+        }
+
+        .home-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .home-button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Back Button */
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Hide screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--scratch-line);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Home Screen -->
+        <div id="home-screen" class="screen active">
+            <div class="header">
+                <h1>Mathe-Champion</h1>
+                <p class="subtitle">Dein Weg zur 1!</p>
+                <div class="countdown" id="countdown"></div>
+            </div>
+            <div class="topic-grid" id="topic-grid"></div>
+            <button class="exam-button" onclick="startExamMode()">
+                Prüfungs-Modus starten 🎯
+            </button>
+        </div>
+
+        <!-- Practice Screen -->
+        <div id="practice-screen" class="screen">
+            <button class="back-button" onclick="goHome()">← Zurück</button>
+            <div class="progress-container">
+                <div class="progress-text" id="progress-text">Aufgabe 1 von 10</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 10%"></div>
+                </div>
+            </div>
+            <div class="question-container">
+                <button class="hint-button" id="hint-button" onclick="showHint()">Tipp 💡</button>
+                <div class="question-text" id="question-text"></div>
+                <div class="column-layout" id="column-layout" style="display: none;"></div>
+            </div>
+            <div class="hint-panel" id="hint-panel">
+                <div class="hint-title" id="hint-title"></div>
+                <div class="hint-content" id="hint-content"></div>
+            </div>
+            <div class="scratch-pad" id="scratch-pad" style="display: none;">
+                <div class="scratch-pad-header">
+                    <span class="scratch-pad-title">Rechenfläche (S-Pen)</span>
+                    <button class="scratch-clear" onclick="clearScratchPad()">Löschen 🗑</button>
+                </div>
+                <canvas id="scratch-canvas" class="scratch-canvas"></canvas>
+            </div>
+            <div id="input-area"></div>
+            <div class="feedback" id="feedback"></div>
+            <div class="explanation-panel" id="explanation-panel">
+                <div class="explanation-title">Lösung:</div>
+                <div class="explanation-content" id="explanation-content"></div>
+                <button class="next-button" onclick="nextQuestion()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen">
+            <div class="end-screen">
+                <h2 id="end-title"></h2>
+                <div class="end-stars" id="end-stars"></div>
+                <div class="end-score" id="end-score"></div>
+                <div class="end-message" id="end-message"></div>
+                <button class="home-button" onclick="goHome()">Zurück zum Start</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="star-burst" id="star-burst"></div>
+    <div class="confetti-container" id="confetti-container"></div>
+
+    <script>
+        // Capacitor Preferences wrapper with localStorage fallback
+        const Storage = {
+            async get(key) {
+                try {
+                    // Check if Capacitor Preferences plugin is available
+                    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Preferences) {
+                        const result = await window.Capacitor.Plugins.Preferences.get({ key });
+                        return result.value;
+                    }
+                } catch (e) {
+                    console.log('Capacitor Preferences not available, using localStorage');
+                }
+                return localStorage.getItem(key);
+            },
+            async set(key, value) {
+                try {
+                    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Preferences) {
+                        await window.Capacitor.Plugins.Preferences.set({ key, value });
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Capacitor Preferences not available, using localStorage');
+                }
+                localStorage.setItem(key, value);
+            }
+        };
+
+        // Make Storage globally available
+        window.Storage = Storage;
+
+        // Initialize app when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+        });
+    </script>
+
+    <script>
+        // ====== APP STATE ======
+        const state = {
+            currentScreen: 'home',
+            currentTopic: null,
+            isExamMode: false,
+            questions: [],
+            currentQuestionIndex: 0,
+            correctAnswers: 0,
+            attempts: 0,
+            hintLevel: 0,
+            usedHints: 0,
+            topicStars: {},
+            usedQuestions: new Set()
+        };
+
+        // ====== TOPICS DEFINITION ======
+        const topics = [
+            { id: 'vielfache', name: 'Vielfache', lang: 'de', questionsPerSession: 10 },
+            { id: 'teiler', name: 'Teiler', lang: 'de', questionsPerSession: 10 },
+            { id: 'teilbarkeit', name: 'Teilbarkeitsregeln', lang: 'de', questionsPerSession: 10 },
+            { id: 'halbmult', name: 'Halbschriftliche Multiplikation', lang: 'de', questionsPerSession: 10, hasScratchPad: true },
+            { id: 'halbdiv', name: 'Halbschriftliche Division', lang: 'de', questionsPerSession: 10, hasScratchPad: true },
+            { id: 'nearestten', name: 'Nearest Ten Strategy', lang: 'en', questionsPerSession: 10, hasScratchPad: true },
+            { id: 'nearesthundred', name: 'Nearest Hundred Strategy', lang: 'en', questionsPerSession: 10, hasScratchPad: true },
+            { id: 'columnadd', name: 'Column Addition', lang: 'en', questionsPerSession: 10, hasScratchPad: true, hasHTOGrid: true },
+            { id: 'columnsub', name: 'Column Subtraction', lang: 'en', questionsPerSession: 10, hasScratchPad: true, hasHTOGrid: true },
+            { id: 'vocabulary', name: 'Math Vocabulary', lang: 'en', questionsPerSession: 10 }
+        ];
+
+        // ====== INITIALIZATION ======
+        async function initApp() {
+            await loadProgress();
+            renderTopicGrid();
+            updateCountdown();
+            setInterval(updateCountdown, 60000);
+        }
+
+        window.initApp = initApp;
+
+        async function loadProgress() {
+            try {
+                const saved = await window.Storage.get('topicStars');
+                if (saved) {
+                    state.topicStars = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.log('No saved progress');
+            }
+        }
+
+        async function saveProgress() {
+            try {
+                await window.Storage.set('topicStars', JSON.stringify(state.topicStars));
+            } catch (e) {
+                console.log('Could not save progress');
+            }
+        }
+
+        function updateCountdown() {
+            const testDate = new Date('2026-05-13');
+            const now = new Date();
+            const days = Math.ceil((testDate - now) / (1000 * 60 * 60 * 24));
+            const el = document.getElementById('countdown');
+            if (days > 0) {
+                el.textContent = `Noch ${days} Tag${days !== 1 ? 'e' : ''} bis zur Prüfung!`;
+            } else if (days === 0) {
+                el.textContent = 'Heute ist der große Tag! Du schaffst das! 💪';
+            } else {
+                el.textContent = 'Du hast es geschafft! 🎉';
+            }
+        }
+
+        // ====== RENDERING ======
+        function renderTopicGrid() {
+            const grid = document.getElementById('topic-grid');
+            grid.innerHTML = topics.map(topic => {
+                const stars = state.topicStars[topic.id] || 0;
+                const starDisplay = '⭐'.repeat(stars) + '<span class="star-empty">' + '☆'.repeat(3 - stars) + '</span>';
+                return `
+                    <div class="topic-card" onclick="startTopic('${topic.id}')">
+                        <div class="topic-name">${topic.name}</div>
+                        <div class="topic-lang">${topic.lang === 'de' ? '🇩🇪' : '🇬🇧'}</div>
+                        <div class="stars">${starDisplay}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            state.currentScreen = screenId;
+        }
+
+        // ====== TOPIC/EXAM START ======
+        function startTopic(topicId) {
+            state.currentTopic = topics.find(t => t.id === topicId);
+            state.isExamMode = false;
+            state.questions = generateQuestions(topicId, 10);
+            state.currentQuestionIndex = 0;
+            state.correctAnswers = 0;
+            state.usedQuestions.clear();
+            showScreen('practice-screen');
+            renderQuestion();
+        }
+        window.startTopic = startTopic;
+
+        function startExamMode() {
+            state.currentTopic = null;
+            state.isExamMode = true;
+            state.questions = [];
+            state.usedQuestions.clear();
+
+            // 2 questions per topic, shuffled
+            topics.forEach(topic => {
+                const qs = generateQuestions(topic.id, 2, true);
+                state.questions.push(...qs);
+            });
+
+            // Shuffle
+            for (let i = state.questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [state.questions[i], state.questions[j]] = [state.questions[j], state.questions[i]];
+            }
+
+            state.currentQuestionIndex = 0;
+            state.correctAnswers = 0;
+            showScreen('practice-screen');
+            renderQuestion();
+        }
+        window.startExamMode = startExamMode;
+
+        // ====== QUESTION GENERATION ======
+        function generateQuestions(topicId, count, isExam = false) {
+            const questions = [];
+            for (let i = 0; i < count; i++) {
+                const isEasy = i < 2; // First 2 are easier
+                questions.push(generateQuestion(topicId, isEasy, isExam));
+            }
+            return questions;
+        }
+
+        function generateQuestion(topicId, isEasy = false, isExam = false) {
+            const topic = topics.find(t => t.id === topicId);
+            let question;
+            let attempts = 0;
+
+            do {
+                question = createQuestion(topicId, isEasy);
+                attempts++;
+            } while (state.usedQuestions.has(question.key) && attempts < 50);
+
+            state.usedQuestions.add(question.key);
+            question.topic = topic;
+            return question;
+        }
+
+        function createQuestion(topicId, isEasy) {
+            switch (topicId) {
+                case 'vielfache': return createVielfacheQuestion(isEasy);
+                case 'teiler': return createTeilerQuestion(isEasy);
+                case 'teilbarkeit': return createTeilbarkeitQuestion(isEasy);
+                case 'halbmult': return createHalbMultQuestion(isEasy);
+                case 'halbdiv': return createHalbDivQuestion(isEasy);
+                case 'nearestten': return createNearestTenQuestion(isEasy);
+                case 'nearesthundred': return createNearestHundredQuestion(isEasy);
+                case 'columnadd': return createColumnAddQuestion(isEasy);
+                case 'columnsub': return createColumnSubQuestion(isEasy);
+                case 'vocabulary': return createVocabularyQuestion(isEasy);
+                default: return null;
+            }
+        }
+
+        // --- Vielfache ---
+        function createVielfacheQuestion(isEasy) {
+            const type = Math.random() < 0.5 ? 'position' : 'choice';
+            const base = isEasy ? randInt(2, 5) : randInt(2, 12);
+
+            if (type === 'position') {
+                const position = isEasy ? randInt(1, 5) : randInt(1, 10);
+                const answer = base * position;
+                const ordinal = getOrdinal(position);
+                return {
+                    key: `vielfache-pos-${base}-${position}`,
+                    text: `Nenne das ${ordinal} Vielfache von ${base}`,
+                    type: 'numpad',
+                    answer: answer,
+                    hint1: 'Vielfache entstehen durch Multiplikation.',
+                    hint2: `${position}. Vielfache von ${base} = ${position} × ${base} = ${answer}`,
+                    explanation: `Das ${ordinal} Vielfache von ${base} ist ${position} × ${base} = ${answer}`
+                };
+            } else {
+                const correctCount = 2;
+                const multiples = [];
+                const nonMultiples = [];
+
+                for (let i = 1; i <= 12; i++) {
+                    multiples.push(base * i);
+                }
+
+                for (let i = 1; i <= 100; i++) {
+                    if (i % base !== 0) nonMultiples.push(i);
+                }
+
+                shuffle(multiples);
+                shuffle(nonMultiples);
+
+                const correctAnswers = multiples.slice(0, correctCount);
+                const wrongAnswers = nonMultiples.slice(0, 4 - correctCount);
+                const options = shuffle([...correctAnswers, ...wrongAnswers]);
+
+                return {
+                    key: `vielfache-choice-${base}-${options.join('-')}`,
+                    text: `Welche Zahlen sind Vielfache von ${base}?`,
+                    type: 'multichoice',
+                    options: options,
+                    correctOptions: correctAnswers,
+                    hint1: 'Vielfache können durch die Zahl geteilt werden.',
+                    hint2: `Prüfe: Ist die Zahl durch ${base} teilbar?`,
+                    explanation: `Die Vielfachen von ${base} sind: ${correctAnswers.join(', ')}`
+                };
+            }
+        }
+
+        // --- Teiler ---
+        function createTeilerQuestion(isEasy) {
+            const type = Math.random() < 0.5 ? 'count' : 'choice';
+            const number = isEasy ? [6, 8, 10, 12][randInt(0, 3)] : randInt(12, 50);
+            const divisors = getDivisors(number);
+
+            if (type === 'count') {
+                return {
+                    key: `teiler-count-${number}`,
+                    text: `Wie viele Teiler hat ${number}?`,
+                    type: 'numpad',
+                    answer: divisors.length,
+                    hint1: 'Teiler teilen die Zahl ohne Rest.',
+                    hint2: `Teiler von ${number}: ${divisors.join(', ')}`,
+                    explanation: `${number} hat ${divisors.length} Teiler: ${divisors.join(', ')}`
+                };
+            } else {
+                const correctCount = 2;
+                const nonDivisors = [];
+
+                for (let i = 2; i <= 20; i++) {
+                    if (number % i !== 0) nonDivisors.push(i);
+                }
+
+                shuffle(nonDivisors);
+                const correctAnswers = divisors.filter(d => d > 1 && d < number).slice(0, correctCount);
+                if (correctAnswers.length < correctCount) {
+                    correctAnswers.push(...divisors.slice(0, correctCount - correctAnswers.length));
+                }
+                const wrongAnswers = nonDivisors.slice(0, 4 - correctAnswers.length);
+                const options = shuffle([...correctAnswers, ...wrongAnswers]);
+
+                return {
+                    key: `teiler-choice-${number}-${options.join('-')}`,
+                    text: `Welche Zahlen sind Teiler von ${number}?`,
+                    type: 'multichoice',
+                    options: options,
+                    correctOptions: correctAnswers,
+                    hint1: 'Teiler teilen die Zahl ohne Rest.',
+                    hint2: `Probiere: ${number} ÷ Zahl = ?`,
+                    explanation: `Die Teiler von ${number} in den Optionen sind: ${correctAnswers.join(', ')}`
+                };
+            }
+        }
+
+        // --- Teilbarkeit ---
+        function createTeilbarkeitQuestion(isEasy) {
+            const type = Math.random() < 0.5 ? 'yesno' : 'multiselect';
+
+            if (type === 'yesno') {
+                const divisor = [2, 5, 10][randInt(0, 2)];
+                let number;
+                const shouldBeDivisible = Math.random() < 0.5;
+
+                if (shouldBeDivisible) {
+                    number = divisor * randInt(10, 99);
+                } else {
+                    do {
+                        number = randInt(100, 999);
+                    } while (number % divisor === 0);
+                }
+
+                const answer = number % divisor === 0;
+                let rule = '';
+                if (divisor === 2) rule = 'Eine Zahl ist durch 2 teilbar, wenn die letzte Ziffer gerade ist (0, 2, 4, 6, 8).';
+                if (divisor === 5) rule = 'Eine Zahl ist durch 5 teilbar, wenn die letzte Ziffer 0 oder 5 ist.';
+                if (divisor === 10) rule = 'Eine Zahl ist durch 10 teilbar, wenn die letzte Ziffer 0 ist.';
+
+                return {
+                    key: `teilbar-yesno-${number}-${divisor}`,
+                    text: `Ist ${number} durch ${divisor} teilbar?`,
+                    type: 'yesno',
+                    answer: answer,
+                    hint1: rule,
+                    hint2: `Letzte Ziffer von ${number} ist ${number % 10}. ${answer ? 'Ja!' : 'Nein!'}`,
+                    explanation: `${number} ${answer ? 'ist' : 'ist nicht'} durch ${divisor} teilbar. ${rule}`
+                };
+            } else {
+                const number = randInt(10, 50) * 10; // Divisible by 10
+                const divisibleBy = [];
+                if (number % 2 === 0) divisibleBy.push(2);
+                if (number % 5 === 0) divisibleBy.push(5);
+                if (number % 10 === 0) divisibleBy.push(10);
+
+                return {
+                    key: `teilbar-multi-${number}`,
+                    text: `Durch welche Zahlen ist ${number} teilbar?`,
+                    type: 'multiselect',
+                    options: [2, 5, 10],
+                    correctOptions: divisibleBy,
+                    hint1: 'Prüfe die Teilbarkeitsregeln für 2, 5 und 10.',
+                    hint2: `Letzte Ziffer: ${number % 10}`,
+                    explanation: `${number} ist teilbar durch: ${divisibleBy.join(', ')}`
+                };
+            }
+        }
+
+        // --- Halbschriftliche Multiplikation ---
+        function createHalbMultQuestion(isEasy) {
+            let a, b;
+            if (isEasy) {
+                a = randInt(12, 29);
+                b = randInt(2, 5);
+            } else {
+                const use3digit = Math.random() < 0.4;
+                a = use3digit ? randInt(100, 250) : randInt(20, 99);
+                b = randInt(2, 9);
+            }
+
+            const answer = a * b;
+            const tens = Math.floor(a / 10) * 10;
+            const ones = a % 10;
+            const hundreds = Math.floor(a / 100) * 100;
+
+            let hint2, explanation;
+            if (a >= 100) {
+                const h = Math.floor(a / 100) * 100;
+                const rest = a - h;
+                hint2 = `${a} × ${b} = (${h} × ${b}) + (${rest} × ${b}) = ${h * b} + ${rest * b} = ${answer}`;
+                explanation = `${a} × ${b} = (${h} × ${b}) + (${rest} × ${b}) = ${h * b} + ${rest * b} = ${answer}`;
+            } else {
+                hint2 = `${a} × ${b} = (${tens} × ${b}) + (${ones} × ${b}) = ${tens * b} + ${ones * b} = ${answer}`;
+                explanation = `${a} × ${b} = (${tens} × ${b}) + (${ones} × ${b}) = ${tens * b} + ${ones * b} = ${answer}`;
+            }
+
+            return {
+                key: `halbmult-${a}-${b}`,
+                text: `${a} × ${b} = ?`,
+                type: 'numpad',
+                answer: answer,
+                hasScratchPad: true,
+                hint1: 'Zerlege die größere Zahl in Zehner und Einer.',
+                hint2: hint2,
+                explanation: explanation
+            };
+        }
+
+        // --- Halbschriftliche Division ---
+        function createHalbDivQuestion(isEasy) {
+            const b = isEasy ? randInt(2, 4) : randInt(2, 9);
+            let answer, a;
+
+            if (isEasy) {
+                answer = randInt(10, 25);
+            } else {
+                answer = randInt(10, 99);
+            }
+            a = answer * b;
+
+            const tens = Math.floor(a / 10) * 10;
+            const ones = a - tens;
+
+            // Find a good decomposition
+            let tensResult = Math.floor(tens / b);
+            let onesResult = answer - tensResult;
+            let tensUsed = tensResult * b;
+            let onesUsed = onesResult * b;
+
+            return {
+                key: `halbdiv-${a}-${b}`,
+                text: `${a} ÷ ${b} = ?`,
+                type: 'numpad',
+                answer: answer,
+                hasScratchPad: true,
+                hint1: 'Zerlege die Zahl in einfachere Teile.',
+                hint2: `${a} ÷ ${b} = (${tensUsed} ÷ ${b}) + (${onesUsed} ÷ ${b}) = ${tensResult} + ${onesResult} = ${answer}`,
+                explanation: `${a} ÷ ${b} = ${answer}`
+            };
+        }
+
+        // --- Nearest Ten (Addition) ---
+        function createNearestTenQuestion(isEasy) {
+            const base = isEasy ? randInt(100, 300) : randInt(100, 900);
+            const addend = [8, 9, 18, 19, 28, 29][randInt(0, isEasy ? 1 : 5)];
+            const roundedAddend = Math.ceil(addend / 10) * 10;
+            const adjustment = roundedAddend - addend;
+            const answer = base + addend;
+
+            return {
+                key: `nearestten-${base}-${addend}`,
+                text: `${base} + ${addend} = ?`,
+                type: 'numpad',
+                answer: answer,
+                hasScratchPad: true,
+                hint1: 'Round the second number up to the nearest ten.',
+                hint2: `Step 1: Round ${addend} up to ${roundedAddend} (+${adjustment})\nStep 2: ${base} + ${roundedAddend} = ${base + roundedAddend}\nStep 3: ${base + roundedAddend} - ${adjustment} = ${answer}`,
+                explanation: `${base} + ${addend} = ${base} + ${roundedAddend} - ${adjustment} = ${base + roundedAddend} - ${adjustment} = ${answer}`
+            };
+        }
+
+        // --- Nearest Hundred (Subtraction) ---
+        function createNearestHundredQuestion(isEasy) {
+            const base = isEasy ? randInt(200, 500) : randInt(300, 999);
+            const subtrahend = [98, 99, 198, 199][randInt(0, isEasy ? 1 : 3)];
+            const roundedSub = Math.ceil(subtrahend / 100) * 100;
+            const adjustment = roundedSub - subtrahend;
+            const answer = base - subtrahend;
+
+            if (answer < 0) return createNearestHundredQuestion(isEasy);
+
+            return {
+                key: `nearesthundred-${base}-${subtrahend}`,
+                text: `${base} − ${subtrahend} = ?`,
+                type: 'numpad',
+                answer: answer,
+                hasScratchPad: true,
+                hint1: 'Round the subtrahend up to the nearest hundred.',
+                hint2: `Step 1: Round ${subtrahend} up to ${roundedSub}\nStep 2: ${base} - ${roundedSub} = ${base - roundedSub}\nStep 3: Add back ${adjustment}: ${base - roundedSub} + ${adjustment} = ${answer}`,
+                explanation: `${base} - ${subtrahend} = ${base} - ${roundedSub} + ${adjustment} = ${answer}`
+            };
+        }
+
+        // --- Column Addition ---
+        function createColumnAddQuestion(isEasy) {
+            let a, b;
+            if (isEasy) {
+                a = randInt(100, 400);
+                b = randInt(100, 400);
+            } else {
+                a = randInt(100, 700);
+                b = randInt(100, 700);
+            }
+
+            // Ensure there's regrouping
+            const ones = (a % 10) + (b % 10);
+            const tens = (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10);
+            if (ones < 10 && tens < 10) {
+                a += 5; // Force some regrouping
+            }
+
+            const answer = a + b;
+
+            return {
+                key: `columnadd-${a}-${b}`,
+                text: 'Add these numbers:',
+                type: 'numpad',
+                answer: answer,
+                columnLayout: { a, b, operation: '+' },
+                hasScratchPad: true,
+                hasHTOGrid: true,
+                hint1: 'Add each column from right to left. Carry when needed.',
+                hint2: `H: ${Math.floor(a/100)} + ${Math.floor(b/100)}, T: ${Math.floor(a/10)%10} + ${Math.floor(b/10)%10}, O: ${a%10} + ${b%10}`,
+                explanation: `${a} + ${b} = ${answer}`
+            };
+        }
+
+        // --- Column Subtraction ---
+        function createColumnSubQuestion(isEasy) {
+            let a, b;
+            if (isEasy) {
+                a = randInt(300, 600);
+                b = randInt(100, 250);
+            } else {
+                a = randInt(400, 999);
+                b = randInt(100, 400);
+            }
+
+            // Ensure a > b and there's borrowing
+            if (b >= a) {
+                [a, b] = [b + 100, a];
+            }
+
+            // Try to ensure borrowing is needed
+            if ((a % 10) >= (b % 10) && (Math.floor(a/10) % 10) >= (Math.floor(b/10) % 10)) {
+                b = b + 5;
+                if (b >= a) a = b + 50;
+            }
+
+            const answer = a - b;
+
+            return {
+                key: `columnsub-${a}-${b}`,
+                text: 'Subtract these numbers:',
+                type: 'numpad',
+                answer: answer,
+                columnLayout: { a, b, operation: '−' },
+                hasScratchPad: true,
+                hasHTOGrid: true,
+                hint1: 'Subtract each column from right to left. Borrow when needed.',
+                hint2: `If the top digit is smaller, borrow from the next column.`,
+                explanation: `${a} - ${b} = ${answer}`
+            };
+        }
+
+        // --- Math Vocabulary ---
+        function createVocabularyQuestion(isEasy) {
+            const types = ['difference', 'sum', 'halve'];
+            const type = types[randInt(0, 2)];
+
+            let a, b, answer, text, keyword;
+
+            if (type === 'difference') {
+                a = isEasy ? randInt(30, 80) : randInt(50, 200);
+                b = isEasy ? randInt(10, 29) : randInt(20, 100);
+                if (b >= a) [a, b] = [b + 20, a];
+                answer = a - b;
+                keyword = 'DIFFERENCE';
+                text = `What is the <span class="keyword">${keyword}</span> of ${a} and ${b}?`;
+            } else if (type === 'sum') {
+                a = isEasy ? randInt(50, 150) : randInt(100, 500);
+                b = isEasy ? randInt(50, 150) : randInt(100, 500);
+                answer = a + b;
+                keyword = 'SUM';
+                text = `What is the <span class="keyword">${keyword}</span> of ${a} and ${b}?`;
+            } else {
+                a = (isEasy ? randInt(20, 50) : randInt(20, 100)) * 2;
+                answer = a / 2;
+                keyword = 'HALVE';
+                text = `<span class="keyword">${keyword}</span> ${a}`;
+            }
+
+            let explanation;
+            if (type === 'difference') {
+                explanation = `DIFFERENCE means subtract: ${a} - ${b} = ${answer}`;
+            } else if (type === 'sum') {
+                explanation = `SUM means add: ${a} + ${b} = ${answer}`;
+            } else {
+                explanation = `HALVE means divide by 2: ${a} ÷ 2 = ${answer}`;
+            }
+
+            return {
+                key: `vocab-${type}-${a}-${b || ''}`,
+                text: text,
+                type: 'numpad',
+                answer: answer,
+                hint1: `${keyword} is a math vocabulary word.`,
+                hint2: type === 'difference' ? 'DIFFERENCE = subtraction' :
+                       type === 'sum' ? 'SUM = addition' :
+                       'HALVE = divide by 2',
+                explanation: explanation
+            };
+        }
+
+        // ====== QUESTION RENDERING ======
+        function renderQuestion() {
+            const q = state.questions[state.currentQuestionIndex];
+            state.attempts = 0;
+            state.hintLevel = 0;
+
+            // Update progress
+            const total = state.questions.length;
+            const current = state.currentQuestionIndex + 1;
+            document.getElementById('progress-text').textContent = `Aufgabe ${current} von ${total}`;
+            document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
+
+            // Reset UI
+            document.getElementById('hint-panel').classList.remove('visible');
+            document.getElementById('feedback').classList.remove('visible');
+            document.getElementById('explanation-panel').classList.remove('visible');
+
+            // Question text
+            document.getElementById('question-text').innerHTML = q.text;
+
+            // Column layout for addition/subtraction
+            const colLayout = document.getElementById('column-layout');
+            if (q.columnLayout) {
+                const { a, b, operation } = q.columnLayout;
+                colLayout.innerHTML = `
+                    <div>${a.toString().padStart(3, ' ')}</div>
+                    <div><span class="operator">${operation}</span>${b.toString().padStart(3, ' ')}</div>
+                    <div class="separator">&nbsp;</div>
+                `;
+                colLayout.style.display = 'block';
+            } else {
+                colLayout.style.display = 'none';
+            }
+
+            // Scratch pad
+            const scratchPad = document.getElementById('scratch-pad');
+            if (q.hasScratchPad) {
+                scratchPad.style.display = 'block';
+                initScratchPad(q.hasHTOGrid);
+            } else {
+                scratchPad.style.display = 'none';
+            }
+
+            // Input area
+            renderInput(q);
+        }
+
+        function renderInput(q) {
+            const inputArea = document.getElementById('input-area');
+
+            switch (q.type) {
+                case 'numpad':
+                    inputArea.innerHTML = `
+                        <div class="answer-display" id="answer-display"></div>
+                        <div class="numpad">
+                            ${[1,2,3,4,5,6,7,8,9].map(n =>
+                                `<button class="numpad-key" onclick="pressKey('${n}')">${n}</button>`
+                            ).join('')}
+                            <button class="numpad-key backspace" onclick="pressKey('back')">⌫</button>
+                            <button class="numpad-key" onclick="pressKey('0')">0</button>
+                            <button class="numpad-key confirm" onclick="submitNumpad()">✓</button>
+                        </div>
+                    `;
+                    break;
+
+                case 'multichoice':
+                    inputArea.innerHTML = `
+                        <div class="choice-grid">
+                            ${q.options.map((opt, i) =>
+                                `<button class="choice-button" data-value="${opt}" onclick="selectChoice(this, ${opt})">${opt}</button>`
+                            ).join('')}
+                        </div>
+                    `;
+                    break;
+
+                case 'yesno':
+                    inputArea.innerHTML = `
+                        <div class="yesno-container">
+                            <button class="yesno-button yes" onclick="submitYesNo(true)">Ja ✓</button>
+                            <button class="yesno-button no" onclick="submitYesNo(false)">Nein ✗</button>
+                        </div>
+                    `;
+                    break;
+
+                case 'multiselect':
+                    inputArea.innerHTML = `
+                        <div class="multiselect-grid">
+                            ${q.options.map(opt =>
+                                `<button class="multiselect-tile" data-value="${opt}" onclick="toggleMultiSelect(this)">${opt}</button>`
+                            ).join('')}
+                        </div>
+                        <button class="confirm-button" onclick="submitMultiSelect()">Fertig ✓</button>
+                    `;
+                    break;
+            }
+        }
+
+        // ====== INPUT HANDLERS ======
+        let currentAnswer = '';
+
+        function pressKey(key) {
+            if (key === 'back') {
+                currentAnswer = currentAnswer.slice(0, -1);
+            } else {
+                if (currentAnswer.length < 6) {
+                    currentAnswer += key;
+                }
+            }
+            document.getElementById('answer-display').textContent = currentAnswer;
+        }
+        window.pressKey = pressKey;
+
+        function submitNumpad() {
+            if (!currentAnswer) return;
+            const q = state.questions[state.currentQuestionIndex];
+            checkAnswer(parseInt(currentAnswer), q.answer);
+        }
+        window.submitNumpad = submitNumpad;
+
+        function selectChoice(btn, value) {
+            const q = state.questions[state.currentQuestionIndex];
+            const isCorrect = q.correctOptions.includes(value);
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                // Check if all correct options found
+                const allButtons = document.querySelectorAll('.choice-button');
+                const selectedCorrect = Array.from(allButtons).filter(b =>
+                    b.classList.contains('correct')
+                );
+                if (selectedCorrect.length === q.correctOptions.length) {
+                    setTimeout(() => handleCorrect(), 300);
+                }
+            } else {
+                btn.classList.add('incorrect');
+                state.attempts++;
+                if (state.attempts >= 2) {
+                    setTimeout(() => handleWrong(true), 300);
+                } else {
+                    showFeedback(false);
+                }
+            }
+        }
+        window.selectChoice = selectChoice;
+
+        function submitYesNo(answer) {
+            const q = state.questions[state.currentQuestionIndex];
+            checkAnswer(answer, q.answer);
+        }
+        window.submitYesNo = submitYesNo;
+
+        function toggleMultiSelect(btn) {
+            btn.classList.toggle('selected');
+        }
+        window.toggleMultiSelect = toggleMultiSelect;
+
+        function submitMultiSelect() {
+            const q = state.questions[state.currentQuestionIndex];
+            const selected = Array.from(document.querySelectorAll('.multiselect-tile.selected'))
+                .map(b => parseInt(b.dataset.value));
+
+            const isCorrect = q.correctOptions.length === selected.length &&
+                q.correctOptions.every(v => selected.includes(v));
+
+            checkAnswer(isCorrect, true);
+        }
+        window.submitMultiSelect = submitMultiSelect;
+
+        function checkAnswer(given, expected) {
+            const isCorrect = given === expected;
+
+            if (isCorrect) {
+                handleCorrect();
+            } else {
+                state.attempts++;
+                if (state.attempts >= 2) {
+                    handleWrong(true);
+                } else {
+                    handleWrong(false);
+                }
+            }
+        }
+
+        function handleCorrect() {
+            state.correctAnswers++;
+            const q = state.questions[state.currentQuestionIndex];
+            const isGerman = q.topic?.lang === 'de';
+
+            showFeedback(true, isGerman ? 'Super! ⭐' : 'Brilliant! ⭐');
+            showStarBurst();
+
+            setTimeout(() => {
+                currentAnswer = '';
+                nextQuestion();
+            }, 800);
+        }
+
+        function handleWrong(showSolution) {
+            const display = document.getElementById('answer-display');
+            if (display) {
+                display.classList.add('shake');
+                setTimeout(() => display.classList.remove('shake'), 500);
+            }
+
+            if (showSolution) {
+                showFeedback(false, 'Schau dir die Lösung an:');
+                showExplanation();
+            } else {
+                showFeedback(false, 'Nochmal! 💪');
+            }
+        }
+
+        function showFeedback(correct, message) {
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback visible ' + (correct ? 'correct' : 'incorrect');
+            fb.textContent = message || (correct ? 'Richtig!' : 'Falsch!');
+        }
+
+        function showExplanation() {
+            const q = state.questions[state.currentQuestionIndex];
+            document.getElementById('explanation-content').textContent = q.explanation;
+            document.getElementById('explanation-panel').classList.add('visible');
+
+            // Disable inputs
+            document.querySelectorAll('.numpad-key, .choice-button, .yesno-button, .multiselect-tile, .confirm-button')
+                .forEach(b => b.disabled = true);
+        }
+
+        function nextQuestion() {
+            currentAnswer = '';
+            state.currentQuestionIndex++;
+
+            if (state.currentQuestionIndex >= state.questions.length) {
+                endSession();
+            } else {
+                renderQuestion();
+            }
+        }
+        window.nextQuestion = nextQuestion;
+
+        // ====== HINTS ======
+        function showHint() {
+            const q = state.questions[state.currentQuestionIndex];
+            state.hintLevel++;
+            state.usedHints++;
+
+            const panel = document.getElementById('hint-panel');
+            const title = document.getElementById('hint-title');
+            const content = document.getElementById('hint-content');
+
+            if (state.hintLevel === 1) {
+                title.textContent = 'Tipp:';
+                content.textContent = q.hint1;
+            } else {
+                title.textContent = 'Beispiel:';
+                content.innerHTML = q.hint2.replace(/\n/g, '<br>');
+            }
+
+            panel.classList.add('visible');
+
+            if (state.hintLevel >= 2) {
+                document.getElementById('hint-button').disabled = true;
+            }
+        }
+        window.showHint = showHint;
+
+        // ====== SCRATCH PAD ======
+        let scratchCanvas, scratchCtx;
+        let isDrawing = false;
+        let lastX = 0, lastY = 0;
+
+        function initScratchPad(showHTOGrid = false) {
+            scratchCanvas = document.getElementById('scratch-canvas');
+            scratchCtx = scratchCanvas.getContext('2d');
+
+            // Set canvas size
+            const rect = scratchCanvas.getBoundingClientRect();
+            scratchCanvas.width = rect.width * 2;
+            scratchCanvas.height = rect.height * 2;
+            scratchCtx.scale(2, 2);
+
+            // Draw background
+            scratchCtx.fillStyle = '#FFFEF7';
+            scratchCtx.fillRect(0, 0, rect.width, rect.height);
+
+            // Draw lines
+            scratchCtx.strokeStyle = '#E5E7EB';
+            scratchCtx.lineWidth = 1;
+
+            if (showHTOGrid) {
+                // H T O grid
+                const colWidth = rect.width / 3;
+
+                // Vertical lines
+                scratchCtx.beginPath();
+                scratchCtx.moveTo(colWidth, 0);
+                scratchCtx.lineTo(colWidth, rect.height);
+                scratchCtx.moveTo(colWidth * 2, 0);
+                scratchCtx.lineTo(colWidth * 2, rect.height);
+                scratchCtx.stroke();
+
+                // Labels
+                scratchCtx.fillStyle = '#9CA3AF';
+                scratchCtx.font = '14px Nunito';
+                scratchCtx.textAlign = 'center';
+                scratchCtx.fillText('H', colWidth / 2, 20);
+                scratchCtx.fillText('T', colWidth * 1.5, 20);
+                scratchCtx.fillText('O', colWidth * 2.5, 20);
+
+                // Answer separator line
+                scratchCtx.strokeStyle = '#9CA3AF';
+                scratchCtx.lineWidth = 2;
+                scratchCtx.beginPath();
+                scratchCtx.moveTo(10, rect.height - 40);
+                scratchCtx.lineTo(rect.width - 10, rect.height - 40);
+                scratchCtx.stroke();
+            } else {
+                // Horizontal lines
+                for (let y = 30; y < rect.height; y += 30) {
+                    scratchCtx.beginPath();
+                    scratchCtx.moveTo(0, y);
+                    scratchCtx.lineTo(rect.width, y);
+                    scratchCtx.stroke();
+                }
+            }
+
+            // Set up drawing
+            scratchCtx.strokeStyle = '#1e3a5f';
+            scratchCtx.lineWidth = 2.5;
+            scratchCtx.lineCap = 'round';
+            scratchCtx.lineJoin = 'round';
+
+            // Event listeners
+            scratchCanvas.onpointerdown = startDraw;
+            scratchCanvas.onpointermove = draw;
+            scratchCanvas.onpointerup = stopDraw;
+            scratchCanvas.onpointerleave = stopDraw;
+        }
+
+        function startDraw(e) {
+            isDrawing = true;
+            const rect = scratchCanvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+
+            const rect = scratchCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            scratchCtx.beginPath();
+            scratchCtx.moveTo(lastX, lastY);
+            scratchCtx.lineTo(x, y);
+            scratchCtx.stroke();
+
+            lastX = x;
+            lastY = y;
+        }
+
+        function stopDraw() {
+            isDrawing = false;
+        }
+
+        function clearScratchPad() {
+            const q = state.questions[state.currentQuestionIndex];
+            initScratchPad(q.hasHTOGrid);
+        }
+        window.clearScratchPad = clearScratchPad;
+
+        // ====== ANIMATIONS ======
+        function showStarBurst() {
+            const container = document.getElementById('star-burst');
+            container.innerHTML = '';
+
+            const colors = ['#F59E0B', '#7C3AED', '#16A34A', '#EC4899', '#3B82F6', '#EF4444', '#14B8A6', '#F97316'];
+            const emojis = ['⭐', '✨', '🌟', '💫'];
+
+            for (let i = 0; i < 8; i++) {
+                const star = document.createElement('div');
+                star.className = 'burst-star';
+                star.textContent = emojis[i % emojis.length];
+                const angle = (i / 8) * Math.PI * 2;
+                const distance = 80 + Math.random() * 40;
+                star.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+                star.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+                container.appendChild(star);
+            }
+
+            setTimeout(() => container.innerHTML = '', 1000);
+        }
+
+        function showConfetti() {
+            const container = document.getElementById('confetti-container');
+            container.innerHTML = '';
+
+            const colors = ['#F59E0B', '#7C3AED', '#16A34A', '#EC4899', '#3B82F6', '#EF4444'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                confetti.style.animationDuration = `${1.5 + Math.random()}s`;
+                container.appendChild(confetti);
+            }
+
+            setTimeout(() => container.innerHTML = '', 3000);
+        }
+
+        // ====== END SESSION ======
+        async function endSession() {
+            showConfetti();
+
+            const score = state.correctAnswers;
+            const total = state.questions.length;
+            const percentage = (score / total) * 100;
+
+            let stars = 0;
+            if (percentage >= 90) stars = 3;
+            else if (percentage >= 80) stars = 2;
+            else if (percentage >= 60) stars = 1;
+
+            // Update stored stars
+            if (!state.isExamMode && state.currentTopic) {
+                const topicId = state.currentTopic.id;
+                if (!state.topicStars[topicId] || stars > state.topicStars[topicId]) {
+                    state.topicStars[topicId] = stars;
+                    await saveProgress();
+                }
+            }
+
+            // Render end screen
+            const isExam = state.isExamMode;
+            document.getElementById('end-title').textContent = isExam ? 'Prüfung abgeschlossen!' : 'Thema abgeschlossen!';
+            document.getElementById('end-stars').innerHTML = '⭐'.repeat(stars) + '<span class="star-empty">' + '☆'.repeat(3 - stars) + '</span>';
+            document.getElementById('end-score').textContent = `${score} von ${total} richtig`;
+
+            const messageEl = document.getElementById('end-message');
+            if (isExam && score >= 18) {
+                messageEl.className = 'end-message special';
+                messageEl.textContent = 'Sophia, du bist BEREIT! Die 1 gehört dir! 🏆';
+            } else if (percentage >= 90) {
+                messageEl.className = 'end-message';
+                messageEl.textContent = 'Perfekt! Du kannst das super! 🌟';
+            } else if (percentage >= 80) {
+                messageEl.className = 'end-message';
+                messageEl.textContent = 'Sehr gut! Fast perfekt! 💪';
+            } else if (percentage >= 60) {
+                messageEl.className = 'end-message';
+                messageEl.textContent = 'Gut gemacht! Noch ein bisschen üben! 📚';
+            } else {
+                messageEl.className = 'end-message';
+                messageEl.textContent = 'Weiter üben! Du schaffst das! 💪';
+            }
+
+            showScreen('end-screen');
+        }
+
+        // ====== NAVIGATION ======
+        function goHome() {
+            renderTopicGrid();
+            showScreen('home-screen');
+        }
+        window.goHome = goHome;
+
+        // ====== UTILITIES ======
+        function randInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function getOrdinal(n) {
+            return n + '.';
+        }
+
+        function getDivisors(n) {
+            const divisors = [];
+            for (let i = 1; i <= n; i++) {
+                if (n % i === 0) divisors.push(i);
+            }
+            return divisors;
+        }
+    </script>
+</body>
+</html>

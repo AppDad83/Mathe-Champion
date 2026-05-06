@@ -1,0 +1,13 @@
+{
+  "appId": "de.sophia.mathetrainer",
+  "appName": "Mathe-Champion",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "Preferences": {
+      "group": "SophiaMathPrefs"
+    }
+  }
+}
