@@ -886,7 +886,8 @@
             { id: 'nearesthundred', name: 'Nearest Hundred Strategy', lang: 'en', questionsPerSession: 10, hasScratchPad: true },
             { id: 'columnadd', name: 'Column Addition', lang: 'en', questionsPerSession: 10, hasScratchPad: true, hasHTOGrid: true },
             { id: 'columnsub', name: 'Column Subtraction', lang: 'en', questionsPerSession: 10, hasScratchPad: true, hasHTOGrid: true },
-            { id: 'vocabulary', name: 'Math Vocabulary', lang: 'en', questionsPerSession: 10 }
+            { id: 'vocabulary', name: 'Math Vocabulary', lang: 'en', questionsPerSession: 10 },
+            { id: 'roughcalc', name: 'Rough Calculation', icon: '≈', lang: 'en', questionsPerSession: 10, hasScratchPad: true, color: '#8B5CF6' }
         ];
 
         // ====== INITIALIZATION ======
@@ -1029,6 +1030,7 @@
                 case 'columnadd': return createColumnAddQuestion(isEasy);
                 case 'columnsub': return createColumnSubQuestion(isEasy);
                 case 'vocabulary': return createVocabularyQuestion(isEasy);
+                case 'roughcalc': return createRoughCalcQuestion(isEasy);
                 default: return null;
             }
         }
@@ -1298,23 +1300,56 @@
 
         // --- Column Addition ---
         function createColumnAddQuestion(isEasy) {
-            let a, b;
-            if (isEasy) {
-                a = randInt(100, 400);
-                b = randInt(100, 400);
+            // Randomly choose 2 or 3 summands
+            const useThreeSummands = !isEasy && Math.random() < 0.4;
+
+            let a, b, c;
+            if (useThreeSummands) {
+                // For 3 summands, use smaller numbers to keep result < 1000
+                a = randInt(50, 300);
+                b = randInt(50, 300);
+                c = randInt(50, 300);
+                // Ensure result stays under 1000
+                while (a + b + c >= 1000) {
+                    a = randInt(50, 250);
+                    b = randInt(50, 250);
+                    c = randInt(50, 250);
+                }
             } else {
-                a = randInt(100, 700);
-                b = randInt(100, 700);
+                if (isEasy) {
+                    a = randInt(100, 400);
+                    b = randInt(100, 400);
+                } else {
+                    a = randInt(100, 700);
+                    b = randInt(100, 700);
+                }
             }
 
-            // Ensure there's regrouping
-            const ones = (a % 10) + (b % 10);
-            const tens = (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10);
-            if (ones < 10 && tens < 10) {
-                a += 5; // Force some regrouping
+            // Ensure there's regrouping (for 2 summands)
+            if (!useThreeSummands) {
+                const ones = (a % 10) + (b % 10);
+                const tens = (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10);
+                if (ones < 10 && tens < 10) {
+                    a += 5; // Force some regrouping
+                }
             }
 
-            const answer = a + b;
+            const answer = useThreeSummands ? a + b + c : a + b;
+
+            if (useThreeSummands) {
+                return {
+                    key: `columnadd-${a}-${b}-${c}`,
+                    text: 'Add these numbers:',
+                    type: 'numpad',
+                    answer: answer,
+                    columnLayout: { a, b, c, operation: '+' },
+                    hasScratchPad: true,
+                    hasHTOGrid: true,
+                    hint1: 'Add each column from right to left. Carry when needed.',
+                    hint2: `H: ${Math.floor(a/100)} + ${Math.floor(b/100)} + ${Math.floor(c/100)}, T: ${Math.floor(a/10)%10} + ${Math.floor(b/10)%10} + ${Math.floor(c/10)%10}, O: ${a%10} + ${b%10} + ${c%10}`,
+                    explanation: `${a} + ${b} + ${c} = ${answer}`
+                };
+            }
 
             return {
                 key: `columnadd-${a}-${b}`,
@@ -1417,6 +1452,61 @@
             };
         }
 
+        // --- Rough Calculation (Überschlagsrechnung) ---
+        function createRoughCalcQuestion(isEasy) {
+            // Choose question type: addition, subtraction, or 3 summands
+            const types = isEasy ? ['addition', 'subtraction'] : ['addition', 'subtraction', 'threeSummands'];
+            const type = types[randInt(0, types.length - 1)];
+
+            let a, b, c, answer, roundedAnswer, text, hint2;
+
+            // Helper to round to nearest ten
+            const roundToTen = (n) => Math.round(n / 10) * 10;
+
+            if (type === 'addition') {
+                a = isEasy ? randInt(100, 500) : randInt(100, 900);
+                b = isEasy ? randInt(100, 400) : randInt(100, 800);
+                const exactAnswer = a + b;
+                roundedAnswer = roundToTen(a) + roundToTen(b);
+                text = `Estimate: ${a} + ${b} ≈ ?`;
+                hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}\n${roundToTen(a)} + ${roundToTen(b)} = ${roundedAnswer}`;
+                answer = roundedAnswer;
+            } else if (type === 'subtraction') {
+                a = isEasy ? randInt(300, 800) : randInt(400, 999);
+                b = isEasy ? randInt(100, 300) : randInt(100, 500);
+                if (b >= a) {
+                    [a, b] = [a + 200, b];
+                }
+                const exactAnswer = a - b;
+                roundedAnswer = roundToTen(a) - roundToTen(b);
+                text = `Estimate: ${a} − ${b} ≈ ?`;
+                hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}\n${roundToTen(a)} − ${roundToTen(b)} = ${roundedAnswer}`;
+                answer = roundedAnswer;
+            } else {
+                // Three summands
+                a = randInt(100, 350);
+                b = randInt(100, 350);
+                c = randInt(100, 300);
+                const exactAnswer = a + b + c;
+                roundedAnswer = roundToTen(a) + roundToTen(b) + roundToTen(c);
+                text = `Estimate: ${a} + ${b} + ${c} ≈ ?`;
+                hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}, ${c} ≈ ${roundToTen(c)}\n${roundToTen(a)} + ${roundToTen(b)} + ${roundToTen(c)} = ${roundedAnswer}`;
+                answer = roundedAnswer;
+            }
+
+            return {
+                key: `roughcalc-${type}-${a}-${b}-${c || ''}`,
+                text: text,
+                type: 'numpad',
+                answer: answer,
+                tolerance: 20, // Accept answers within ±20
+                hasScratchPad: true,
+                hint1: 'Round each number to the nearest ten first, then calculate.',
+                hint2: hint2,
+                explanation: `Round to nearest 10: ${hint2.split('\n')[0]}\nResult: ${answer}`
+            };
+        }
+
         // ====== QUESTION RENDERING ======
         function renderQuestion() {
             const q = state.questions[state.currentQuestionIndex];
@@ -1440,12 +1530,18 @@
             // Column layout for addition/subtraction
             const colLayout = document.getElementById('column-layout');
             if (q.columnLayout) {
-                const { a, b, operation } = q.columnLayout;
-                colLayout.innerHTML = `
-                    <div>${a.toString().padStart(3, ' ')}</div>
-                    <div><span class="operator">${operation}</span>${b.toString().padStart(3, ' ')}</div>
-                    <div class="separator">&nbsp;</div>
-                `;
+                const { a, b, c, operation } = q.columnLayout;
+                let layoutHTML = `<div>${a.toString().padStart(3, ' ')}</div>`;
+                if (c !== undefined) {
+                    // 3 summands
+                    layoutHTML += `<div>${b.toString().padStart(3, ' ')}</div>`;
+                    layoutHTML += `<div><span class="operator">${operation}</span>${c.toString().padStart(3, ' ')}</div>`;
+                } else {
+                    // 2 summands
+                    layoutHTML += `<div><span class="operator">${operation}</span>${b.toString().padStart(3, ' ')}</div>`;
+                }
+                layoutHTML += `<div class="separator">&nbsp;</div>`;
+                colLayout.innerHTML = layoutHTML;
                 colLayout.style.display = 'block';
             } else {
                 colLayout.style.display = 'none';
@@ -1586,7 +1682,13 @@
         window.submitMultiSelect = submitMultiSelect;
 
         function checkAnswer(given, expected) {
-            const isCorrect = given === expected;
+            const q = state.questions[state.currentQuestionIndex];
+            let isCorrect = given === expected;
+
+            // For rough calculation, allow tolerance
+            if (q.tolerance && typeof given === 'number' && typeof expected === 'number') {
+                isCorrect = Math.abs(given - expected) <= q.tolerance;
+            }
 
             if (isCorrect) {
                 handleCorrect();
