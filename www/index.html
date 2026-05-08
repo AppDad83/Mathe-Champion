@@ -8,8 +8,9 @@
     <title>Mathe-Champion</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Nunito:wght@400;600;700;800&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -18,22 +19,23 @@
         }
 
         :root {
-            --primary: #7C3AED;
-            --primary-light: #A78BFA;
-            --primary-dark: #5B21B6;
-            --accent: #F59E0B;
-            --accent-light: #FCD34D;
-            --background: #FFFBF0;
-            --success: #16A34A;
-            --success-light: #22C55E;
-            --error: #DC2626;
-            --error-light: #EF4444;
-            --text: #1F2937;
-            --text-light: #6B7280;
-            --card-bg: #FFFFFF;
-            --scratch-bg: #FFFEF7;
-            --scratch-line: #E5E7EB;
-            --stroke-color: #1e3a5f;
+            --primary: #1B3A6B;
+            --primary-light: #2E5FA3;
+            --primary-dark: #122649;
+            --accent: #B8860B;
+            --accent-light: #D4A017;
+            --background: #0D1B2A;
+            --surface: #152238;
+            --success: #2D6A4F;
+            --success-light: #40916C;
+            --error: #9B2335;
+            --error-light: #C1394B;
+            --card-bg: #1A2F4A;
+            --scratch-bg: #152238;
+            --scratch-line: #2E4A6B;
+            --text: #F0E6D3;
+            --text-light: #A89F8C;
+            --stroke-color: #B8860B;
         }
 
         html, body {
@@ -43,7 +45,9 @@
 
         body {
             font-family: 'Nunito', sans-serif;
-            background: var(--background);
+            background-color: var(--background);
+            background-image: radial-gradient(circle at 20% 50%, #1B3A6B22 0%, transparent 50%),
+                              radial-gradient(circle at 80% 20%, #B8860B11 0%, transparent 40%);
             color: var(--text);
             font-size: 18px;
             line-height: 1.5;
@@ -60,6 +64,57 @@
             flex-direction: column;
         }
 
+        /* Medieval Font for Headings */
+        h1, h2, .screen-title, .topic-name, .hall-title {
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* Rune Divider */
+        .rune-divider {
+            text-align: center;
+            color: var(--accent);
+            font-size: 14px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .rune-divider::before,
+        .rune-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .rune-divider .runes {
+            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 4px;
+        }
+
+        /* Norse Card */
+        .norse-card {
+            background: var(--card-bg);
+            border: 1px solid #B8860B33;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .norse-card::before {
+            content: 'ᚠ';
+            position: absolute;
+            font-size: 120px;
+            color: var(--accent);
+            opacity: 0.04;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
         /* Header */
         .header {
             text-align: center;
@@ -67,25 +122,52 @@
         }
 
         .header h1 {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary);
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--accent);
             margin-bottom: 8px;
+            text-shadow: 0 2px 8px rgba(184, 134, 11, 0.3);
         }
 
         .header .subtitle {
-            font-size: 16px;
+            font-size: 14px;
             color: var(--text-light);
+            margin-bottom: 4px;
         }
 
-        .header .countdown {
-            margin-top: 12px;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border-radius: 20px;
+        .header .rune-subtitle {
+            font-size: 12px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        .yggdrasil-banner {
+            width: 80px;
+            height: 60px;
+            margin: 16px auto;
+            opacity: 0.7;
+        }
+
+        .prophecy-box {
+            margin-top: 16px;
+            padding: 12px 20px;
+            background: var(--surface);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
             display: inline-block;
+        }
+
+        .prophecy-box .prophecy-title {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .prophecy-box .countdown {
+            font-size: 16px;
             font-weight: 600;
+            color: var(--text);
         }
 
         /* Topic Grid */
@@ -102,25 +184,45 @@
             border-radius: 16px;
             padding: 16px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             cursor: pointer;
             transition: all 0.2s ease;
-            border: 2px solid transparent;
+            border: 1px solid transparent;
             display: flex;
             flex-direction: column;
             justify-content: center;
             min-height: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-card::before {
+            content: 'ᚱ';
+            position: absolute;
+            font-size: 80px;
+            color: var(--accent);
+            opacity: 0.03;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
         }
 
         .topic-card:hover, .topic-card:active {
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.2);
-            border-color: var(--primary-light);
+            box-shadow: 0 4px 20px rgba(184, 134, 11, 0.25);
+            border-color: var(--accent);
+        }
+
+        .topic-card .topic-rune {
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 4px;
         }
 
         .topic-card .topic-name {
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 400;
             color: var(--text);
             margin-bottom: 8px;
         }
@@ -132,34 +234,96 @@
         }
 
         .topic-card .stars {
-            font-size: 20px;
+            font-size: 18px;
             letter-spacing: 2px;
+            color: var(--accent);
         }
 
         .star-empty {
             opacity: 0.3;
         }
 
+        /* Primary Buttons (Gold) */
+        .btn-primary {
+            background: var(--accent);
+            color: var(--background);
+            border: none;
+            border-radius: 8px;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
+        }
+
+        .btn-primary:hover, .btn-primary:active {
+            background: var(--accent-light);
+            box-shadow: 0 6px 16px rgba(212, 160, 23, 0.4);
+            transform: translateY(-1px);
+        }
+
         /* Exam Button */
         .exam-button {
-            background: linear-gradient(135deg, var(--accent), #D97706);
-            color: white;
+            background: var(--accent);
+            color: var(--background);
             border: none;
-            border-radius: 16px;
+            border-radius: 8px;
             padding: 20px;
             font-size: 20px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 16px rgba(184, 134, 11, 0.3);
             font-family: 'Nunito', sans-serif;
             width: 100%;
-            margin-top: auto;
+            margin-top: 12px;
         }
 
         .exam-button:hover, .exam-button:active {
+            background: var(--accent-light);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+        }
+
+        /* Hall Button */
+        .hall-button {
+            background: var(--surface);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            width: 100%;
+            margin-top: auto;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .hall-button:hover {
+            background: var(--accent);
+            color: var(--background);
+        }
+
+        .hall-button .badge {
+            background: var(--accent);
+            color: var(--background);
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .hall-button:hover .badge {
+            background: var(--background);
+            color: var(--accent);
         }
 
         /* Progress Bar */
@@ -168,7 +332,7 @@
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .progress-text {
@@ -187,7 +351,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
             border-radius: 4px;
             transition: width 0.3s ease;
         }
@@ -198,7 +362,7 @@
             border-radius: 20px;
             padding: 24px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
             position: relative;
         }
 
@@ -206,8 +370,9 @@
             position: absolute;
             top: 16px;
             right: 16px;
-            background: var(--accent-light);
-            border: none;
+            background: var(--primary);
+            border: 1px solid var(--accent);
+            color: var(--accent);
             border-radius: 20px;
             padding: 6px 12px;
             font-size: 14px;
@@ -219,7 +384,7 @@
 
         .hint-button:hover {
             background: var(--accent);
-            color: white;
+            color: var(--background);
         }
 
         .question-text {
@@ -232,7 +397,7 @@
         }
 
         .question-text .keyword {
-            color: var(--primary);
+            color: var(--accent);
             font-weight: 800;
         }
 
@@ -248,6 +413,7 @@
             margin: 20px auto;
             max-width: 200px;
             line-height: 1.6;
+            border: 1px solid var(--scratch-line);
         }
 
         .column-layout .operator {
@@ -262,7 +428,8 @@
 
         /* Hint Panel */
         .hint-panel {
-            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            background: linear-gradient(135deg, #2D3A1F, #3D4A2F);
+            border: 1px solid var(--accent);
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 20px;
@@ -276,12 +443,12 @@
 
         .hint-title {
             font-weight: 700;
-            color: #92400E;
+            color: var(--accent);
             margin-bottom: 8px;
         }
 
         .hint-content {
-            color: #78350F;
+            color: var(--text);
             font-size: 16px;
         }
 
@@ -309,7 +476,7 @@
         }
 
         .scratch-clear {
-            background: var(--error-light);
+            background: var(--error);
             color: white;
             border: none;
             border-radius: 8px;
@@ -347,6 +514,7 @@
             min-height: 64px;
             font-size: 24px;
             font-weight: 700;
+            color: var(--text);
             cursor: pointer;
             font-family: 'Nunito', sans-serif;
             transition: all 0.15s ease;
@@ -357,12 +525,11 @@
 
         .numpad-key:hover, .numpad-key:active {
             background: var(--primary-light);
-            color: white;
-            border-color: var(--primary);
+            border-color: var(--accent);
         }
 
         .numpad-key.backspace {
-            background: var(--error-light);
+            background: var(--error);
             color: white;
             border-color: var(--error);
         }
@@ -379,7 +546,7 @@
 
         .answer-display {
             background: var(--card-bg);
-            border: 3px solid var(--primary);
+            border: 3px solid var(--accent);
             border-radius: 12px;
             padding: 16px 24px;
             font-size: 32px;
@@ -417,6 +584,7 @@
             min-height: 80px;
             font-size: 20px;
             font-weight: 700;
+            color: var(--text);
             cursor: pointer;
             font-family: 'Nunito', sans-serif;
             transition: all 0.2s ease;
@@ -426,15 +594,14 @@
         }
 
         .choice-button:hover {
-            border-color: var(--primary);
+            border-color: var(--accent);
             background: var(--primary-light);
-            color: white;
         }
 
         .choice-button.selected {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: white;
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--background);
         }
 
         .choice-button.correct {
@@ -498,6 +665,7 @@
             min-height: 64px;
             font-size: 20px;
             font-weight: 700;
+            color: var(--text);
             cursor: pointer;
             font-family: 'Nunito', sans-serif;
             transition: all 0.2s ease;
@@ -507,9 +675,9 @@
         }
 
         .multiselect-tile.selected {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: white;
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--background);
         }
 
         .confirm-button {
@@ -547,19 +715,19 @@
         }
 
         .feedback.correct {
-            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
-            color: #065F46;
+            background: linear-gradient(135deg, #1D4A3A, #2D6A4F);
+            color: #A7F3D0;
         }
 
         .feedback.incorrect {
-            background: linear-gradient(135deg, #FEE2E2, #FECACA);
-            color: #991B1B;
+            background: linear-gradient(135deg, #4A1D2A, #6A2D3F);
+            color: #FECACA;
         }
 
         /* Explanation Panel */
         .explanation-panel {
             background: var(--card-bg);
-            border: 2px solid var(--primary-light);
+            border: 2px solid var(--accent);
             border-radius: 12px;
             padding: 20px;
             margin: 20px 0;
@@ -573,7 +741,7 @@
 
         .explanation-title {
             font-weight: 700;
-            color: var(--primary);
+            color: var(--accent);
             margin-bottom: 12px;
             font-size: 18px;
         }
@@ -584,10 +752,10 @@
         }
 
         .next-button {
-            background: var(--primary);
-            color: white;
+            background: var(--accent);
+            color: var(--background);
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 16px 32px;
             font-size: 18px;
             font-weight: 700;
@@ -599,7 +767,7 @@
         }
 
         .next-button:hover {
-            background: var(--primary-dark);
+            background: var(--accent-light);
         }
 
         /* Star Burst Animation */
@@ -656,7 +824,7 @@
 
         .end-screen h2 {
             font-size: 28px;
-            color: var(--primary);
+            color: var(--accent);
             margin-bottom: 20px;
         }
 
@@ -672,44 +840,84 @@
             color: var(--text);
         }
 
+        .end-total-stars {
+            font-size: 16px;
+            color: var(--accent);
+            margin: 10px 0;
+        }
+
+        .end-next-unlock {
+            font-size: 14px;
+            color: var(--text-light);
+            margin: 10px 0;
+            padding: 10px;
+            background: var(--surface);
+            border-radius: 8px;
+            border: 1px solid var(--accent);
+        }
+
         .end-message {
             font-size: 20px;
             color: var(--text-light);
             margin: 20px 0;
             padding: 20px;
-            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            background: linear-gradient(135deg, #2D3A1F, #3D4A2F);
             border-radius: 12px;
         }
 
         .end-message.special {
-            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
-            color: #065F46;
+            background: linear-gradient(135deg, #1D4A3A, #2D6A4F);
+            color: #A7F3D0;
             font-weight: 700;
         }
 
+        .end-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
         .home-button {
-            background: var(--primary);
-            color: white;
+            background: var(--accent);
+            color: var(--background);
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 16px 40px;
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
             font-family: 'Nunito', sans-serif;
-            margin-top: 20px;
             transition: all 0.2s ease;
         }
 
         .home-button:hover {
-            background: var(--primary-dark);
+            background: var(--accent-light);
+        }
+
+        .hall-button-end {
+            background: var(--surface);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .hall-button-end:hover {
+            background: var(--accent);
+            color: var(--background);
         }
 
         /* Back Button */
         .back-button {
             background: none;
             border: none;
-            color: var(--primary);
+            color: var(--accent);
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
@@ -722,7 +930,7 @@
         }
 
         .back-button:hover {
-            color: var(--primary-dark);
+            color: var(--accent-light);
         }
 
         /* Hide screens */
@@ -748,13 +956,362 @@
             width: 50px;
             height: 50px;
             border: 4px solid var(--scratch-line);
-            border-top-color: var(--primary);
+            border-top-color: var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        /* ====== HALL OF GODS SCREEN ====== */
+        .hall-header {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .hall-title {
+            font-size: 14px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .hall-subtitle {
+            font-size: 24px;
+            color: var(--text);
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        .hall-progress {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .hall-progress-text {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .hall-progress-bar {
+            height: 12px;
+            background: var(--scratch-line);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 0 20px;
+        }
+
+        .hall-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .hall-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 20px 0;
+            flex: 1;
+        }
+
+        .character-card {
+            background: var(--card-bg);
+            border: 1px solid var(--scratch-line);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .character-card.unlocked {
+            border-color: var(--accent);
+        }
+
+        .character-card.locked {
+            opacity: 0.6;
+        }
+
+        .character-card .char-emoji {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+
+        .character-card .char-name {
+            font-size: 18px;
+            font-family: 'MedievalSharp', cursive;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .character-card .char-rune {
+            font-size: 12px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .character-card .char-subtitle {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .character-card .lock-icon {
+            font-size: 32px;
+            opacity: 0.5;
+        }
+
+        .character-card .lock-text {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 8px;
+        }
+
+        .item-badge {
+            display: inline-block;
+            background: var(--surface);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 14px;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .item-badge:hover {
+            background: var(--accent);
+            color: var(--background);
+        }
+
+        .item-badge.locked {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        /* ====== UNLOCK ANIMATION OVERLAY ====== */
+        .unlock-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 27, 42, 0.95);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .unlock-sparks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .spark {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: sparkFall 2s ease-out infinite;
+        }
+
+        @keyframes sparkFall {
+            0% { transform: translateY(-20px) scale(1); opacity: 1; }
+            100% { transform: translateY(100vh) scale(0); opacity: 0; }
+        }
+
+        .unlock-content {
+            text-align: center;
+            z-index: 1;
+            padding: 20px;
+        }
+
+        .unlock-label {
+            font-size: 16px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        .unlock-emoji {
+            font-size: 80px;
+            animation: pulseScale 1s ease infinite;
+        }
+
+        @keyframes pulseScale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .unlock-name {
+            font-size: 32px;
+            color: var(--text);
+            font-family: 'MedievalSharp', cursive;
+            margin: 20px 0 8px;
+        }
+
+        .unlock-rune {
+            font-size: 14px;
+            color: var(--accent);
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+        }
+
+        .unlock-description {
+            font-size: 16px;
+            color: var(--text-light);
+            max-width: 300px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .unlock-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .unlock-btn-hall {
+            background: var(--accent);
+            color: var(--background);
+            border: none;
+            border-radius: 8px;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .unlock-btn-continue {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--text-light);
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        /* ====== 3D VIEWER OVERLAY ====== */
+        .viewer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--surface);
+        }
+
+        .viewer-close {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .viewer-title {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--accent);
+            font-size: 20px;
+        }
+
+        .viewer-canvas-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .viewer-canvas-container canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .viewer-fallback {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .viewer-fallback-emoji {
+            font-size: 120px;
+            margin-bottom: 20px;
+        }
+
+        .viewer-fallback-name {
+            font-size: 24px;
+            font-family: 'MedievalSharp', cursive;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .viewer-fallback-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .viewer-info {
+            padding: 20px;
+            background: var(--surface);
+            text-align: center;
+        }
+
+        .viewer-info-name {
+            font-size: 20px;
+            font-family: 'MedievalSharp', cursive;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .viewer-info-rune {
+            font-size: 12px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .viewer-info-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -764,12 +1321,33 @@
         <div id="home-screen" class="screen active">
             <div class="header">
                 <h1>Mathe-Champion</h1>
-                <p class="subtitle">Dein Weg zur 1!</p>
-                <div class="countdown" id="countdown"></div>
+                <p class="subtitle">Die Halle der Götter</p>
+                <p class="rune-subtitle">ᚼᛅᛚᛚ ᚢᚠ ᚴᚢᚦᛋ</p>
+
+                <!-- Yggdrasil SVG Banner -->
+                <svg class="yggdrasil-banner" viewBox="0 0 100 75" fill="none">
+                    <path d="M50 70 L50 35 M50 35 C35 35 25 20 25 10 M50 35 C65 35 75 20 75 10 M50 35 C50 25 40 15 30 15 M50 35 C50 25 60 15 70 15 M50 50 C35 55 20 50 15 45 M50 50 C65 55 80 50 85 45 M45 70 C40 72 35 70 30 68 M55 70 C60 72 65 70 70 68"
+                          stroke="#B8860B" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="50" cy="8" r="4" fill="#B8860B" opacity="0.5"/>
+                    <circle cx="25" cy="8" r="3" fill="#B8860B" opacity="0.3"/>
+                    <circle cx="75" cy="8" r="3" fill="#B8860B" opacity="0.3"/>
+                </svg>
+
+                <div class="prophecy-box">
+                    <div class="prophecy-title">⚡ Die Prüfung naht...</div>
+                    <div class="countdown" id="countdown"></div>
+                </div>
             </div>
+
             <div class="topic-grid" id="topic-grid"></div>
+
+            <button class="hall-button" onclick="showHallScreen()">
+                <span>ᚼ</span> Halle der Götter
+                <span class="badge" id="hall-badge">0</span>
+            </button>
+
             <button class="exam-button" onclick="startExamMode()">
-                Prüfungs-Modus starten 🎯
+                Prüfungs-Modus starten ⚔️
             </button>
         </div>
 
@@ -813,14 +1391,40 @@
                 <h2 id="end-title"></h2>
                 <div class="end-stars" id="end-stars"></div>
                 <div class="end-score" id="end-score"></div>
+                <div class="end-total-stars" id="end-total-stars"></div>
+                <div class="end-next-unlock" id="end-next-unlock"></div>
                 <div class="end-message" id="end-message"></div>
-                <button class="home-button" onclick="goHome()">Zurück zum Start</button>
+                <div class="end-buttons">
+                    <button class="home-button" onclick="goHome()">Weiter üben</button>
+                    <button class="hall-button-end" onclick="showHallScreen()">ᚼ Halle der Götter</button>
+                </div>
             </div>
+        </div>
+
+        <!-- Hall of Gods Screen -->
+        <div id="hall-screen" class="screen">
+            <button class="back-button" onclick="goHome()">← Zurück</button>
+            <div class="hall-header">
+                <div class="hall-title">ᚼᛅᛚᛚ ᚢᚠ ᚴᚢᚦᛋ</div>
+                <div class="hall-subtitle">Halle der Götter</div>
+            </div>
+            <div class="hall-progress">
+                <div class="hall-progress-text" id="hall-progress-text">0 von 33 Sternen</div>
+                <div class="hall-progress-bar">
+                    <div class="hall-progress-fill" id="hall-progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="rune-divider">
+                <span class="runes">ᚠ ᚢ ᚦ ᚬ ᚱ ᚴ</span>
+            </div>
+            <div class="hall-grid" id="hall-grid"></div>
         </div>
     </div>
 
     <div class="star-burst" id="star-burst"></div>
     <div class="confetti-container" id="confetti-container"></div>
+    <div id="unlock-overlay-container"></div>
+    <div id="viewer-overlay-container"></div>
 
     <script>
         // Capacitor Preferences wrapper with localStorage fallback
@@ -860,6 +1464,87 @@
     </script>
 
     <script>
+        // ====== NORSE UNLOCKS DEFINITION ======
+        const NORSE_UNLOCKS = [
+            {
+                id: 'thor', type: 'character', starsRequired: 5,
+                name: 'Thor', subtitle: 'Gott des Donners',
+                emoji: '⚡', runeTitle: 'ᚦᚢᚱ',
+                description: 'Der stärkste Kämpfer in Asgard – sein Hammer Mjölnir trifft immer!',
+                image: 'assets/characters/thor.png'
+            },
+            {
+                id: 'mjolnir', type: 'item', starsRequired: 8,
+                name: 'Mjölnir', subtitle: 'Thors Hammer',
+                emoji: '🔨', runeTitle: 'ᛘᛁᚢᛚᚾᛁᚱ',
+                description: 'Der mächtigste Hammer der Welt – kehrt immer zu Thor zurück.',
+                model: 'assets/models/mjolnir.glb',
+                parentCharacter: 'thor'
+            },
+            {
+                id: 'loki', type: 'character', starsRequired: 12,
+                name: 'Loki', subtitle: 'Gott der Tricks',
+                emoji: '🐺', runeTitle: 'ᛚᚢᚴᛁ',
+                description: 'Schlau, unberechenbar – und immer für eine Überraschung gut.',
+                image: 'assets/characters/loki.png'
+            },
+            {
+                id: 'andvaranaut', type: 'item', starsRequired: 15,
+                name: 'Andvaranaut', subtitle: 'Der Verfluchungsring',
+                emoji: '💍', runeTitle: 'ᛅᚾᛏᚢᛅᚱᛅᚾᛅᚢᛏ',
+                description: 'Dieser Goldring gehörte dem Zwerg Andvari – Loki stahl ihn und brachte damit Unglück über alle, die ihn besaßen!',
+                model: 'assets/models/andvaranaut.glb',
+                parentCharacter: 'loki'
+            },
+            {
+                id: 'odin', type: 'character', starsRequired: 19,
+                name: 'Odin', subtitle: 'Göttervater',
+                emoji: '🦅', runeTitle: 'ᚢᚦᛁᚾ',
+                description: 'Der weiseste aller Götter – er opferte ein Auge für das Wissen der Runen.',
+                image: 'assets/characters/odin.png'
+            },
+            {
+                id: 'gungnir', type: 'item', starsRequired: 22,
+                name: 'Gungnir', subtitle: 'Odins Speer',
+                emoji: '🔱', runeTitle: 'ᚴᚢᚾᚴᚾᛁᚱ',
+                description: 'Odins Speer – verfehlt niemals sein Ziel und kehrt immer zurück.',
+                model: 'assets/models/gungnir.glb',
+                parentCharacter: 'odin'
+            },
+            {
+                id: 'heimdall', type: 'character', starsRequired: 27,
+                name: 'Heimdall', subtitle: 'Wächter der Brücke',
+                emoji: '🌈', runeTitle: 'ᚼᛖᛁᛘᛏᛅᛚᛚ',
+                description: 'Heimdall sieht alles und hört alles – er bewacht den Bifröst Tag und Nacht.',
+                image: 'assets/characters/heimdall.png'
+            },
+            {
+                id: 'gjallarhorn', type: 'item', starsRequired: 29,
+                name: 'Gjallarhorn', subtitle: 'Das Welthorn',
+                emoji: '📯', runeTitle: 'ᚴᛁᛅᛚᛚᛅᚱᚼᚢᚱᚾ',
+                description: 'Wenn Heimdall dieses Horn bläst, hören es alle neun Welten – es ist das Zeichen für Ragnarök!',
+                model: 'assets/models/gjallarhorn.glb',
+                parentCharacter: 'heimdall'
+            },
+            {
+                id: 'freya', type: 'character', starsRequired: 33,
+                name: 'Freya', subtitle: 'Göttin der Liebe & des Krieges',
+                emoji: '⚔️', runeTitle: 'ᚠᚱᛁᛅ',
+                description: 'Freya ist die mächtigste Göttin – geheimes Zeichen für alle 33 Sterne!',
+                image: 'assets/characters/freya.png',
+                secret: true
+            },
+            {
+                id: 'brisingamen', type: 'item', starsRequired: 33,
+                name: 'Brísingamen', subtitle: 'Freyas Halsband',
+                emoji: '📿', runeTitle: 'ᛒᚱᛁᛋᛁᚾᚴᛅᛘᛖᚾ',
+                description: 'Das magischste Schmuckstück in allen neun Welten – nur Freya darf es tragen!',
+                model: 'assets/models/brisingamen.glb',
+                parentCharacter: 'freya',
+                secret: true
+            }
+        ];
+
         // ====== APP STATE ======
         const state = {
             currentScreen: 'home',
@@ -872,7 +1557,17 @@
             hintLevel: 0,
             usedHints: 0,
             topicStars: {},
-            usedQuestions: new Set()
+            usedQuestions: new Set(),
+            unlockedIds: []
+        };
+
+        // Topic Rune Icons
+        const TOPIC_RUNES = {
+            'vielfache': 'ᚢ',
+            'teiler': 'ᛏ',
+            'teilbarkeit': 'ᚦ',
+            'halbmult': 'ᛘ',
+            'halbdiv': 'ᛞ'
         };
 
         // ====== TOPICS DEFINITION ======
@@ -895,6 +1590,7 @@
             await loadProgress();
             renderTopicGrid();
             updateCountdown();
+            updateHallBadge();
             setInterval(updateCountdown, 60000);
         }
 
@@ -906,6 +1602,10 @@
                 if (saved) {
                     state.topicStars = JSON.parse(saved);
                 }
+                const savedUnlocks = await window.Storage.get('norseUnlocks');
+                if (savedUnlocks) {
+                    state.unlockedIds = JSON.parse(savedUnlocks);
+                }
             } catch (e) {
                 console.log('No saved progress');
             }
@@ -914,9 +1614,14 @@
         async function saveProgress() {
             try {
                 await window.Storage.set('topicStars', JSON.stringify(state.topicStars));
+                await window.Storage.set('norseUnlocks', JSON.stringify(state.unlockedIds));
             } catch (e) {
                 console.log('Could not save progress');
             }
+        }
+
+        function getTotalStars() {
+            return Object.values(state.topicStars).reduce((a, b) => a + b, 0);
         }
 
         function updateCountdown() {
@@ -933,14 +1638,23 @@
             }
         }
 
+        function updateHallBadge() {
+            const badge = document.getElementById('hall-badge');
+            if (badge) {
+                badge.textContent = state.unlockedIds.length;
+            }
+        }
+
         // ====== RENDERING ======
         function renderTopicGrid() {
             const grid = document.getElementById('topic-grid');
             grid.innerHTML = topics.map(topic => {
                 const stars = state.topicStars[topic.id] || 0;
+                const rune = TOPIC_RUNES[topic.id] || 'ᚱ';
                 const starDisplay = '⭐'.repeat(stars) + '<span class="star-empty">' + '☆'.repeat(3 - stars) + '</span>';
                 return `
                     <div class="topic-card" onclick="startTopic('${topic.id}')">
+                        <div class="topic-rune">${rune}</div>
                         <div class="topic-name">${topic.name}</div>
                         <div class="topic-lang">${topic.lang === 'de' ? '🇩🇪' : '🇬🇧'}</div>
                         <div class="stars">${starDisplay}</div>
@@ -1198,7 +1912,6 @@
             const answer = a * b;
             const tens = Math.floor(a / 10) * 10;
             const ones = a % 10;
-            const hundreds = Math.floor(a / 100) * 100;
 
             let hint2, explanation;
             if (a >= 100) {
@@ -1236,7 +1949,6 @@
             a = answer * b;
 
             const tens = Math.floor(a / 10) * 10;
-            const ones = a - tens;
 
             // Find a good decomposition
             let tensResult = Math.floor(tens / b);
@@ -1300,16 +2012,13 @@
 
         // --- Column Addition ---
         function createColumnAddQuestion(isEasy) {
-            // Randomly choose 2 or 3 summands
             const useThreeSummands = !isEasy && Math.random() < 0.4;
 
             let a, b, c;
             if (useThreeSummands) {
-                // For 3 summands, use smaller numbers to keep result < 1000
                 a = randInt(50, 300);
                 b = randInt(50, 300);
                 c = randInt(50, 300);
-                // Ensure result stays under 1000
                 while (a + b + c >= 1000) {
                     a = randInt(50, 250);
                     b = randInt(50, 250);
@@ -1325,12 +2034,11 @@
                 }
             }
 
-            // Ensure there's regrouping (for 2 summands)
             if (!useThreeSummands) {
                 const ones = (a % 10) + (b % 10);
                 const tens = (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10);
                 if (ones < 10 && tens < 10) {
-                    a += 5; // Force some regrouping
+                    a += 5;
                 }
             }
 
@@ -1376,12 +2084,10 @@
                 b = randInt(100, 400);
             }
 
-            // Ensure a > b and there's borrowing
             if (b >= a) {
                 [a, b] = [b + 100, a];
             }
 
-            // Try to ensure borrowing is needed
             if ((a % 10) >= (b % 10) && (Math.floor(a/10) % 10) >= (Math.floor(b/10) % 10)) {
                 b = b + 5;
                 if (b >= a) a = b + 50;
@@ -1452,21 +2158,17 @@
             };
         }
 
-        // --- Rough Calculation (Überschlagsrechnung) ---
+        // --- Rough Calculation ---
         function createRoughCalcQuestion(isEasy) {
-            // Choose question type: addition, subtraction, or 3 summands
             const types = isEasy ? ['addition', 'subtraction'] : ['addition', 'subtraction', 'threeSummands'];
             const type = types[randInt(0, types.length - 1)];
 
             let a, b, c, answer, roundedAnswer, text, hint2;
-
-            // Helper to round to nearest ten
             const roundToTen = (n) => Math.round(n / 10) * 10;
 
             if (type === 'addition') {
                 a = isEasy ? randInt(100, 500) : randInt(100, 900);
                 b = isEasy ? randInt(100, 400) : randInt(100, 800);
-                const exactAnswer = a + b;
                 roundedAnswer = roundToTen(a) + roundToTen(b);
                 text = `Estimate: ${a} + ${b} ≈ ?`;
                 hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}\n${roundToTen(a)} + ${roundToTen(b)} = ${roundedAnswer}`;
@@ -1477,17 +2179,14 @@
                 if (b >= a) {
                     [a, b] = [a + 200, b];
                 }
-                const exactAnswer = a - b;
                 roundedAnswer = roundToTen(a) - roundToTen(b);
                 text = `Estimate: ${a} − ${b} ≈ ?`;
                 hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}\n${roundToTen(a)} − ${roundToTen(b)} = ${roundedAnswer}`;
                 answer = roundedAnswer;
             } else {
-                // Three summands
                 a = randInt(100, 350);
                 b = randInt(100, 350);
                 c = randInt(100, 300);
-                const exactAnswer = a + b + c;
                 roundedAnswer = roundToTen(a) + roundToTen(b) + roundToTen(c);
                 text = `Estimate: ${a} + ${b} + ${c} ≈ ?`;
                 hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}, ${c} ≈ ${roundToTen(c)}\n${roundToTen(a)} + ${roundToTen(b)} + ${roundToTen(c)} = ${roundedAnswer}`;
@@ -1499,7 +2198,7 @@
                 text: text,
                 type: 'numpad',
                 answer: answer,
-                tolerance: 20, // Accept answers within ±20
+                tolerance: 20,
                 hasScratchPad: true,
                 hint1: 'Round each number to the nearest ten first, then calculate.',
                 hint2: hint2,
@@ -1513,31 +2212,26 @@
             state.attempts = 0;
             state.hintLevel = 0;
 
-            // Update progress
             const total = state.questions.length;
             const current = state.currentQuestionIndex + 1;
             document.getElementById('progress-text').textContent = `Aufgabe ${current} von ${total}`;
             document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
 
-            // Reset UI
             document.getElementById('hint-panel').classList.remove('visible');
             document.getElementById('feedback').classList.remove('visible');
             document.getElementById('explanation-panel').classList.remove('visible');
+            document.getElementById('hint-button').disabled = false;
 
-            // Question text
             document.getElementById('question-text').innerHTML = q.text;
 
-            // Column layout for addition/subtraction
             const colLayout = document.getElementById('column-layout');
             if (q.columnLayout) {
                 const { a, b, c, operation } = q.columnLayout;
                 let layoutHTML = `<div>${a.toString().padStart(3, ' ')}</div>`;
                 if (c !== undefined) {
-                    // 3 summands
                     layoutHTML += `<div>${b.toString().padStart(3, ' ')}</div>`;
                     layoutHTML += `<div><span class="operator">${operation}</span>${c.toString().padStart(3, ' ')}</div>`;
                 } else {
-                    // 2 summands
                     layoutHTML += `<div><span class="operator">${operation}</span>${b.toString().padStart(3, ' ')}</div>`;
                 }
                 layoutHTML += `<div class="separator">&nbsp;</div>`;
@@ -1547,7 +2241,6 @@
                 colLayout.style.display = 'none';
             }
 
-            // Scratch pad
             const scratchPad = document.getElementById('scratch-pad');
             if (q.hasScratchPad) {
                 scratchPad.style.display = 'block';
@@ -1556,7 +2249,6 @@
                 scratchPad.style.display = 'none';
             }
 
-            // Input area
             renderInput(q);
         }
 
@@ -1638,7 +2330,6 @@
 
             if (isCorrect) {
                 btn.classList.add('correct');
-                // Check if all correct options found
                 const allButtons = document.querySelectorAll('.choice-button');
                 const selectedCorrect = Array.from(allButtons).filter(b =>
                     b.classList.contains('correct')
@@ -1685,7 +2376,6 @@
             const q = state.questions[state.currentQuestionIndex];
             let isCorrect = given === expected;
 
-            // For rough calculation, allow tolerance
             if (q.tolerance && typeof given === 'number' && typeof expected === 'number') {
                 isCorrect = Math.abs(given - expected) <= q.tolerance;
             }
@@ -1742,7 +2432,6 @@
             document.getElementById('explanation-content').textContent = q.explanation;
             document.getElementById('explanation-panel').classList.add('visible');
 
-            // Disable inputs
             document.querySelectorAll('.numpad-key, .choice-button, .yesno-button, .multiselect-tile, .confirm-button')
                 .forEach(b => b.disabled = true);
         }
@@ -1794,25 +2483,20 @@
             scratchCanvas = document.getElementById('scratch-canvas');
             scratchCtx = scratchCanvas.getContext('2d');
 
-            // Set canvas size
             const rect = scratchCanvas.getBoundingClientRect();
             scratchCanvas.width = rect.width * 2;
             scratchCanvas.height = rect.height * 2;
             scratchCtx.scale(2, 2);
 
-            // Draw background
-            scratchCtx.fillStyle = '#FFFEF7';
+            scratchCtx.fillStyle = '#152238';
             scratchCtx.fillRect(0, 0, rect.width, rect.height);
 
-            // Draw lines
-            scratchCtx.strokeStyle = '#E5E7EB';
+            scratchCtx.strokeStyle = '#2E4A6B';
             scratchCtx.lineWidth = 1;
 
             if (showHTOGrid) {
-                // H T O grid
                 const colWidth = rect.width / 3;
 
-                // Vertical lines
                 scratchCtx.beginPath();
                 scratchCtx.moveTo(colWidth, 0);
                 scratchCtx.lineTo(colWidth, rect.height);
@@ -1820,23 +2504,20 @@
                 scratchCtx.lineTo(colWidth * 2, rect.height);
                 scratchCtx.stroke();
 
-                // Labels
-                scratchCtx.fillStyle = '#9CA3AF';
+                scratchCtx.fillStyle = '#A89F8C';
                 scratchCtx.font = '14px Nunito';
                 scratchCtx.textAlign = 'center';
                 scratchCtx.fillText('H', colWidth / 2, 20);
                 scratchCtx.fillText('T', colWidth * 1.5, 20);
                 scratchCtx.fillText('O', colWidth * 2.5, 20);
 
-                // Answer separator line
-                scratchCtx.strokeStyle = '#9CA3AF';
+                scratchCtx.strokeStyle = '#A89F8C';
                 scratchCtx.lineWidth = 2;
                 scratchCtx.beginPath();
                 scratchCtx.moveTo(10, rect.height - 40);
                 scratchCtx.lineTo(rect.width - 10, rect.height - 40);
                 scratchCtx.stroke();
             } else {
-                // Horizontal lines
                 for (let y = 30; y < rect.height; y += 30) {
                     scratchCtx.beginPath();
                     scratchCtx.moveTo(0, y);
@@ -1845,13 +2526,11 @@
                 }
             }
 
-            // Set up drawing
-            scratchCtx.strokeStyle = '#1e3a5f';
+            scratchCtx.strokeStyle = '#B8860B';
             scratchCtx.lineWidth = 2.5;
             scratchCtx.lineCap = 'round';
             scratchCtx.lineJoin = 'round';
 
-            // Event listeners
             scratchCanvas.onpointerdown = startDraw;
             scratchCanvas.onpointermove = draw;
             scratchCanvas.onpointerup = stopDraw;
@@ -1896,7 +2575,6 @@
             const container = document.getElementById('star-burst');
             container.innerHTML = '';
 
-            const colors = ['#F59E0B', '#7C3AED', '#16A34A', '#EC4899', '#3B82F6', '#EF4444', '#14B8A6', '#F97316'];
             const emojis = ['⭐', '✨', '🌟', '💫'];
 
             for (let i = 0; i < 8; i++) {
@@ -1917,7 +2595,7 @@
             const container = document.getElementById('confetti-container');
             container.innerHTML = '';
 
-            const colors = ['#F59E0B', '#7C3AED', '#16A34A', '#EC4899', '#3B82F6', '#EF4444'];
+            const colors = ['#B8860B', '#D4A017', '#1B3A6B', '#2E5FA3', '#2D6A4F'];
 
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
@@ -1945,7 +2623,6 @@
             else if (percentage >= 80) stars = 2;
             else if (percentage >= 60) stars = 1;
 
-            // Update stored stars
             if (!state.isExamMode && state.currentTopic) {
                 const topicId = state.currentTopic.id;
                 if (!state.topicStars[topicId] || stars > state.topicStars[topicId]) {
@@ -1954,19 +2631,31 @@
                 }
             }
 
-            // Render end screen
+            const totalStars = getTotalStars();
             const isExam = state.isExamMode;
+
             document.getElementById('end-title').textContent = isExam ? 'Prüfung abgeschlossen!' : 'Thema abgeschlossen!';
             document.getElementById('end-stars').innerHTML = '⭐'.repeat(stars) + '<span class="star-empty">' + '☆'.repeat(3 - stars) + '</span>';
             document.getElementById('end-score').textContent = `${score} von ${total} richtig`;
+            document.getElementById('end-total-stars').textContent = `Gesamt: ${totalStars} / 33 ⭐`;
+
+            // Next unlock info
+            const nextUnlock = getNextUnlock();
+            const nextUnlockEl = document.getElementById('end-next-unlock');
+            if (nextUnlock) {
+                const starsNeeded = nextUnlock.starsRequired - totalStars;
+                nextUnlockEl.innerHTML = `Noch ${starsNeeded} Stern${starsNeeded !== 1 ? 'e' : ''} bis <strong>${nextUnlock.name}</strong> ${nextUnlock.emoji}`;
+            } else {
+                nextUnlockEl.innerHTML = 'Alle Götter freigeschaltet! ✨';
+            }
 
             const messageEl = document.getElementById('end-message');
             if (isExam && score >= 18) {
                 messageEl.className = 'end-message special';
-                messageEl.textContent = 'Sophia, du bist BEREIT! Die 1 gehört dir! 🏆';
+                messageEl.textContent = 'Du bist BEREIT für die Prüfung! Die Götter sind mit dir! ⚡';
             } else if (percentage >= 90) {
                 messageEl.className = 'end-message';
-                messageEl.textContent = 'Perfekt! Du kannst das super! 🌟';
+                messageEl.textContent = 'Perfekt! Die Götter sind beeindruckt! 🌟';
             } else if (percentage >= 80) {
                 messageEl.className = 'end-message';
                 messageEl.textContent = 'Sehr gut! Fast perfekt! 💪';
@@ -1979,11 +2668,326 @@
             }
 
             showScreen('end-screen');
+
+            // Check for new unlocks
+            await checkAndUnlock();
         }
+
+        function getNextUnlock() {
+            const totalStars = getTotalStars();
+            const notUnlocked = NORSE_UNLOCKS
+                .filter(u => !state.unlockedIds.includes(u.id) && !u.secret)
+                .sort((a, b) => a.starsRequired - b.starsRequired);
+            return notUnlocked[0] || null;
+        }
+
+        // ====== UNLOCK SYSTEM ======
+        async function checkAndUnlock() {
+            const totalStars = getTotalStars();
+            const newUnlocks = [];
+
+            for (const unlock of NORSE_UNLOCKS) {
+                if (unlock.starsRequired <= totalStars && !state.unlockedIds.includes(unlock.id)) {
+                    state.unlockedIds.push(unlock.id);
+                    newUnlocks.push(unlock);
+                }
+            }
+
+            if (newUnlocks.length > 0) {
+                await saveProgress();
+                updateHallBadge();
+                // Show animation for first new unlock
+                showUnlockAnimation(newUnlocks[0]);
+            }
+        }
+
+        function showUnlockAnimation(unlock) {
+            const container = document.getElementById('unlock-overlay-container');
+
+            // Create sparks
+            let sparksHTML = '';
+            for (let i = 0; i < 30; i++) {
+                const left = Math.random() * 100;
+                const delay = Math.random() * 2;
+                sparksHTML += `<div class="spark" style="left: ${left}%; animation-delay: ${delay}s;"></div>`;
+            }
+
+            container.innerHTML = `
+                <div class="unlock-overlay">
+                    <div class="unlock-sparks">${sparksHTML}</div>
+                    <div class="unlock-content">
+                        <div class="unlock-label">Neu freigeschaltet!</div>
+                        <div class="unlock-emoji">${unlock.emoji}</div>
+                        <div class="unlock-name">${unlock.name}</div>
+                        <div class="unlock-rune">${unlock.runeTitle}</div>
+                        <div class="unlock-description">${unlock.description}</div>
+                        <div class="unlock-buttons">
+                            <button class="unlock-btn-hall" onclick="closeUnlockAndGoHall()">Zur Halle der Götter</button>
+                            <button class="unlock-btn-continue" onclick="closeUnlockOverlay()">Weiter üben</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeUnlockOverlay() {
+            document.getElementById('unlock-overlay-container').innerHTML = '';
+        }
+
+        function closeUnlockAndGoHall() {
+            closeUnlockOverlay();
+            showHallScreen();
+        }
+        window.closeUnlockOverlay = closeUnlockOverlay;
+        window.closeUnlockAndGoHall = closeUnlockAndGoHall;
+
+        // ====== HALL OF GODS SCREEN ======
+        function showHallScreen() {
+            showScreen('hall-screen');
+            renderHall();
+        }
+        window.showHallScreen = showHallScreen;
+
+        function renderHall() {
+            const totalStars = getTotalStars();
+            const maxStars = 33;
+
+            document.getElementById('hall-progress-text').textContent = `Du hast ${totalStars} von ${maxStars} Sternen gesammelt`;
+            document.getElementById('hall-progress-fill').style.width = `${(totalStars / maxStars) * 100}%`;
+
+            const grid = document.getElementById('hall-grid');
+            const characters = NORSE_UNLOCKS.filter(u => u.type === 'character');
+
+            grid.innerHTML = characters.map(char => {
+                const isUnlocked = state.unlockedIds.includes(char.id);
+                const item = NORSE_UNLOCKS.find(u => u.type === 'item' && u.parentCharacter === char.id);
+                const itemUnlocked = item && state.unlockedIds.includes(item.id);
+
+                if (isUnlocked) {
+                    return `
+                        <div class="character-card unlocked">
+                            <div class="char-emoji">${char.emoji}</div>
+                            <div class="char-name">${char.name}</div>
+                            <div class="char-rune">${char.runeTitle}</div>
+                            <div class="char-subtitle">${char.subtitle}</div>
+                            ${item ? `
+                                <div class="item-badge ${itemUnlocked ? '' : 'locked'}"
+                                     ${itemUnlocked ? `onclick="show3DViewer('${item.id}')"` : ''}>
+                                    ${item.emoji} ${item.name}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                } else {
+                    const starsNeeded = char.starsRequired - totalStars;
+                    return `
+                        <div class="character-card locked">
+                            <div class="lock-icon">🔒</div>
+                            <div class="char-name">${char.secret ? '???' : char.name}</div>
+                            <div class="lock-text">${char.secret ? '???' : `${starsNeeded} ⭐ für Freischaltung`}</div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // ====== 3D VIEWER ======
+        let threeLoaded = false;
+        let viewerScene, viewerCamera, viewerRenderer, viewerMesh;
+        let viewerAnimationId;
+        let isDragging = false;
+        let previousMouseX = 0;
+        let autoRotate = true;
+
+        function show3DViewer(itemId) {
+            const item = NORSE_UNLOCKS.find(u => u.id === itemId);
+            if (!item) return;
+
+            const container = document.getElementById('viewer-overlay-container');
+            container.innerHTML = `
+                <div class="viewer-overlay">
+                    <div class="viewer-header">
+                        <button class="viewer-close" onclick="close3DViewer()">✕</button>
+                        <div class="viewer-title">${item.name}</div>
+                        <div style="width: 40px;"></div>
+                    </div>
+                    <div class="viewer-canvas-container" id="viewer-canvas-container">
+                        <div class="viewer-fallback" id="viewer-fallback" style="display: none;">
+                            <div class="viewer-fallback-emoji">${item.emoji}</div>
+                            <div class="viewer-fallback-name">${item.name}</div>
+                            <div class="viewer-fallback-desc">${item.description}</div>
+                        </div>
+                    </div>
+                    <div class="viewer-info">
+                        <div class="viewer-info-name">${item.name}</div>
+                        <div class="viewer-info-rune">${item.runeTitle}</div>
+                        <div class="viewer-info-desc">${item.description}</div>
+                    </div>
+                </div>
+            `;
+
+            loadThreeJS(item);
+        }
+        window.show3DViewer = show3DViewer;
+
+        function loadThreeJS(item) {
+            if (threeLoaded) {
+                init3DScene(item);
+                return;
+            }
+
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+            script.onload = () => {
+                const gltfScript = document.createElement('script');
+                gltfScript.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
+                gltfScript.onload = () => {
+                    threeLoaded = true;
+                    init3DScene(item);
+                };
+                gltfScript.onerror = () => showViewerFallback();
+                document.head.appendChild(gltfScript);
+            };
+            script.onerror = () => showViewerFallback();
+            document.head.appendChild(script);
+        }
+
+        function init3DScene(item) {
+            const container = document.getElementById('viewer-canvas-container');
+            if (!container) return;
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // Scene
+            viewerScene = new THREE.Scene();
+            viewerScene.background = new THREE.Color(0x0D1B2A);
+
+            // Camera
+            viewerCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            viewerCamera.position.set(0, 0, 3);
+
+            // Renderer
+            viewerRenderer = new THREE.WebGLRenderer({ antialias: true });
+            viewerRenderer.setSize(width, height);
+            viewerRenderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(viewerRenderer.domElement);
+
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xB8860B, 0.6);
+            viewerScene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+            directionalLight.position.set(1, 1, 1);
+            viewerScene.add(directionalLight);
+
+            // Load model
+            const loader = new THREE.GLTFLoader();
+            loader.load(
+                item.model,
+                (gltf) => {
+                    viewerMesh = gltf.scene;
+
+                    // Center and scale
+                    const box = new THREE.Box3().setFromObject(viewerMesh);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 2 / maxDim;
+                    viewerMesh.scale.setScalar(scale);
+                    viewerMesh.position.sub(center.multiplyScalar(scale));
+
+                    viewerScene.add(viewerMesh);
+                    setupViewerControls();
+                    animate3D();
+                },
+                undefined,
+                (error) => {
+                    console.log('GLB load error:', error);
+                    showViewerFallback();
+                }
+            );
+        }
+
+        function setupViewerControls() {
+            const canvas = viewerRenderer.domElement;
+
+            canvas.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                previousMouseX = e.clientX;
+                autoRotate = false;
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDragging && viewerMesh) {
+                    const deltaX = e.clientX - previousMouseX;
+                    viewerMesh.rotation.y += deltaX * 0.01;
+                    previousMouseX = e.clientX;
+                }
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            canvas.addEventListener('mouseleave', () => {
+                isDragging = false;
+            });
+
+            // Touch events
+            canvas.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                previousMouseX = e.touches[0].clientX;
+                autoRotate = false;
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (isDragging && viewerMesh) {
+                    const deltaX = e.touches[0].clientX - previousMouseX;
+                    viewerMesh.rotation.y += deltaX * 0.01;
+                    previousMouseX = e.touches[0].clientX;
+                }
+            });
+
+            canvas.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+        }
+
+        function animate3D() {
+            viewerAnimationId = requestAnimationFrame(animate3D);
+
+            if (viewerMesh && autoRotate) {
+                viewerMesh.rotation.y += 0.005;
+            }
+
+            viewerRenderer.render(viewerScene, viewerCamera);
+        }
+
+        function showViewerFallback() {
+            const fallback = document.getElementById('viewer-fallback');
+            if (fallback) {
+                fallback.style.display = 'block';
+            }
+        }
+
+        function close3DViewer() {
+            if (viewerAnimationId) {
+                cancelAnimationFrame(viewerAnimationId);
+            }
+            viewerScene = null;
+            viewerCamera = null;
+            viewerRenderer = null;
+            viewerMesh = null;
+            autoRotate = true;
+            document.getElementById('viewer-overlay-container').innerHTML = '';
+        }
+        window.close3DViewer = close3DViewer;
 
         // ====== NAVIGATION ======
         function goHome() {
             renderTopicGrid();
+            updateHallBadge();
             showScreen('home-screen');
         }
         window.goHome = goHome;

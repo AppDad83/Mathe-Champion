@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Outer golden ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B8860B"
+        android:strokeWidth="3"
+        android:pathData="M54,54m-28,0a28,28 0,1 1,56 0a28,28 0,1 1,-56 0"/>
+
+    <!-- Inner decorative ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B8860B"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.6"
+        android:pathData="M54,54m-23,0a23,23 0,1 1,46 0a23,23 0,1 1,-46 0"/>
+
+    <!-- Mjölnir (Thor's Hammer) stylized -->
+    <!-- Hammer head -->
+    <path
+        android:fillColor="#B8860B"
+        android:pathData="M42,42 L66,42 L68,48 L40,48 Z"/>
+
+    <!-- Hammer head top detail -->
+    <path
+        android:fillColor="#D4A017"
+        android:pathData="M44,42 L64,42 L64,44 L44,44 Z"/>
+
+    <!-- Hammer handle -->
+    <path
+        android:fillColor="#B8860B"
+        android:pathData="M51,48 L57,48 L57,70 L51,70 Z"/>
+
+    <!-- Handle wrap details -->
+    <path
+        android:fillColor="#8B6914"
+        android:pathData="M51,52 L57,52 L57,54 L51,54 Z"/>
+    <path
+        android:fillColor="#8B6914"
+        android:pathData="M51,58 L57,58 L57,60 L51,60 Z"/>
+    <path
+        android:fillColor="#8B6914"
+        android:pathData="M51,64 L57,64 L57,66 L51,66 Z"/>
+
+    <!-- Handle end knob -->
+    <path
+        android:fillColor="#B8860B"
+        android:pathData="M49,70 L59,70 L59,73 L49,73 Z"/>
+
+    <!-- Rune ᛘ (Mannaz/M) on hammer head -->
+    <path
+        android:fillColor="#0D1B2A"
+        android:strokeColor="#0D1B2A"
+        android:strokeWidth="1.5"
+        android:pathData="M48,44 L48,47 M60,44 L60,47 M48,44 L54,46 L60,44"/>
+
+    <!-- Corner runes decorations -->
+    <!-- Top left rune ᚠ -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B8860B"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.5"
+        android:pathData="M30,30 L30,38 M30,30 L35,33 M30,34 L34,36"/>
+
+    <!-- Top right rune ᚢ -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B8860B"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.5"
+        android:pathData="M78,30 L78,38 M78,30 L73,34 L78,38"/>
+
+    <!-- Bottom left rune ᚦ -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B8860B"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.5"
+        android:pathData="M30,70 L30,78 M30,70 L35,74 L30,78"/>
+
+    <!-- Bottom right rune ᚱ -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B8860B"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.5"
+        android:pathData="M78,70 L78,78 M78,70 L73,74"/>
+
+    <!-- Small stars/sparkles -->
+    <path
+        android:fillColor="#D4A017"
+        android:pathData="M36,54 L37,52 L38,54 L37,56 Z"/>
+    <path
+        android:fillColor="#D4A017"
+        android:pathData="M70,54 L71,52 L72,54 L71,56 Z"/>
+    <path
+        android:fillColor="#D4A017"
+        android:fillAlpha="0.7"
+        android:pathData="M54,32 L55,30 L56,32 L55,34 Z"/>
+</vector>
