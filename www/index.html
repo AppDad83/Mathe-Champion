@@ -1042,6 +1042,61 @@
             margin-bottom: 8px;
         }
 
+        .character-card .char-portrait {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .portrait-fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .portrait-fullscreen-overlay img {
+            max-width: 90vw;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 16px;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 40px rgba(184, 134, 11, 0.5);
+        }
+
+        .portrait-fullscreen-name {
+            margin-top: 20px;
+            font-size: 28px;
+            font-family: 'MedievalSharp', cursive;
+            color: var(--text);
+        }
+
+        .portrait-fullscreen-subtitle {
+            margin-top: 8px;
+            font-size: 16px;
+            color: var(--accent);
+        }
+
+        .portrait-fullscreen-hint {
+            position: absolute;
+            bottom: 30px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
         .character-card .char-name {
             font-size: 18px;
             font-family: 'MedievalSharp', cursive;
@@ -1539,7 +1594,7 @@
                 name: 'Brísingamen', subtitle: 'Freyas Halsband',
                 emoji: '📿', runeTitle: 'ᛒᚱᛁᛋᛁᚾᚴᛅᛘᛖᚾ',
                 description: 'Das magischste Schmuckstück in allen neun Welten – nur Freya darf es tragen!',
-                model: 'assets/models/brisingamen.glb',
+                model: 'assets/models/brisingamen_freya.glb',
                 parentCharacter: 'freya',
                 secret: true
             }
@@ -2758,7 +2813,7 @@
                 if (isUnlocked) {
                     return `
                         <div class="character-card unlocked">
-                            <div class="char-emoji">${char.emoji}</div>
+                            <img class="char-portrait" src="${char.image}" alt="${char.name}" onclick="showPortraitFullscreen('${char.id}')">
                             <div class="char-name">${char.name}</div>
                             <div class="char-rune">${char.runeTitle}</div>
                             <div class="char-subtitle">${char.subtitle}</div>
@@ -2783,13 +2838,34 @@
             }).join('');
         }
 
+        // ====== PORTRAIT FULLSCREEN ======
+        function showPortraitFullscreen(charId) {
+            const char = NORSE_UNLOCKS.find(u => u.id === charId);
+            if (!char) return;
+
+            const overlay = document.createElement('div');
+            overlay.className = 'portrait-fullscreen-overlay';
+            overlay.innerHTML = `
+                <img src="${char.image}" alt="${char.name}">
+                <div class="portrait-fullscreen-name">${char.name}</div>
+                <div class="portrait-fullscreen-subtitle">${char.subtitle}</div>
+                <div class="portrait-fullscreen-hint">Tippen zum Schließen</div>
+            `;
+            overlay.onclick = () => overlay.remove();
+            document.body.appendChild(overlay);
+        }
+        window.showPortraitFullscreen = showPortraitFullscreen;
+
         // ====== 3D VIEWER ======
         let threeLoaded = false;
         let viewerScene, viewerCamera, viewerRenderer, viewerMesh;
         let viewerAnimationId;
         let isDragging = false;
         let previousMouseX = 0;
+        let previousMouseY = 0;
         let autoRotate = true;
+        let cameraDistance = 3;
+        let pinchStartDistance = 0;
 
         function show3DViewer(itemId) {
             const item = NORSE_UNLOCKS.find(u => u.id === itemId);
@@ -2865,13 +2941,34 @@
             viewerRenderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(viewerRenderer.domElement);
 
-            // Lights
-            const ambientLight = new THREE.AmbientLight(0xB8860B, 0.6);
+            // Lights - Helle Beleuchtung für gute Sichtbarkeit
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
             viewerScene.add(ambientLight);
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-            directionalLight.position.set(1, 1, 1);
+            // Haupt-Licht von vorne oben
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
+            directionalLight.position.set(1, 2, 2);
             viewerScene.add(directionalLight);
+
+            // Fülllicht von links (golden)
+            const fillLight = new THREE.DirectionalLight(0xFFD700, 1.0);
+            fillLight.position.set(-2, 1, 1);
+            viewerScene.add(fillLight);
+
+            // Fülllicht von rechts
+            const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.8);
+            fillLight2.position.set(2, 0, 1);
+            viewerScene.add(fillLight2);
+
+            // Rücklicht für Konturen
+            const backLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            backLight.position.set(0, 1, -2);
+            viewerScene.add(backLight);
+
+            // Unterlicht für Details
+            const bottomLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            bottomLight.position.set(0, -2, 1);
+            viewerScene.add(bottomLight);
 
             // Load model
             const loader = new THREE.GLTFLoader();
@@ -2879,6 +2976,23 @@
                 item.model,
                 (gltf) => {
                     viewerMesh = gltf.scene;
+
+                    // Transparenz deaktivieren für solid rendering
+                    viewerMesh.traverse((child) => {
+                        if (child.isMesh && child.material) {
+                            if (Array.isArray(child.material)) {
+                                child.material.forEach(mat => {
+                                    mat.transparent = false;
+                                    mat.opacity = 1.0;
+                                    mat.depthWrite = true;
+                                });
+                            } else {
+                                child.material.transparent = false;
+                                child.material.opacity = 1.0;
+                                child.material.depthWrite = true;
+                            }
+                        }
+                    });
 
                     // Center and scale
                     const box = new THREE.Box3().setFromObject(viewerMesh);
@@ -2904,17 +3018,24 @@
         function setupViewerControls() {
             const canvas = viewerRenderer.domElement;
 
+            // Maus-Steuerung
             canvas.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 previousMouseX = e.clientX;
+                previousMouseY = e.clientY;
                 autoRotate = false;
             });
 
             canvas.addEventListener('mousemove', (e) => {
                 if (isDragging && viewerMesh) {
                     const deltaX = e.clientX - previousMouseX;
+                    const deltaY = e.clientY - previousMouseY;
                     viewerMesh.rotation.y += deltaX * 0.01;
+                    viewerMesh.rotation.x += deltaY * 0.01;
+                    // X-Rotation begrenzen
+                    viewerMesh.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, viewerMesh.rotation.x));
                     previousMouseX = e.clientX;
+                    previousMouseY = e.clientY;
                 }
             });
 
@@ -2926,20 +3047,52 @@
                 isDragging = false;
             });
 
-            // Touch events
+            // Mausrad-Zoom
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                cameraDistance += e.deltaY * 0.01;
+                cameraDistance = Math.max(1.5, Math.min(6, cameraDistance));
+                viewerCamera.position.z = cameraDistance;
+            }, { passive: false });
+
+            // Touch-Steuerung
             canvas.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                previousMouseX = e.touches[0].clientX;
-                autoRotate = false;
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    previousMouseX = e.touches[0].clientX;
+                    previousMouseY = e.touches[0].clientY;
+                    autoRotate = false;
+                } else if (e.touches.length === 2) {
+                    // Pinch-Zoom Start
+                    isDragging = false;
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    pinchStartDistance = Math.sqrt(dx * dx + dy * dy);
+                }
             });
 
             canvas.addEventListener('touchmove', (e) => {
-                if (isDragging && viewerMesh) {
+                e.preventDefault();
+                if (e.touches.length === 1 && isDragging && viewerMesh) {
                     const deltaX = e.touches[0].clientX - previousMouseX;
+                    const deltaY = e.touches[0].clientY - previousMouseY;
                     viewerMesh.rotation.y += deltaX * 0.01;
+                    viewerMesh.rotation.x += deltaY * 0.01;
+                    viewerMesh.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, viewerMesh.rotation.x));
                     previousMouseX = e.touches[0].clientX;
+                    previousMouseY = e.touches[0].clientY;
+                } else if (e.touches.length === 2) {
+                    // Pinch-Zoom
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    const pinchDistance = Math.sqrt(dx * dx + dy * dy);
+                    const delta = pinchStartDistance - pinchDistance;
+                    cameraDistance += delta * 0.02;
+                    cameraDistance = Math.max(1.5, Math.min(6, cameraDistance));
+                    viewerCamera.position.z = cameraDistance;
+                    pinchStartDistance = pinchDistance;
                 }
-            });
+            }, { passive: false });
 
             canvas.addEventListener('touchend', () => {
                 isDragging = false;
@@ -2972,6 +3125,7 @@
             viewerRenderer = null;
             viewerMesh = null;
             autoRotate = true;
+            cameraDistance = 3;
             document.getElementById('viewer-overlay-container').innerHTML = '';
         }
         window.close3DViewer = close3DViewer;
