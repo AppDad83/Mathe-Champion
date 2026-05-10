@@ -356,6 +356,150 @@
             transition: width 0.3s ease;
         }
 
+        /* Exam Timer */
+        .exam-timer-container {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            text-align: right;
+        }
+
+        .exam-timer {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .exam-timer.warning {
+            color: var(--error-light);
+            animation: timerPulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .exam-timer-bar {
+            width: 80px;
+            height: 6px;
+            background: var(--scratch-line);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .exam-timer-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+
+        .exam-timer-fill.warning {
+            background: var(--error-light);
+        }
+
+        /* Topic Breakdown in End Screen */
+        .topic-breakdown {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: left;
+        }
+
+        .breakdown-section {
+            margin-bottom: 12px;
+        }
+
+        .breakdown-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .breakdown-header {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--scratch-line);
+        }
+
+        .breakdown-header.strengths {
+            color: var(--accent);
+        }
+
+        .breakdown-header.weaknesses {
+            color: var(--error-light);
+        }
+
+        .breakdown-item {
+            font-size: 14px;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breakdown-item.strength {
+            color: var(--accent);
+        }
+
+        .breakdown-item.weakness {
+            color: var(--error-light);
+        }
+
+        .weakness-button {
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .weakness-button:hover {
+            background: var(--error-light);
+        }
+
+        /* Highlighted Topic Cards */
+        .topic-card.highlight-weak {
+            border: 2px solid var(--accent);
+            animation: highlightPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes highlightPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.4); }
+            50% { box-shadow: 0 0 15px 3px rgba(184, 134, 11, 0.6); }
+        }
+
+        .topic-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent);
+            color: var(--background);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+
+        .topic-badge.recommended {
+            background: var(--primary-light);
+            color: var(--text);
+        }
+
         /* Question Area */
         .question-container {
             background: var(--card-bg);
@@ -1643,10 +1787,16 @@
         <!-- Practice Screen -->
         <div id="practice-screen" class="screen">
             <button class="back-button" onclick="goHome()">← Zurück</button>
-            <div class="progress-container">
+            <div class="progress-container" style="position: relative;">
                 <div class="progress-text" id="progress-text">Aufgabe 1 von 10</div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill" style="width: 10%"></div>
+                </div>
+                <div class="exam-timer-container" id="exam-timer-container" style="display: none;">
+                    <div class="exam-timer" id="exam-timer">⏱️ 01:00</div>
+                    <div class="exam-timer-bar">
+                        <div class="exam-timer-fill" id="exam-timer-fill" style="width: 100%"></div>
+                    </div>
                 </div>
             </div>
             <div class="question-container">
@@ -1680,10 +1830,11 @@
                 <h2 id="end-title"></h2>
                 <div class="end-stars" id="end-stars"></div>
                 <div class="end-score" id="end-score"></div>
+                <div class="topic-breakdown" id="topic-breakdown" style="display: none;"></div>
                 <div class="end-total-stars" id="end-total-stars"></div>
                 <div class="end-next-unlock" id="end-next-unlock"></div>
                 <div class="end-message" id="end-message"></div>
-                <div class="end-buttons">
+                <div class="end-buttons" id="end-buttons">
                     <button class="home-button" onclick="goHome()">Weiter üben</button>
                     <button class="hall-button-end" onclick="showHallScreen()">ᚼ Halle der Götter</button>
                 </div>
@@ -2059,6 +2210,10 @@
             ]
         };
 
+        // ====== EXAM TIMER CONSTANTS ======
+        const EXAM_TIMER_SECONDS = 60;  // Sekunden pro Aufgabe
+        const EXAM_WARNING_SECONDS = 15; // Ab wann Timer rot wird
+
         // ====== APP STATE ======
         const state = {
             currentScreen: 'home',
@@ -2083,7 +2238,16 @@
             sessionState: {
                 consecutiveErrors: 0,
                 rageModeTriggered: false
-            }
+            },
+            // Exam timer
+            examTimerInterval: null,
+            examTimeRemaining: 0,
+            // Exam topic results tracking
+            examTopicResults: {},
+            // Weak topics to highlight on home screen
+            highlightWeakTopics: [],
+            // Last exam weak topics for spaced repetition
+            lastExamWeakTopics: []
         };
 
         // Topic Rune Icons
@@ -2239,6 +2403,44 @@
                 }
             }
             return countedTopics > 0 ? Math.round(totalScore / countedTopics) : 0;
+        }
+
+        // ====== SPACED REPETITION FUNCTIONS ======
+        function getDaysSinceLastPlay(topicId) {
+            const perf = state.topicPerformance[topicId];
+            if (!perf || !perf.lastPlayedDate) return 999; // Never played = high priority
+
+            const lastPlayed = new Date(perf.lastPlayedDate);
+            const today = new Date();
+            const diffTime = today - lastPlayed;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        function wasWeakInLastExam(topicId) {
+            return state.lastExamWeakTopics.includes(topicId);
+        }
+
+        function calculateTopicPriority(topicId) {
+            const performance = getTopicScore(topicId);
+            const daysSinceLastPlay = getDaysSinceLastPlay(topicId);
+            const examWeakness = wasWeakInLastExam(topicId);
+
+            let priority = 0;
+
+            // Performance-based priority
+            if (performance < 60) priority += 50;
+            else if (performance < 75) priority += 30;
+            else if (performance < 85) priority += 10;
+
+            // Time-based priority
+            if (daysSinceLastPlay > 2) priority += 20;
+            else if (daysSinceLastPlay > 1) priority += 10;
+
+            // Exam weakness priority
+            if (examWeakness) priority += 30;
+
+            return priority;
         }
 
         function getBestExamScore() {
@@ -2448,13 +2650,29 @@
         // ====== RENDERING ======
         function renderTopicGrid() {
             const grid = document.getElementById('topic-grid');
-            grid.innerHTML = topics.map(topic => {
+
+            // Calculate priorities and sort topics
+            const topicsWithPriority = topics.map(topic => ({
+                topic,
+                priority: calculateTopicPriority(topic.id)
+            }));
+            topicsWithPriority.sort((a, b) => b.priority - a.priority);
+
+            // Get top 2 priority topics for "Recommended" badge
+            const topPriorityIds = topicsWithPriority
+                .filter(t => t.priority > 0)
+                .slice(0, 2)
+                .map(t => t.topic.id);
+
+            grid.innerHTML = topicsWithPriority.map(({ topic, priority }) => {
                 const rune = TOPIC_RUNES[topic.id] || 'ᚱ';
                 const sessions = getTopicSessionCount(topic.id);
                 const score = getTopicScore(topic.id);
                 const diffLevel = getDifficultyLevel(topic.id);
                 const needsHelp = sessions >= 3 && score < 60 && diffLevel === 1;
                 const nextUnlock = getNextUnlockForTopic(topic.id);
+                const isHighlightWeak = state.highlightWeakTopics.includes(topic.id);
+                const isRecommended = topPriorityIds.includes(topic.id) && !isHighlightWeak;
 
                 let progressText = '';
                 if (sessions < 3) {
@@ -2477,11 +2695,26 @@
                     }
                 }
 
+                // Badge for highlighted weak topics or recommended
+                let badgeHTML = '';
+                if (isHighlightWeak) {
+                    badgeHTML = `<div class="topic-badge">🎯 Jetzt üben!</div>`;
+                } else if (isRecommended) {
+                    badgeHTML = `<div class="topic-badge recommended">🎯 Empfohlen</div>`;
+                }
+
                 const diffRunes = getDifficultyRunes(diffLevel);
                 const diffLabel = getDifficultyLabel(diffLevel);
 
+                const cardClasses = [
+                    'topic-card',
+                    needsHelp ? 'needs-help' : '',
+                    isHighlightWeak ? 'highlight-weak' : ''
+                ].filter(Boolean).join(' ');
+
                 return `
-                    <div class="topic-card ${needsHelp ? 'needs-help' : ''}" onclick="startTopic('${topic.id}')" data-topic="${topic.id}">
+                    <div class="${cardClasses}" onclick="startTopic('${topic.id}')" data-topic="${topic.id}">
+                        ${badgeHTML}
                         <div class="topic-rune">${rune}</div>
                         <div class="topic-name">${topic.name}</div>
                         <div class="topic-lang">${topic.lang === 'de' ? '🇩🇪' : '🇬🇧'}</div>
@@ -2531,6 +2764,8 @@
             state.isExamMode = true;
             state.questions = [];
             state.usedQuestions.clear();
+            // Reset exam topic results tracking
+            state.examTopicResults = {};
             // Reset session state for rage detection
             state.sessionState = {
                 consecutiveErrors: 0,
@@ -2543,7 +2778,7 @@
                 state.questions.push(...qs);
             });
 
-            // Shuffle
+            // Shuffle (Fisher-Yates)
             for (let i = state.questions.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [state.questions[i], state.questions[j]] = [state.questions[j], state.questions[i]];
@@ -3254,6 +3489,9 @@
             state.attempts = 0;
             state.hintLevel = 0;
 
+            // Clear any existing timer
+            clearExamTimer();
+
             const total = state.questions.length;
             const current = state.currentQuestionIndex + 1;
             document.getElementById('progress-text').textContent = `Aufgabe ${current} von ${total}`;
@@ -3263,6 +3501,18 @@
             document.getElementById('feedback').classList.remove('visible');
             document.getElementById('explanation-panel').classList.remove('visible');
             document.getElementById('hint-button').disabled = false;
+
+            // Exam mode: hide hint button and scratch-pad, show timer
+            const hintButton = document.getElementById('hint-button');
+            const timerContainer = document.getElementById('exam-timer-container');
+            if (state.isExamMode) {
+                hintButton.style.display = 'none';
+                timerContainer.style.display = 'block';
+                startExamTimer();
+            } else {
+                hintButton.style.display = 'block';
+                timerContainer.style.display = 'none';
+            }
 
             document.getElementById('question-text').innerHTML = q.text;
 
@@ -3283,8 +3533,11 @@
                 colLayout.style.display = 'none';
             }
 
+            // Scratch pad: hide in exam mode
             const scratchPad = document.getElementById('scratch-pad');
-            if (q.hasScratchPad) {
+            if (state.isExamMode) {
+                scratchPad.style.display = 'none';
+            } else if (q.hasScratchPad) {
                 scratchPad.style.display = 'block';
                 initScratchPad(q.hasHTOGrid);
             } else {
@@ -3341,6 +3594,78 @@
                         <button class="confirm-button" onclick="submitMultiSelect()">Fertig ✓</button>
                     `;
                     break;
+            }
+        }
+
+        // ====== EXAM TIMER ======
+        function startExamTimer() {
+            state.examTimeRemaining = EXAM_TIMER_SECONDS;
+            updateTimerDisplay();
+
+            state.examTimerInterval = setInterval(() => {
+                state.examTimeRemaining--;
+                updateTimerDisplay();
+
+                if (state.examTimeRemaining <= 0) {
+                    clearExamTimer();
+                    handleTimerExpired();
+                }
+            }, 1000);
+        }
+
+        function clearExamTimer() {
+            if (state.examTimerInterval) {
+                clearInterval(state.examTimerInterval);
+                state.examTimerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('exam-timer');
+            const timerFill = document.getElementById('exam-timer-fill');
+
+            const minutes = Math.floor(state.examTimeRemaining / 60);
+            const seconds = state.examTimeRemaining % 60;
+            timerEl.textContent = `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            const percentage = (state.examTimeRemaining / EXAM_TIMER_SECONDS) * 100;
+            timerFill.style.width = `${percentage}%`;
+
+            // Warning state
+            if (state.examTimeRemaining <= EXAM_WARNING_SECONDS) {
+                timerEl.classList.add('warning');
+                timerFill.classList.add('warning');
+            } else {
+                timerEl.classList.remove('warning');
+                timerFill.classList.remove('warning');
+            }
+        }
+
+        function handleTimerExpired() {
+            const q = state.questions[state.currentQuestionIndex];
+
+            // Track as wrong for this topic
+            if (q.topic) {
+                trackExamTopicResult(q.topic.id, false);
+            }
+
+            // Show brief feedback
+            showFeedback(false, 'Zeit abgelaufen! ⏱️');
+
+            // Auto-advance after short delay
+            setTimeout(() => {
+                currentAnswer = '';
+                nextQuestion();
+            }, 1000);
+        }
+
+        function trackExamTopicResult(topicId, correct) {
+            if (!state.examTopicResults[topicId]) {
+                state.examTopicResults[topicId] = { correct: 0, total: 0 };
+            }
+            state.examTopicResults[topicId].total++;
+            if (correct) {
+                state.examTopicResults[topicId].correct++;
             }
         }
 
@@ -3422,11 +3747,17 @@
                 isCorrect = Math.abs(given - expected) <= q.tolerance;
             }
 
+            // Clear timer on any answer in exam mode
+            if (state.isExamMode) {
+                clearExamTimer();
+            }
+
             if (isCorrect) {
                 handleCorrect();
             } else {
                 state.attempts++;
-                if (state.attempts >= 2) {
+                // In exam mode: always show solution after first wrong answer (no second chance)
+                if (state.isExamMode || state.attempts >= 2) {
                     handleWrong(true);
                 } else {
                     handleWrong(false);
@@ -3442,13 +3773,20 @@
             const q = state.questions[state.currentQuestionIndex];
             const isGerman = q.topic?.lang === 'de';
 
+            // Track exam topic result
+            if (state.isExamMode && q.topic) {
+                trackExamTopicResult(q.topic.id, true);
+            }
+
             showFeedback(true, isGerman ? 'Super! ⭐' : 'Brilliant! ⭐');
             showStarBurst();
 
+            // Faster feedback in exam mode
+            const delay = state.isExamMode ? 500 : 800;
             setTimeout(() => {
                 currentAnswer = '';
                 nextQuestion();
-            }, 800);
+            }, delay);
         }
 
         function handleWrong(showSolution) {
@@ -3458,19 +3796,37 @@
                 setTimeout(() => display.classList.remove('shake'), 500);
             }
 
-            // Track consecutive errors for rage detection
-            state.sessionState.consecutiveErrors++;
+            const q = state.questions[state.currentQuestionIndex];
 
-            // Check if rage stop should be triggered (3 consecutive errors, not already triggered)
-            if (state.sessionState.consecutiveErrors >= 3 && !state.sessionState.rageModeTriggered) {
-                state.sessionState.rageModeTriggered = true;
-                showRageStop();
-                return;
+            // Track exam topic result
+            if (state.isExamMode && q.topic) {
+                trackExamTopicResult(q.topic.id, false);
+            }
+
+            // Track consecutive errors for rage detection (not in exam mode)
+            if (!state.isExamMode) {
+                state.sessionState.consecutiveErrors++;
+
+                // Check if rage stop should be triggered (3 consecutive errors, not already triggered)
+                if (state.sessionState.consecutiveErrors >= 3 && !state.sessionState.rageModeTriggered) {
+                    state.sessionState.rageModeTriggered = true;
+                    showRageStop();
+                    return;
+                }
             }
 
             if (showSolution) {
-                showFeedback(false, 'Schau dir die Lösung an:');
-                showExplanation();
+                // In exam mode: shorter feedback, auto-advance
+                if (state.isExamMode) {
+                    showFeedback(false, 'Falsch! ✗');
+                    setTimeout(() => {
+                        currentAnswer = '';
+                        nextQuestion();
+                    }, 1500);
+                } else {
+                    showFeedback(false, 'Schau dir die Lösung an:');
+                    showExplanation();
+                }
             } else {
                 showFeedback(false, 'Nochmal! 💪');
             }
@@ -3763,7 +4119,8 @@
                         lastScore: 0,
                         highScore: 0,
                         played: false,
-                        recentScores: []
+                        recentScores: [],
+                        lastPlayedDate: null
                     };
                 }
                 const perf = state.topicPerformance[topicId];
@@ -3773,6 +4130,10 @@
                 perf.lastScore = percentage;
                 perf.highScore = Math.max(perf.highScore, percentage);
                 perf.played = true;
+                perf.lastPlayedDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+                // Clear highlight after practicing this topic
+                state.highlightWeakTopics = state.highlightWeakTopics.filter(id => id !== topicId);
 
                 // Track recent scores for difficulty adjustment (newest first, max 3)
                 if (!perf.recentScores) perf.recentScores = [];
@@ -3808,6 +4169,71 @@
             // Update UI
             document.getElementById('end-title').textContent = isExam ? 'Prüfung abgeschlossen!' : 'Thema abgeschlossen!';
             document.getElementById('end-score').textContent = `${score} von ${total} richtig (${percentage}%)`;
+
+            // Topic breakdown for exam mode
+            const breakdownEl = document.getElementById('topic-breakdown');
+            const endButtonsEl = document.getElementById('end-buttons');
+            if (isExam && Object.keys(state.examTopicResults).length > 0) {
+                const strengths = [];
+                const weaknesses = [];
+
+                for (const [topicId, result] of Object.entries(state.examTopicResults)) {
+                    const topic = topics.find(t => t.id === topicId);
+                    const pct = Math.round((result.correct / result.total) * 100);
+                    const item = {
+                        topicId,
+                        name: topic ? topic.name : topicId,
+                        correct: result.correct,
+                        total: result.total,
+                        pct
+                    };
+                    if (pct === 100) {
+                        strengths.push(item);
+                    } else {
+                        weaknesses.push(item);
+                    }
+                }
+
+                // Save weak topics for spaced repetition
+                state.lastExamWeakTopics = weaknesses.map(w => w.topicId);
+
+                let breakdownHTML = '';
+                if (strengths.length > 0) {
+                    breakdownHTML += `<div class="breakdown-section">
+                        <div class="breakdown-header strengths">── Stärken ──</div>
+                        ${strengths.map(s => `<div class="breakdown-item strength">✓ ${s.name}: ${s.correct}/${s.total} perfekt!</div>`).join('')}
+                    </div>`;
+                }
+                if (weaknesses.length > 0) {
+                    breakdownHTML += `<div class="breakdown-section">
+                        <div class="breakdown-header weaknesses">── Schwächen ──</div>
+                        ${weaknesses.map(w => `<div class="breakdown-item weakness">✗ ${w.name}: ${w.correct}/${w.total}</div>`).join('')}
+                    </div>`;
+                }
+
+                breakdownEl.innerHTML = breakdownHTML;
+                breakdownEl.style.display = 'block';
+
+                // Add "Practice weaknesses" button if there are weaknesses
+                if (weaknesses.length > 0) {
+                    endButtonsEl.innerHTML = `
+                        <button class="weakness-button" onclick="practiceExamWeaknesses()">Schwächen üben 🎯</button>
+                        <button class="home-button" onclick="goHome()">Weiter üben</button>
+                        <button class="hall-button-end" onclick="showHallScreen()">ᚼ Halle der Götter</button>
+                    `;
+                } else {
+                    endButtonsEl.innerHTML = `
+                        <button class="home-button" onclick="goHome()">Weiter üben</button>
+                        <button class="hall-button-end" onclick="showHallScreen()">ᚼ Halle der Götter</button>
+                    `;
+                }
+            } else {
+                breakdownEl.style.display = 'none';
+                endButtonsEl.innerHTML = `
+                    <button class="home-button" onclick="goHome()">Weiter üben</button>
+                    <button class="hall-button-end" onclick="showHallScreen()">ᚼ Halle der Götter</button>
+                `;
+            }
 
             // Show streak if > 0
             const streakHTML = state.streakCount > 0 ?
@@ -4295,11 +4721,19 @@
 
         // ====== NAVIGATION ======
         function goHome() {
+            // Clear exam timer if running
+            clearExamTimer();
             renderTopicGrid();
             updateHallBadge();
             showScreen('home-screen');
         }
         window.goHome = goHome;
+
+        function practiceExamWeaknesses() {
+            state.highlightWeakTopics = [...state.lastExamWeakTopics];
+            goHome();
+        }
+        window.practiceExamWeaknesses = practiceExamWeaknesses;
 
         // ====== UTILITIES ======
         function randInt(min, max) {
