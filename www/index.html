@@ -1097,6 +1097,240 @@
             color: var(--text-light);
         }
 
+        /* ====== RAGE STOP OVERLAY ====== */
+        .rage-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(13, 27, 42, 0.98);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .rage-character {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: ragePulse 2s ease infinite;
+        }
+
+        @keyframes ragePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .rage-name {
+            font-size: 28px;
+            font-family: 'MedievalSharp', cursive;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .rage-message {
+            font-size: 18px;
+            color: var(--text);
+            text-align: center;
+            max-width: 320px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .rage-timer-container {
+            width: 100%;
+            max-width: 280px;
+            margin-bottom: 20px;
+        }
+
+        .rage-timer-text {
+            font-size: 14px;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .rage-timer-bar {
+            height: 8px;
+            background: var(--surface);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .rage-timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .rage-button {
+            background: var(--accent);
+            color: var(--background);
+            border: none;
+            border-radius: 8px;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            opacity: 0.4;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .rage-button.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .rage-button.active:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* ====== TOPIC CARD PROGRESS ====== */
+        .topic-progress-container {
+            margin-top: 8px;
+        }
+
+        .topic-progress-bar {
+            height: 6px;
+            background: var(--scratch-line);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .topic-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .topic-progress-text {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        .topic-unlock-hint {
+            font-size: 12px;
+            margin-top: 6px;
+            color: var(--accent);
+        }
+
+        .topic-card.needs-help {
+            border-color: var(--error);
+        }
+
+        .topic-help-text {
+            font-size: 11px;
+            color: var(--error-light);
+            margin-top: 4px;
+        }
+
+        /* ====== STREAK DISPLAY ====== */
+        .streak-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--surface);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .streak-fire {
+            font-size: 20px;
+        }
+
+        .streak-text {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ====== CHARACTER CARD CONDITION TEXT ====== */
+        .char-condition {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* ====== DIFFICULTY LEVEL DISPLAY ====== */
+        .topic-difficulty {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .difficulty-runes {
+            font-size: 12px;
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
+
+        .difficulty-runes.level-3 {
+            text-shadow: 0 0 8px rgba(184, 134, 11, 0.6);
+            animation: runeGlow 2s ease infinite;
+        }
+
+        @keyframes runeGlow {
+            0%, 100% { text-shadow: 0 0 8px rgba(184, 134, 11, 0.4); }
+            50% { text-shadow: 0 0 12px rgba(184, 134, 11, 0.8); }
+        }
+
+        .difficulty-label {
+            font-size: 9px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* Level Up Animation */
+        .topic-card.level-up {
+            animation: levelUpFlash 1s ease;
+        }
+
+        @keyframes levelUpFlash {
+            0% { box-shadow: 0 0 0 0 rgba(184, 134, 11, 0); }
+            30% { box-shadow: 0 0 20px 5px rgba(184, 134, 11, 0.6); border-color: var(--accent); }
+            100% { box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        }
+
+        .level-up-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--accent);
+            color: var(--background);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 10;
+            animation: levelUpTextAnim 1.5s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes levelUpTextAnim {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+        }
+
         .character-card .char-name {
             font-size: 18px;
             font-family: 'MedievalSharp', cursive;
@@ -1520,16 +1754,20 @@
 
     <script>
         // ====== NORSE UNLOCKS DEFINITION ======
+        // ====== NORSE UNLOCKS - Condition-based System ======
         const NORSE_UNLOCKS = [
+            // ── BEREITS FREIGESCHALTET (Stufe 0) ──────────────────────────────
             {
-                id: 'thor', type: 'character', starsRequired: 5,
+                id: 'thor', type: 'character',
+                condition: { type: 'topic_performance', topics: ['halbmult', 'halbdiv'], threshold: 80 },
                 name: 'Thor', subtitle: 'Gott des Donners',
                 emoji: '⚡', runeTitle: 'ᚦᚢᚱ',
                 description: 'Der stärkste Kämpfer in Asgard – sein Hammer Mjölnir trifft immer!',
                 image: 'assets/characters/thor.png'
             },
             {
-                id: 'mjolnir', type: 'item', starsRequired: 8,
+                id: 'mjolnir', type: 'item',
+                condition: { type: 'topic_performance', topics: ['halbmult', 'halbdiv'], threshold: 90 },
                 name: 'Mjölnir', subtitle: 'Thors Hammer',
                 emoji: '🔨', runeTitle: 'ᛘᛁᚢᛚᚾᛁᚱ',
                 description: 'Der mächtigste Hammer der Welt – kehrt immer zu Thor zurück.',
@@ -1537,68 +1775,289 @@
                 parentCharacter: 'thor'
             },
             {
-                id: 'loki', type: 'character', starsRequired: 12,
+                id: 'loki', type: 'character',
+                condition: { type: 'topic_performance', topics: ['teilbarkeit'], threshold: 80 },
                 name: 'Loki', subtitle: 'Gott der Tricks',
                 emoji: '🐺', runeTitle: 'ᛚᚢᚴᛁ',
                 description: 'Schlau, unberechenbar – und immer für eine Überraschung gut.',
                 image: 'assets/characters/loki.png'
             },
             {
-                id: 'andvaranaut', type: 'item', starsRequired: 15,
+                id: 'andvaranaut', type: 'item',
+                condition: { type: 'topic_performance', topics: ['teilbarkeit'], threshold: 90 },
                 name: 'Andvaranaut', subtitle: 'Der Verfluchungsring',
                 emoji: '💍', runeTitle: 'ᛅᚾᛏᚢᛅᚱᛅᚾᛅᚢᛏ',
-                description: 'Dieser Goldring gehörte dem Zwerg Andvari – Loki stahl ihn und brachte damit Unglück über alle, die ihn besaßen!',
+                description: 'Dieser Goldring gehörte dem Zwerg Andvari – Loki stahl ihn!',
                 model: 'assets/models/andvaranaut.glb',
                 parentCharacter: 'loki'
             },
             {
-                id: 'odin', type: 'character', starsRequired: 19,
+                id: 'odin', type: 'character',
+                condition: { type: 'topic_performance', topics: ['vielfache', 'teiler'], threshold: 80 },
                 name: 'Odin', subtitle: 'Göttervater',
                 emoji: '🦅', runeTitle: 'ᚢᚦᛁᚾ',
                 description: 'Der weiseste aller Götter – er opferte ein Auge für das Wissen der Runen.',
                 image: 'assets/characters/odin.png'
             },
             {
-                id: 'gungnir', type: 'item', starsRequired: 22,
+                id: 'gungnir', type: 'item',
+                condition: { type: 'topic_performance', topics: ['vielfache', 'teiler'], threshold: 90 },
                 name: 'Gungnir', subtitle: 'Odins Speer',
                 emoji: '🔱', runeTitle: 'ᚴᚢᚾᚴᚾᛁᚱ',
-                description: 'Odins Speer – verfehlt niemals sein Ziel und kehrt immer zurück.',
+                description: 'Odins Speer – verfehlt niemals sein Ziel.',
                 model: 'assets/models/gungnir.glb',
                 parentCharacter: 'odin'
             },
             {
-                id: 'heimdall', type: 'character', starsRequired: 27,
+                id: 'heimdall', type: 'character',
+                condition: { type: 'topic_performance', topics: ['nearestten', 'nearesthundred'], threshold: 80 },
                 name: 'Heimdall', subtitle: 'Wächter der Brücke',
                 emoji: '🌈', runeTitle: 'ᚼᛖᛁᛘᛏᛅᛚᛚ',
-                description: 'Heimdall sieht alles und hört alles – er bewacht den Bifröst Tag und Nacht.',
+                description: 'Heimdall sieht alles und hört alles – er bewacht den Bifröst.',
                 image: 'assets/characters/heimdall.png'
             },
             {
-                id: 'gjallarhorn', type: 'item', starsRequired: 29,
+                id: 'gjallarhorn', type: 'item',
+                condition: { type: 'topic_performance', topics: ['nearestten', 'nearesthundred'], threshold: 90 },
                 name: 'Gjallarhorn', subtitle: 'Das Welthorn',
                 emoji: '📯', runeTitle: 'ᚴᛁᛅᛚᛚᛅᚱᚼᚢᚱᚾ',
-                description: 'Wenn Heimdall dieses Horn bläst, hören es alle neun Welten – es ist das Zeichen für Ragnarök!',
+                description: 'Wenn Heimdall dieses Horn bläst, hören es alle neun Welten!',
                 model: 'assets/models/gjallarhorn.glb',
                 parentCharacter: 'heimdall'
             },
+            // ── NEU FREIZUSCHALTEN ────────────────────────────────────────────
             {
-                id: 'freya', type: 'character', starsRequired: 33,
+                id: 'tyr', type: 'character',
+                condition: { type: 'topic_performance', topics: ['columnadd', 'columnsub'], threshold: 80 },
+                name: 'Tyr', subtitle: 'Gott der Gerechtigkeit',
+                emoji: '⚔️', runeTitle: 'ᛏᚢᚱ',
+                description: 'Tyr opferte seine Hand um Fenrir zu binden – mutiger als alle anderen Götter!',
+                image: 'assets/characters/tyr.png'
+            },
+            {
+                id: 'tyr_sword', type: 'item',
+                condition: { type: 'topic_performance', topics: ['columnadd', 'columnsub'], threshold: 90 },
+                name: 'Tyrs Schwert', subtitle: 'Schwert der Gerechtigkeit',
+                emoji: '🗡️', runeTitle: 'ᛏᚢᚱᛋ ᛋᚢᛖᚱᛏ',
+                description: 'Das Schwert des Gerechtigkeitsgottes – geführt mit nur einer Hand!',
+                model: 'assets/models/tyr_sword.glb',
+                parentCharacter: 'tyr'
+            },
+            {
+                id: 'sleipnir', type: 'character',
+                condition: { type: 'topic_performance', topics: ['roughcalc'], threshold: 80 },
+                name: 'Sleipnir', subtitle: 'Odins Zauberpferd',
+                emoji: '🐴', runeTitle: 'ᛋᛚᛖᛁᛒᚾᛁᚱ',
+                description: 'Sleipnir hat acht Beine und ist das schnellste Pferd in allen neun Welten!',
+                image: 'assets/characters/sleipnir.png'
+            },
+            {
+                id: 'sleipnir_horseshoe', type: 'item',
+                condition: { type: 'topic_performance', topics: ['roughcalc'], threshold: 90 },
+                name: 'Sleipnirs Hufeisen', subtitle: 'Das goldene Hufeisen',
+                emoji: '🧲', runeTitle: 'ᛋᛚᛖᛁᛒᚾᛁᚱᛋ ᚼᚢᚠ',
+                description: 'Ein Hufeisen von Sleipnir – bringt unglaubliches Glück!',
+                model: 'assets/models/sleipnir_horseshoe.glb',
+                parentCharacter: 'sleipnir'
+            },
+            {
+                id: 'hymir', type: 'character',
+                condition: { type: 'topic_performance', topics: ['vocabulary'], threshold: 80 },
+                name: 'Hymir', subtitle: 'Der Meeresriese',
+                emoji: '🎣', runeTitle: 'ᚼᚢᛘᛁᚱ',
+                description: 'Der riesige Meeresgigant der Thor auf Angelausflug mitnahm!',
+                image: 'assets/characters/hymir.png'
+            },
+            {
+                id: 'hymir_rod', type: 'item',
+                condition: { type: 'topic_performance', topics: ['vocabulary'], threshold: 90 },
+                name: 'Hymirs Angelrute', subtitle: 'Die Riesenangel',
+                emoji: '🎣', runeTitle: 'ᚼᚢᛘᛁᚱᛋ ᛅᚾᚴᛖᛚ',
+                description: 'Mit dieser Riesenangel fischte Thor nach der Midgardschlange!',
+                model: 'assets/models/hymir_rod.glb',
+                parentCharacter: 'hymir'
+            },
+            {
+                id: 'brynhildr', type: 'character',
+                condition: { type: 'all_topics_played' },
+                name: 'Brynhildr', subtitle: 'Die Walküre',
+                emoji: '🛡️', runeTitle: 'ᛒᚱᚢᚾᚼᛁᛚᛏᚱ',
+                description: 'Die mutigste aller Walküren – sie reitet durch Blitz und Donner!',
+                image: 'assets/characters/brynhildr.png'
+            },
+            {
+                id: 'brynhildr_spear', type: 'item',
+                condition: { type: 'all_topics_played' },
+                name: 'Brynhildrs Lanze', subtitle: 'Die Walküren-Lanze',
+                emoji: '🔱', runeTitle: 'ᛒᚱᚢᚾᚼᛁᛚᛏᚱᛋ ᛚᛅᚾᛋ',
+                description: 'Die Lanze der Walküre – mit ihr begleitet sie die tapfersten Krieger nach Walhall!',
+                model: 'assets/models/brynhildr_spear.glb',
+                parentCharacter: 'brynhildr'
+            },
+            {
+                id: 'brokkr', type: 'character',
+                condition: { type: 'streak', count: 3 },
+                name: 'Brokkr', subtitle: 'Der Zwergschmied',
+                emoji: '⚒️', runeTitle: 'ᛒᚱᚢᚴᚱ',
+                description: 'Brokkr schmiedete Mjölnir – der beste Schmied in allen neun Welten!',
+                image: 'assets/characters/brokkr.png'
+            },
+            {
+                id: 'brokkr_hammer', type: 'item',
+                condition: { type: 'streak', count: 3 },
+                name: 'Brokkrs Hammer', subtitle: 'Der Schmiedehammer',
+                emoji: '🔨', runeTitle: 'ᛒᚱᚢᚴᚱᛋ ᚼᛅᛘᛅᚱ',
+                description: 'Mit diesem Hammer schmiedete Brokkr die mächtigsten Waffen der Götter!',
+                model: 'assets/models/brokkr_hammer.glb',
+                parentCharacter: 'brokkr'
+            },
+            {
+                id: 'sindri', type: 'character',
+                condition: { type: 'streak', count: 5 },
+                name: 'Sindri', subtitle: 'Der Meisterschmied',
+                emoji: '⚙️', runeTitle: 'ᛋᛁᚾᛏᚱᛁ',
+                description: 'Sindri ist der klügste Schmied – er erschuf Mjölnir in seiner magischen Schmiede!',
+                image: 'assets/characters/sindri.png'
+            },
+            {
+                id: 'sindri_anvil', type: 'item',
+                condition: { type: 'streak', count: 5 },
+                name: 'Sindris Amboss', subtitle: 'Der magische Amboss',
+                emoji: '⚙️', runeTitle: 'ᛋᛁᚾᛏᚱᛁᛋ ᛅᛘᛒᚢᛋ',
+                description: 'Auf diesem Amboss wurden die legendärsten Waffen der Götter geschmiedet!',
+                model: 'assets/models/sindri_anvil.glb',
+                parentCharacter: 'sindri'
+            },
+            // ── FREYA (GESAMTBONUS) ───────────────────────────────────────────
+            {
+                id: 'freya', type: 'character',
+                condition: { type: 'overall_average', threshold: 75 },
                 name: 'Freya', subtitle: 'Göttin der Liebe & des Krieges',
-                emoji: '⚔️', runeTitle: 'ᚠᚱᛁᛅ',
-                description: 'Freya ist die mächtigste Göttin – geheimes Zeichen für alle 33 Sterne!',
-                image: 'assets/characters/freya.png',
+                emoji: '💖', runeTitle: 'ᚠᚱᛁᛅ',
+                description: 'Freya ist die mächtigste Göttin – nur für die Allerbesten!',
+                image: 'assets/characters/freya.png'
+            },
+            {
+                id: 'brisingamen', type: 'item',
+                condition: { type: 'overall_average', threshold: 75 },
+                name: 'Brísingamen', subtitle: 'Freyas Halsband',
+                emoji: '📿', runeTitle: 'ᛒᚱᛁᛋᛁᚾᚴᛅᛘᛖᚾ',
+                description: 'Das schönste Schmuckstück in allen neun Welten – nur für Freya!',
+                model: 'assets/models/brisingamen_freya.glb',
+                parentCharacter: 'freya'
+            },
+            // ── PRÜFUNGSMODUS-UNLOCKS (secret) ────────────────────────────────
+            {
+                id: 'fenrir', type: 'character',
+                condition: { type: 'exam_score', threshold: 80 },
+                name: 'Fenrir', subtitle: 'Der Riesenwolf',
+                emoji: '🐺', runeTitle: 'ᚠᛖᚾᚱᛁᚱ',
+                description: 'Der mächtigste Wolf in allen Welten – nur im Prüfungsmodus zu verdienen!',
+                image: 'assets/characters/fenrir.png',
                 secret: true
             },
             {
-                id: 'brisingamen', type: 'item', starsRequired: 33,
-                name: 'Brísingamen', subtitle: 'Freyas Halsband',
-                emoji: '📿', runeTitle: 'ᛒᚱᛁᛋᛁᚾᚴᛅᛘᛖᚾ',
-                description: 'Das magischste Schmuckstück in allen neun Welten – nur Freya darf es tragen!',
-                model: 'assets/models/brisingamen_freya.glb',
-                parentCharacter: 'freya',
+                id: 'fenrir_chain', type: 'item',
+                condition: { type: 'exam_score', threshold: 80 },
+                name: 'Gleipnir', subtitle: 'Die magische Fessel',
+                emoji: '⛓️', runeTitle: 'ᚴᛚᛖᛁᛒᚾᛁᚱ',
+                description: 'Die einzige Fessel die Fenrir halten kann – dünner als Seide aber unzerstörbar!',
+                model: 'assets/models/fenrir_chain.glb',
+                parentCharacter: 'fenrir',
                 secret: true
+            },
+            {
+                id: 'jormungandr', type: 'character',
+                condition: { type: 'exam_score', threshold: 95 },
+                name: '???', subtitle: '???',
+                emoji: '❓', runeTitle: '???',
+                description: '??? – nur die Allerbesten erfahren wer sich hier verbirgt!',
+                image: 'assets/characters/jormungandr.png',
+                secret: true,
+                fullyHidden: true
+            },
+            {
+                id: 'jormungandr_model', type: 'item',
+                condition: { type: 'exam_score', threshold: 95 },
+                name: '???', subtitle: 'Die Midgardschlange',
+                emoji: '❓', runeTitle: '???',
+                description: 'Das Wesen das die ganze Welt umschlingt – Erzfeind von Thor!',
+                model: 'assets/models/jormungandr.glb',
+                parentCharacter: 'jormungandr',
+                secret: true,
+                fullyHidden: true
             }
         ];
+
+        // IDs der bereits von Sophia freigeschalteten Götter/Items
+        const LEGACY_UNLOCKED_IDS = [
+            'thor', 'mjolnir', 'loki', 'andvaranaut', 'odin',
+            'gungnir', 'heimdall', 'gjallarhorn', 'freya', 'brisingamen'
+        ];
+
+        // ====== RAGE STOP MESSAGES ======
+        const RAGE_MESSAGES = {
+            'thor': [
+                'Auch Thor verliert manchmal einen Kampf – und macht dann eine Pause! ⚡',
+                'Thor sagt: Tief durchatmen, dann nochmal angreifen!',
+                'Selbst Mjölnir trifft nicht immer – ruh dich kurz aus!'
+            ],
+            'loki': [
+                'Loki flüstert: Der klügste Trick ist manchmal... eine Pause einzulegen! 🐺',
+                'Loki sagt: Auch der listigste Gott denkt manchmal nach bevor er handelt!',
+                'Ein kluger Kopf wie Loki weiß: Ruhe bringt die besten Ideen!'
+            ],
+            'odin': [
+                'Odin opferte ein Auge für Weisheit – nimm dir Zeit zum Nachdenken! 🦅',
+                'Der Göttervater sagt: Weisheit kommt mit Geduld!',
+                'Odin sagt: Auch die Runen brauchen Zeit um verstanden zu werden!'
+            ],
+            'heimdall': [
+                'Heimdall sieht alles – und er sieht dass du eine kurze Pause brauchst! 🌈',
+                'Der Wächter sagt: Selbst ich schlafe manchmal – und du darfst das auch!',
+                'Heimdall sagt: Atme durch, dann siehst du die Aufgabe klarer!'
+            ],
+            'freya': [
+                'Freya sagt: Auch die stärkste Kriegerin kämpft mit einem klaren Kopf! 💖',
+                'Die Göttin der Weisheit sagt: Lass die Gedanken kurz ruhen!',
+                'Freya flüstert: Mut bedeutet auch zu wissen wann man pausiert!'
+            ],
+            'tyr': [
+                'Tyr opferte seine Hand für Gerechtigkeit – sei gerecht zu dir selbst! ⚔️',
+                'Der Gerechtigkeitsgott sagt: Jeder verdient eine zweite Chance – auch du!',
+                'Tyr sagt: Stärke zeigt sich auch darin innezuhalten!'
+            ],
+            'sleipnir': [
+                'Selbst das schnellste Pferd der Welt braucht manchmal eine Ruhepause! 🐴',
+                'Sleipnir sagt: Acht Beine – und trotzdem laufe ich manchmal langsamer!',
+                'Der schnellste Läufer weiß: Manchmal ist langsamer schneller!'
+            ],
+            'hymir': [
+                'Hymir sagt: Beim Angeln braucht man vor allem Geduld! 🎣',
+                'Der Meeresriese sagt: Auch der größte Fisch braucht Zeit!',
+                'Hymir flüstert: Ruhig bleiben – dann klappt es auch mit der Aufgabe!'
+            ],
+            'brynhildr': [
+                'Die Walküre sagt: Auch die mutigsten Krieger atmen vor dem Kampf durch! 🛡️',
+                'Brynhildr sagt: Ein klarer Kopf ist die beste Waffe!',
+                'Die Walküre flüstert: Pause ist keine Schwäche – es ist Strategie!'
+            ],
+            'brokkr': [
+                'Brokkr sagt: Auch der beste Schmied legt den Hammer manchmal weg! ⚒️',
+                'Der Zwerg sagt: Gute Arbeit braucht Zeit – hetz dich nicht!',
+                'Brokkr flüstert: Mjölnir wurde nicht in einer Minute geschmiedet!'
+            ],
+            'sindri': [
+                'Sindri sagt: Meisterwerke entstehen mit Geduld und ruhiger Hand! ⚙️',
+                'Der Meisterschmied sagt: Atme durch – dann wird die nächste Antwort perfekt!',
+                'Sindri flüstert: Auch ich mache manchmal Pause um besser zu denken!'
+            ],
+            'default': [
+                'Die Götter sagen: Tief durchatmen und nochmal versuchen! ✨',
+                'Auch Götter machen Fehler – wichtig ist weiterzumachen!',
+                'Kurze Pause – dann klappt es bestimmt!'
+            ]
+        };
 
         // ====== APP STATE ======
         const state = {
@@ -1611,9 +2070,20 @@
             attempts: 0,
             hintLevel: 0,
             usedHints: 0,
-            topicStars: {},
             usedQuestions: new Set(),
-            unlockedIds: []
+            // New performance tracking
+            topicPerformance: {},
+            unlockedIds: [],
+            examHighScores: {},
+            streakCount: 0,
+            allTopicsPlayedOnce: false,
+            // Difficulty tracking per topic
+            topicDifficulty: {},
+            // Session state for rage detection
+            sessionState: {
+                consecutiveErrors: 0,
+                rageModeTriggered: false
+            }
         };
 
         // Topic Rune Icons
@@ -1622,7 +2092,28 @@
             'teiler': 'ᛏ',
             'teilbarkeit': 'ᚦ',
             'halbmult': 'ᛘ',
-            'halbdiv': 'ᛞ'
+            'halbdiv': 'ᛞ',
+            'nearestten': 'ᚾ',
+            'nearesthundred': 'ᚼ',
+            'columnadd': 'ᛅ',
+            'columnsub': 'ᛋ',
+            'vocabulary': 'ᚠ',
+            'roughcalc': '≈'
+        };
+
+        // Topic to Character mapping for unlock hints
+        const TOPIC_CHARACTER_MAP = {
+            'halbmult': 'thor',
+            'halbdiv': 'thor',
+            'teilbarkeit': 'loki',
+            'vielfache': 'odin',
+            'teiler': 'odin',
+            'nearestten': 'heimdall',
+            'nearesthundred': 'heimdall',
+            'columnadd': 'tyr',
+            'columnsub': 'tyr',
+            'roughcalc': 'sleipnir',
+            'vocabulary': 'hymir'
         };
 
         // ====== TOPICS DEFINITION ======
@@ -1653,30 +2144,284 @@
 
         async function loadProgress() {
             try {
-                const saved = await window.Storage.get('topicStars');
-                if (saved) {
-                    state.topicStars = JSON.parse(saved);
-                }
+                // Check if legacy unlocks need to be preserved (first run of new version)
                 const savedUnlocks = await window.Storage.get('norseUnlocks');
-                if (savedUnlocks) {
+                if (!savedUnlocks) {
+                    // First run - set legacy unlocks
+                    state.unlockedIds = [...LEGACY_UNLOCKED_IDS];
+                    await window.Storage.set('norseUnlocks', JSON.stringify(state.unlockedIds));
+                } else {
                     state.unlockedIds = JSON.parse(savedUnlocks);
+                    // Ensure legacy unlocks are always present
+                    let updated = false;
+                    for (const id of LEGACY_UNLOCKED_IDS) {
+                        if (!state.unlockedIds.includes(id)) {
+                            state.unlockedIds.push(id);
+                            updated = true;
+                        }
+                    }
+                    if (updated) {
+                        await window.Storage.set('norseUnlocks', JSON.stringify(state.unlockedIds));
+                    }
+                }
+
+                // Load topic performance
+                const savedPerformance = await window.Storage.get('topicPerformance');
+                if (savedPerformance) {
+                    state.topicPerformance = JSON.parse(savedPerformance);
+                }
+
+                // Load exam high scores
+                const savedExamScores = await window.Storage.get('examHighScores');
+                if (savedExamScores) {
+                    state.examHighScores = JSON.parse(savedExamScores);
+                }
+
+                // Load streak count
+                const savedStreak = await window.Storage.get('streakCount');
+                if (savedStreak) {
+                    state.streakCount = parseInt(savedStreak) || 0;
+                }
+
+                // Load all topics played flag
+                const savedAllPlayed = await window.Storage.get('allTopicsPlayedOnce');
+                if (savedAllPlayed) {
+                    state.allTopicsPlayedOnce = savedAllPlayed === 'true';
+                }
+
+                // Load topic difficulty levels
+                const savedDifficulty = await window.Storage.get('topicDifficulty');
+                if (savedDifficulty) {
+                    state.topicDifficulty = JSON.parse(savedDifficulty);
                 }
             } catch (e) {
                 console.log('No saved progress');
+                // Ensure legacy unlocks on error
+                state.unlockedIds = [...LEGACY_UNLOCKED_IDS];
             }
         }
 
         async function saveProgress() {
             try {
-                await window.Storage.set('topicStars', JSON.stringify(state.topicStars));
                 await window.Storage.set('norseUnlocks', JSON.stringify(state.unlockedIds));
+                await window.Storage.set('topicPerformance', JSON.stringify(state.topicPerformance));
+                await window.Storage.set('examHighScores', JSON.stringify(state.examHighScores));
+                await window.Storage.set('streakCount', state.streakCount.toString());
+                await window.Storage.set('allTopicsPlayedOnce', state.allTopicsPlayedOnce.toString());
+                await window.Storage.set('topicDifficulty', JSON.stringify(state.topicDifficulty));
             } catch (e) {
                 console.log('Could not save progress');
             }
         }
 
-        function getTotalStars() {
-            return Object.values(state.topicStars).reduce((a, b) => a + b, 0);
+        // ====== PERFORMANCE TRACKING FUNCTIONS ======
+        function getTopicScore(topicId) {
+            const perf = state.topicPerformance[topicId];
+            if (!perf || perf.sessions < 3 || perf.totalQuestions === 0) {
+                return 0;
+            }
+            return Math.round((perf.totalCorrect / perf.totalQuestions) * 100);
+        }
+
+        function getTopicSessionCount(topicId) {
+            const perf = state.topicPerformance[topicId];
+            return perf ? perf.sessions : 0;
+        }
+
+        function getOverallAverage() {
+            let totalScore = 0;
+            let countedTopics = 0;
+            for (const topic of topics) {
+                const score = getTopicScore(topic.id);
+                if (score > 0) {
+                    totalScore += score;
+                    countedTopics++;
+                }
+            }
+            return countedTopics > 0 ? Math.round(totalScore / countedTopics) : 0;
+        }
+
+        function getBestExamScore() {
+            const scores = Object.values(state.examHighScores);
+            return scores.length > 0 ? Math.max(...scores) : 0;
+        }
+
+        function checkAllTopicsPlayed() {
+            for (const topic of topics) {
+                const perf = state.topicPerformance[topic.id];
+                if (!perf || !perf.played) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function checkCondition(unlock) {
+            if (!unlock.condition) return false;
+
+            switch (unlock.condition.type) {
+                case 'topic_performance': {
+                    const requiredTopics = unlock.condition.topics;
+                    const threshold = unlock.condition.threshold;
+                    let totalScore = 0;
+                    let validTopics = 0;
+
+                    for (const topicId of requiredTopics) {
+                        const sessions = getTopicSessionCount(topicId);
+                        if (sessions < 3) return false; // Must have played at least 3 times
+                        const score = getTopicScore(topicId);
+                        totalScore += score;
+                        validTopics++;
+                    }
+
+                    if (validTopics === 0) return false;
+                    const avgScore = totalScore / validTopics;
+                    return avgScore >= threshold;
+                }
+
+                case 'overall_average': {
+                    // All topics must be played at least once
+                    for (const topic of topics) {
+                        if (getTopicSessionCount(topic.id) < 3) return false;
+                    }
+                    return getOverallAverage() >= unlock.condition.threshold;
+                }
+
+                case 'streak': {
+                    return state.streakCount >= unlock.condition.count;
+                }
+
+                case 'all_topics_played': {
+                    return state.allTopicsPlayedOnce;
+                }
+
+                case 'exam_score': {
+                    return getBestExamScore() >= unlock.condition.threshold;
+                }
+
+                default:
+                    return false;
+            }
+        }
+
+        function getConditionText(unlock) {
+            if (!unlock.condition) return '';
+
+            switch (unlock.condition.type) {
+                case 'topic_performance': {
+                    const topicNames = unlock.condition.topics.map(id => {
+                        const t = topics.find(top => top.id === id);
+                        return t ? t.name : id;
+                    }).join(' & ');
+                    return `${topicNames} auf ${unlock.condition.threshold}% bringen`;
+                }
+                case 'overall_average':
+                    return `Gesamtdurchschnitt von ${unlock.condition.threshold}% erreichen`;
+                case 'streak':
+                    return `${unlock.condition.count} perfekte Sessions in Folge`;
+                case 'all_topics_played':
+                    return 'Alle Themen mindestens einmal spielen';
+                case 'exam_score':
+                    return `${unlock.condition.threshold}% im Prüfungsmodus erreichen`;
+                default:
+                    return '';
+            }
+        }
+
+        function getNextUnlockForTopic(topicId) {
+            // Find which character is associated with this topic
+            const charId = TOPIC_CHARACTER_MAP[topicId];
+            if (!charId) return null;
+
+            const char = NORSE_UNLOCKS.find(u => u.id === charId && !state.unlockedIds.includes(u.id));
+            return char || null;
+        }
+
+        // ====== DIFFICULTY SYSTEM ======
+        function getDifficultyLevel(topicId) {
+            if (!state.topicDifficulty[topicId]) {
+                state.topicDifficulty[topicId] = { level: 1, sessionsAtLevel: 0 };
+            }
+            return state.topicDifficulty[topicId].level;
+        }
+
+        function getDifficultyLabel(level) {
+            switch(level) {
+                case 1: return 'Leicht';
+                case 2: return 'Mittel';
+                case 3: return 'Schwer';
+                default: return 'Leicht';
+            }
+        }
+
+        function getDifficultyRunes(level) {
+            return 'ᚱ'.repeat(level);
+        }
+
+        async function adjustDifficulty(topicId, sessionScore) {
+            // Initialize if needed
+            if (!state.topicDifficulty[topicId]) {
+                state.topicDifficulty[topicId] = { level: 1, sessionsAtLevel: 0 };
+            }
+
+            // Get recent scores from topicPerformance
+            const perf = state.topicPerformance[topicId];
+            if (!perf || !perf.recentScores || perf.recentScores.length < 2) {
+                return false; // Need at least 2 sessions to adjust
+            }
+
+            const recentScores = perf.recentScores;
+            const currentLevel = state.topicDifficulty[topicId].level;
+            let levelChanged = false;
+            let levelUp = false;
+
+            // Check for level UP: Last 2 sessions both > 85% AND level < 3
+            if (currentLevel < 3 && recentScores.length >= 2) {
+                if (recentScores[0] > 85 && recentScores[1] > 85) {
+                    state.topicDifficulty[topicId].level = currentLevel + 1;
+                    state.topicDifficulty[topicId].sessionsAtLevel = 0;
+                    levelChanged = true;
+                    levelUp = true;
+                }
+            }
+
+            // Check for level DOWN: Last 2 sessions both < 50% AND level > 1
+            if (!levelChanged && currentLevel > 1 && recentScores.length >= 2) {
+                if (recentScores[0] < 50 && recentScores[1] < 50) {
+                    state.topicDifficulty[topicId].level = currentLevel - 1;
+                    state.topicDifficulty[topicId].sessionsAtLevel = 0;
+                    levelChanged = true;
+                    levelUp = false;
+                }
+            }
+
+            if (levelChanged) {
+                await saveProgress();
+                // Only show animation for level UP (level down is silent)
+                if (levelUp) {
+                    showLevelUpAnimation(topicId);
+                }
+            }
+
+            return levelChanged;
+        }
+
+        function showLevelUpAnimation(topicId) {
+            // Find the topic card and add animation
+            const cards = document.querySelectorAll('.topic-card');
+            cards.forEach(card => {
+                if (card.onclick && card.onclick.toString().includes(topicId)) {
+                    card.classList.add('level-up');
+                    const textEl = document.createElement('div');
+                    textEl.className = 'level-up-text';
+                    textEl.textContent = 'Schwieriger! ⚡';
+                    card.appendChild(textEl);
+                    setTimeout(() => {
+                        card.classList.remove('level-up');
+                        textEl.remove();
+                    }, 1500);
+                }
+            });
         }
 
         function updateCountdown() {
@@ -1704,15 +2449,54 @@
         function renderTopicGrid() {
             const grid = document.getElementById('topic-grid');
             grid.innerHTML = topics.map(topic => {
-                const stars = state.topicStars[topic.id] || 0;
                 const rune = TOPIC_RUNES[topic.id] || 'ᚱ';
-                const starDisplay = '⭐'.repeat(stars) + '<span class="star-empty">' + '☆'.repeat(3 - stars) + '</span>';
+                const sessions = getTopicSessionCount(topic.id);
+                const score = getTopicScore(topic.id);
+                const diffLevel = getDifficultyLevel(topic.id);
+                const needsHelp = sessions >= 3 && score < 60 && diffLevel === 1;
+                const nextUnlock = getNextUnlockForTopic(topic.id);
+
+                let progressText = '';
+                if (sessions < 3) {
+                    progressText = `Noch ${3 - sessions} Session${3 - sessions !== 1 ? 's' : ''} bis Wertung`;
+                } else {
+                    progressText = `${score}% Durchschnitt`;
+                }
+
+                let unlockHint = '';
+                if (nextUnlock) {
+                    unlockHint = `<div class="topic-unlock-hint">${nextUnlock.emoji} ${nextUnlock.name} wartet!</div>`;
+                }
+
+                let helpText = '';
+                if (needsHelp) {
+                    const charId = TOPIC_CHARACTER_MAP[topic.id];
+                    const char = NORSE_UNLOCKS.find(u => u.id === charId);
+                    if (char) {
+                        helpText = `<div class="topic-help-text">${char.emoji} ${char.name} braucht deine Hilfe!</div>`;
+                    }
+                }
+
+                const diffRunes = getDifficultyRunes(diffLevel);
+                const diffLabel = getDifficultyLabel(diffLevel);
+
                 return `
-                    <div class="topic-card" onclick="startTopic('${topic.id}')">
+                    <div class="topic-card ${needsHelp ? 'needs-help' : ''}" onclick="startTopic('${topic.id}')" data-topic="${topic.id}">
                         <div class="topic-rune">${rune}</div>
                         <div class="topic-name">${topic.name}</div>
                         <div class="topic-lang">${topic.lang === 'de' ? '🇩🇪' : '🇬🇧'}</div>
-                        <div class="stars">${starDisplay}</div>
+                        <div class="topic-progress-container">
+                            <div class="topic-progress-bar">
+                                <div class="topic-progress-fill" style="width: ${Math.min(score, 100)}%"></div>
+                            </div>
+                            <div class="topic-progress-text">${progressText}</div>
+                        </div>
+                        ${unlockHint}
+                        ${helpText}
+                        <div class="topic-difficulty">
+                            <span class="difficulty-runes ${diffLevel === 3 ? 'level-3' : ''}">${diffRunes}</span>
+                            <span class="difficulty-label">${diffLabel}</span>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1732,6 +2516,11 @@
             state.currentQuestionIndex = 0;
             state.correctAnswers = 0;
             state.usedQuestions.clear();
+            // Reset session state for rage detection
+            state.sessionState = {
+                consecutiveErrors: 0,
+                rageModeTriggered: false
+            };
             showScreen('practice-screen');
             renderQuestion();
         }
@@ -1742,6 +2531,11 @@
             state.isExamMode = true;
             state.questions = [];
             state.usedQuestions.clear();
+            // Reset session state for rage detection
+            state.sessionState = {
+                consecutiveErrors: 0,
+                rageModeTriggered: false
+            };
 
             // 2 questions per topic, shuffled
             topics.forEach(topic => {
@@ -1774,11 +2568,13 @@
 
         function generateQuestion(topicId, isEasy = false, isExam = false) {
             const topic = topics.find(t => t.id === topicId);
+            // Get difficulty level for this topic (1-3)
+            const diffLevel = isExam ? 2 : getDifficultyLevel(topicId);
             let question;
             let attempts = 0;
 
             do {
-                question = createQuestion(topicId, isEasy);
+                question = createQuestion(topicId, diffLevel);
                 attempts++;
             } while (state.usedQuestions.has(question.key) && attempts < 50);
 
@@ -1787,30 +2583,47 @@
             return question;
         }
 
-        function createQuestion(topicId, isEasy) {
+        function createQuestion(topicId, diffLevel) {
             switch (topicId) {
-                case 'vielfache': return createVielfacheQuestion(isEasy);
-                case 'teiler': return createTeilerQuestion(isEasy);
-                case 'teilbarkeit': return createTeilbarkeitQuestion(isEasy);
-                case 'halbmult': return createHalbMultQuestion(isEasy);
-                case 'halbdiv': return createHalbDivQuestion(isEasy);
-                case 'nearestten': return createNearestTenQuestion(isEasy);
-                case 'nearesthundred': return createNearestHundredQuestion(isEasy);
-                case 'columnadd': return createColumnAddQuestion(isEasy);
-                case 'columnsub': return createColumnSubQuestion(isEasy);
-                case 'vocabulary': return createVocabularyQuestion(isEasy);
-                case 'roughcalc': return createRoughCalcQuestion(isEasy);
+                case 'vielfache': return createVielfacheQuestion(diffLevel);
+                case 'teiler': return createTeilerQuestion(diffLevel);
+                case 'teilbarkeit': return createTeilbarkeitQuestion(diffLevel);
+                case 'halbmult': return createHalbMultQuestion(diffLevel);
+                case 'halbdiv': return createHalbDivQuestion(diffLevel);
+                case 'nearestten': return createNearestTenQuestion(diffLevel);
+                case 'nearesthundred': return createNearestHundredQuestion(diffLevel);
+                case 'columnadd': return createColumnAddQuestion(diffLevel);
+                case 'columnsub': return createColumnSubQuestion(diffLevel);
+                case 'vocabulary': return createVocabularyQuestion(diffLevel);
+                case 'roughcalc': return createRoughCalcQuestion(diffLevel);
                 default: return null;
             }
         }
 
         // --- Vielfache ---
-        function createVielfacheQuestion(isEasy) {
+        // Level 1: Vielfache von 2, 5, 10 bis 50
+        // Level 2: Vielfache von 3, 4, 6 bis 100
+        // Level 3: Vielfache von 7, 8, 9 bis 100
+        function createVielfacheQuestion(diffLevel) {
             const type = Math.random() < 0.5 ? 'position' : 'choice';
-            const base = isEasy ? randInt(2, 5) : randInt(2, 12);
+            let base, maxPos, maxRange;
+
+            if (diffLevel === 1) {
+                base = [2, 5, 10][randInt(0, 2)];
+                maxPos = 5;
+                maxRange = 50;
+            } else if (diffLevel === 2) {
+                base = [3, 4, 6][randInt(0, 2)];
+                maxPos = 10;
+                maxRange = 100;
+            } else {
+                base = [7, 8, 9][randInt(0, 2)];
+                maxPos = 10;
+                maxRange = 100;
+            }
 
             if (type === 'position') {
-                const position = isEasy ? randInt(1, 5) : randInt(1, 10);
+                const position = randInt(1, maxPos);
                 const answer = base * position;
                 const ordinal = getOrdinal(position);
                 return {
@@ -1828,10 +2641,10 @@
                 const nonMultiples = [];
 
                 for (let i = 1; i <= 12; i++) {
-                    multiples.push(base * i);
+                    if (base * i <= maxRange) multiples.push(base * i);
                 }
 
-                for (let i = 1; i <= 100; i++) {
+                for (let i = 1; i <= maxRange; i++) {
                     if (i % base !== 0) nonMultiples.push(i);
                 }
 
@@ -1856,9 +2669,19 @@
         }
 
         // --- Teiler ---
-        function createTeilerQuestion(isEasy) {
+        // Level 1: Teiler von Zahlen bis 30
+        // Level 2: Teiler von Zahlen bis 60
+        // Level 3: Teiler von Zahlen bis 100
+        function createTeilerQuestion(diffLevel) {
             const type = Math.random() < 0.5 ? 'count' : 'choice';
-            const number = isEasy ? [6, 8, 10, 12][randInt(0, 3)] : randInt(12, 50);
+            let number;
+            if (diffLevel === 1) {
+                number = [6, 8, 10, 12, 15, 18, 20, 24][randInt(0, 7)];
+            } else if (diffLevel === 2) {
+                number = randInt(20, 60);
+            } else {
+                number = randInt(40, 100);
+            }
             const divisors = getDivisors(number);
 
             if (type === 'count') {
@@ -1901,26 +2724,48 @@
         }
 
         // --- Teilbarkeit ---
-        function createTeilbarkeitQuestion(isEasy) {
+        // Level 1: Nur Regeln für 2, 5, 10
+        // Level 2: Regeln für 2, 5, 10 gemischt mit Grenzfällen
+        // Level 3: Alle Regeln + Kombinations-Fragen
+        function createTeilbarkeitQuestion(diffLevel) {
             const type = Math.random() < 0.5 ? 'yesno' : 'multiselect';
 
             if (type === 'yesno') {
-                const divisor = [2, 5, 10][randInt(0, 2)];
+                let divisors, minNum, maxNum;
+                if (diffLevel === 1) {
+                    divisors = [2, 5, 10];
+                    minNum = 10;
+                    maxNum = 99;
+                } else if (diffLevel === 2) {
+                    divisors = [2, 5, 10];
+                    minNum = 100;
+                    maxNum = 999;
+                } else {
+                    divisors = [2, 3, 4, 5, 6, 9, 10];
+                    minNum = 100;
+                    maxNum = 999;
+                }
+
+                const divisor = divisors[randInt(0, divisors.length - 1)];
                 let number;
                 const shouldBeDivisible = Math.random() < 0.5;
 
                 if (shouldBeDivisible) {
-                    number = divisor * randInt(10, 99);
+                    number = divisor * randInt(Math.ceil(minNum / divisor), Math.floor(maxNum / divisor));
                 } else {
                     do {
-                        number = randInt(100, 999);
+                        number = randInt(minNum, maxNum);
                     } while (number % divisor === 0);
                 }
 
                 const answer = number % divisor === 0;
                 let rule = '';
                 if (divisor === 2) rule = 'Eine Zahl ist durch 2 teilbar, wenn die letzte Ziffer gerade ist (0, 2, 4, 6, 8).';
+                if (divisor === 3) rule = 'Eine Zahl ist durch 3 teilbar, wenn die Quersumme durch 3 teilbar ist.';
+                if (divisor === 4) rule = 'Eine Zahl ist durch 4 teilbar, wenn die letzten zwei Ziffern durch 4 teilbar sind.';
                 if (divisor === 5) rule = 'Eine Zahl ist durch 5 teilbar, wenn die letzte Ziffer 0 oder 5 ist.';
+                if (divisor === 6) rule = 'Eine Zahl ist durch 6 teilbar, wenn sie durch 2 und 3 teilbar ist.';
+                if (divisor === 9) rule = 'Eine Zahl ist durch 9 teilbar, wenn die Quersumme durch 9 teilbar ist.';
                 if (divisor === 10) rule = 'Eine Zahl ist durch 10 teilbar, wenn die letzte Ziffer 0 ist.';
 
                 return {
@@ -1933,19 +2778,22 @@
                     explanation: `${number} ${answer ? 'ist' : 'ist nicht'} durch ${divisor} teilbar. ${rule}`
                 };
             } else {
+                let options;
+                if (diffLevel === 3) {
+                    options = [2, 3, 5, 9, 10];
+                } else {
+                    options = [2, 5, 10];
+                }
                 const number = randInt(10, 50) * 10; // Divisible by 10
-                const divisibleBy = [];
-                if (number % 2 === 0) divisibleBy.push(2);
-                if (number % 5 === 0) divisibleBy.push(5);
-                if (number % 10 === 0) divisibleBy.push(10);
+                const divisibleBy = options.filter(d => number % d === 0);
 
                 return {
                     key: `teilbar-multi-${number}`,
                     text: `Durch welche Zahlen ist ${number} teilbar?`,
                     type: 'multiselect',
-                    options: [2, 5, 10],
+                    options: options,
                     correctOptions: divisibleBy,
-                    hint1: 'Prüfe die Teilbarkeitsregeln für 2, 5 und 10.',
+                    hint1: 'Prüfe die Teilbarkeitsregeln.',
                     hint2: `Letzte Ziffer: ${number % 10}`,
                     explanation: `${number} ist teilbar durch: ${divisibleBy.join(', ')}`
                 };
@@ -1953,15 +2801,20 @@
         }
 
         // --- Halbschriftliche Multiplikation ---
-        // Nur zweistellige × einstellige Zahlen
-        function createHalbMultQuestion(isEasy) {
+        // Level 1: Faktor 1 aus {2, 3, 4, 5}, Faktor 2 zwischen 12-29
+        // Level 2: Faktor 1 aus {4, 5, 6, 7}, Faktor 2 zwischen 20-49
+        // Level 3: Faktor 1 aus {6, 7, 8, 9}, Faktor 2 zwischen 50-99
+        function createHalbMultQuestion(diffLevel) {
             let a, b;
-            if (isEasy) {
+            if (diffLevel === 1) {
                 a = randInt(12, 29);
-                b = randInt(2, 5);
+                b = [2, 3, 4, 5][randInt(0, 3)];
+            } else if (diffLevel === 2) {
+                a = randInt(20, 49);
+                b = [4, 5, 6, 7][randInt(0, 3)];
             } else {
-                a = randInt(20, 99);
-                b = randInt(2, 9);
+                a = randInt(50, 99);
+                b = [6, 7, 8, 9][randInt(0, 3)];
             }
 
             const answer = a * b;
@@ -1984,24 +2837,46 @@
         }
 
         // --- Halbschriftliche Division ---
-        function createHalbDivQuestion(isEasy) {
-            const b = isEasy ? randInt(2, 4) : randInt(2, 9);
-            let answer, a;
+        function createHalbDivQuestion(diffLevel) {
+            let a, b, answer, remainder;
 
-            if (isEasy) {
-                answer = randInt(10, 25);
+            if (diffLevel === 1) {
+                // Level 1: 2-stellig ÷ 1-stellig, glatt (48 ÷ 6)
+                b = randInt(2, 6);
+                answer = randInt(10, 19);
+                a = answer * b;
+            } else if (diffLevel === 2) {
+                // Level 2: 3-stellig ÷ 1-stellig, glatt (144 ÷ 6)
+                b = randInt(3, 9);
+                answer = randInt(20, 99);
+                a = answer * b;
             } else {
-                answer = randInt(10, 99);
+                // Level 3: 3-stellig ÷ 1-stellig, mit Rest (157 ÷ 6)
+                b = randInt(3, 9);
+                answer = randInt(20, 99);
+                remainder = randInt(1, b - 1);
+                a = answer * b + remainder;
             }
-            a = answer * b;
 
             const tens = Math.floor(a / 10) * 10;
-
-            // Find a good decomposition
             let tensResult = Math.floor(tens / b);
             let onesResult = answer - tensResult;
             let tensUsed = tensResult * b;
             let onesUsed = onesResult * b;
+
+            if (diffLevel === 3) {
+                return {
+                    key: `halbdiv-${a}-${b}`,
+                    text: `${a} ÷ ${b} = ? Rest ?`,
+                    type: 'numpad',
+                    answer: answer,
+                    remainder: remainder,
+                    hasScratchPad: true,
+                    hint1: 'Zerlege die Zahl in einfachere Teile. Vergiss den Rest nicht!',
+                    hint2: `${a} ÷ ${b} = ${answer} Rest ${remainder}`,
+                    explanation: `${a} ÷ ${b} = ${answer} Rest ${remainder} (${answer} × ${b} = ${answer * b}, dann ${a} - ${answer * b} = ${remainder})`
+                };
+            }
 
             return {
                 key: `halbdiv-${a}-${b}`,
@@ -2016,9 +2891,23 @@
         }
 
         // --- Nearest Ten (Addition) ---
-        function createNearestTenQuestion(isEasy) {
-            const base = isEasy ? randInt(100, 300) : randInt(100, 900);
-            const addend = [8, 9, 18, 19, 28, 29][randInt(0, isEasy ? 1 : 5)];
+        function createNearestTenQuestion(diffLevel) {
+            let base, addend;
+
+            if (diffLevel === 1) {
+                // Level 1: 2-stellig + 1-stellig nahe 10 (45 + 9)
+                base = randInt(20, 90);
+                addend = [8, 9][randInt(0, 1)];
+            } else if (diffLevel === 2) {
+                // Level 2: 3-stellig + 2-stellig nahe 10 (234 + 18)
+                base = randInt(100, 500);
+                addend = [8, 9, 18, 19][randInt(0, 3)];
+            } else {
+                // Level 3: 3-stellig + 3-stellig nahe 10 (456 + 198)
+                base = randInt(200, 800);
+                addend = [98, 99, 198, 199][randInt(0, 3)];
+            }
+
             const roundedAddend = Math.ceil(addend / 10) * 10;
             const adjustment = roundedAddend - addend;
             const answer = base + addend;
@@ -2029,21 +2918,35 @@
                 type: 'numpad',
                 answer: answer,
                 hasScratchPad: true,
-                hint1: 'Round the second number up to the nearest ten.',
-                hint2: `Step 1: Round ${addend} up to ${roundedAddend} (+${adjustment})\nStep 2: ${base} + ${roundedAddend} = ${base + roundedAddend}\nStep 3: ${base + roundedAddend} - ${adjustment} = ${answer}`,
+                hint1: 'Runde die zweite Zahl auf den nächsten Zehner auf.',
+                hint2: `Schritt 1: Runde ${addend} auf zu ${roundedAddend} (+${adjustment})\nSchritt 2: ${base} + ${roundedAddend} = ${base + roundedAddend}\nSchritt 3: ${base + roundedAddend} - ${adjustment} = ${answer}`,
                 explanation: `${base} + ${addend} = ${base} + ${roundedAddend} - ${adjustment} = ${base + roundedAddend} - ${adjustment} = ${answer}`
             };
         }
 
         // --- Nearest Hundred (Subtraction) ---
-        function createNearestHundredQuestion(isEasy) {
-            const base = isEasy ? randInt(200, 500) : randInt(300, 999);
-            const subtrahend = [98, 99, 198, 199][randInt(0, isEasy ? 1 : 3)];
+        function createNearestHundredQuestion(diffLevel) {
+            let base, subtrahend;
+
+            if (diffLevel === 1) {
+                // Level 1: 3-stellig − nahe 100 (456 - 98)
+                base = randInt(200, 600);
+                subtrahend = [98, 99][randInt(0, 1)];
+            } else if (diffLevel === 2) {
+                // Level 2: 4-stellig − nahe 100 (1234 - 99)
+                base = randInt(500, 1500);
+                subtrahend = [98, 99, 198, 199][randInt(0, 3)];
+            } else {
+                // Level 3: 4-stellig − nahe 200/300 (1567 - 298)
+                base = randInt(800, 2000);
+                subtrahend = [198, 199, 298, 299][randInt(0, 3)];
+            }
+
             const roundedSub = Math.ceil(subtrahend / 100) * 100;
             const adjustment = roundedSub - subtrahend;
             const answer = base - subtrahend;
 
-            if (answer < 0) return createNearestHundredQuestion(isEasy);
+            if (answer < 0) return createNearestHundredQuestion(diffLevel);
 
             return {
                 key: `nearesthundred-${base}-${subtrahend}`,
@@ -2051,37 +2954,44 @@
                 type: 'numpad',
                 answer: answer,
                 hasScratchPad: true,
-                hint1: 'Round the subtrahend up to the nearest hundred.',
-                hint2: `Step 1: Round ${subtrahend} up to ${roundedSub}\nStep 2: ${base} - ${roundedSub} = ${base - roundedSub}\nStep 3: Add back ${adjustment}: ${base - roundedSub} + ${adjustment} = ${answer}`,
+                hint1: 'Runde den Subtrahenden auf den nächsten Hunderter auf.',
+                hint2: `Schritt 1: Runde ${subtrahend} auf zu ${roundedSub}\nSchritt 2: ${base} - ${roundedSub} = ${base - roundedSub}\nSchritt 3: Addiere ${adjustment} zurück: ${base - roundedSub} + ${adjustment} = ${answer}`,
                 explanation: `${base} - ${subtrahend} = ${base} - ${roundedSub} + ${adjustment} = ${answer}`
             };
         }
 
         // --- Column Addition ---
-        function createColumnAddQuestion(isEasy) {
-            const useThreeSummands = !isEasy && Math.random() < 0.4;
-
+        function createColumnAddQuestion(diffLevel) {
             let a, b, c;
-            if (useThreeSummands) {
-                a = randInt(50, 300);
-                b = randInt(50, 300);
-                c = randInt(50, 300);
-                while (a + b + c >= 1000) {
-                    a = randInt(50, 250);
-                    b = randInt(50, 250);
-                    c = randInt(50, 250);
-                }
+            const useThreeSummands = diffLevel === 3 && Math.random() < 0.4;
+
+            if (diffLevel === 1) {
+                // Level 1: 2-stellig + 2-stellig (45 + 38)
+                a = randInt(20, 80);
+                b = randInt(20, 80);
+            } else if (diffLevel === 2) {
+                // Level 2: 3-stellig + 3-stellig (345 + 278)
+                a = randInt(100, 600);
+                b = randInt(100, 600);
             } else {
-                if (isEasy) {
+                // Level 3: 4-stellig + 3-stellig (1234 + 567) or 3 summands
+                if (useThreeSummands) {
                     a = randInt(100, 400);
                     b = randInt(100, 400);
+                    c = randInt(100, 400);
+                    while (a + b + c >= 1500) {
+                        a = randInt(100, 350);
+                        b = randInt(100, 350);
+                        c = randInt(100, 350);
+                    }
                 } else {
-                    a = randInt(100, 700);
-                    b = randInt(100, 700);
+                    a = randInt(1000, 5000);
+                    b = randInt(100, 900);
                 }
             }
 
-            if (!useThreeSummands) {
+            // Ensure there's at least one carry operation for challenge
+            if (!useThreeSummands && diffLevel >= 2) {
                 const ones = (a % 10) + (b % 10);
                 const tens = (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10);
                 if (ones < 10 && tens < 10) {
@@ -2094,48 +3004,58 @@
             if (useThreeSummands) {
                 return {
                     key: `columnadd-${a}-${b}-${c}`,
-                    text: 'Add these numbers:',
+                    text: 'Addiere diese Zahlen:',
                     type: 'numpad',
                     answer: answer,
                     columnLayout: { a, b, c, operation: '+' },
                     hasScratchPad: true,
                     hasHTOGrid: true,
-                    hint1: 'Add each column from right to left. Carry when needed.',
-                    hint2: `H: ${Math.floor(a/100)} + ${Math.floor(b/100)} + ${Math.floor(c/100)}, T: ${Math.floor(a/10)%10} + ${Math.floor(b/10)%10} + ${Math.floor(c/10)%10}, O: ${a%10} + ${b%10} + ${c%10}`,
+                    hint1: 'Addiere jede Spalte von rechts nach links. Übertrag nicht vergessen!',
+                    hint2: `H: ${Math.floor(a/100)} + ${Math.floor(b/100)} + ${Math.floor(c/100)}, Z: ${Math.floor(a/10)%10} + ${Math.floor(b/10)%10} + ${Math.floor(c/10)%10}, E: ${a%10} + ${b%10} + ${c%10}`,
                     explanation: `${a} + ${b} + ${c} = ${answer}`
                 };
             }
 
             return {
                 key: `columnadd-${a}-${b}`,
-                text: 'Add these numbers:',
+                text: 'Addiere diese Zahlen:',
                 type: 'numpad',
                 answer: answer,
                 columnLayout: { a, b, operation: '+' },
                 hasScratchPad: true,
                 hasHTOGrid: true,
-                hint1: 'Add each column from right to left. Carry when needed.',
-                hint2: `H: ${Math.floor(a/100)} + ${Math.floor(b/100)}, T: ${Math.floor(a/10)%10} + ${Math.floor(b/10)%10}, O: ${a%10} + ${b%10}`,
+                hint1: 'Addiere jede Spalte von rechts nach links. Übertrag nicht vergessen!',
+                hint2: diffLevel === 3 ?
+                    `T: ${Math.floor(a/1000)} + 0, H: ${Math.floor(a/100)%10} + ${Math.floor(b/100)}, Z: ${Math.floor(a/10)%10} + ${Math.floor(b/10)%10}, E: ${a%10} + ${b%10}` :
+                    `H: ${Math.floor(a/100)} + ${Math.floor(b/100)}, Z: ${Math.floor(a/10)%10} + ${Math.floor(b/10)%10}, E: ${a%10} + ${b%10}`,
                 explanation: `${a} + ${b} = ${answer}`
             };
         }
 
         // --- Column Subtraction ---
-        function createColumnSubQuestion(isEasy) {
+        function createColumnSubQuestion(diffLevel) {
             let a, b;
-            if (isEasy) {
-                a = randInt(300, 600);
-                b = randInt(100, 250);
+
+            if (diffLevel === 1) {
+                // Level 1: 2-stellig - 2-stellig (75 - 38)
+                a = randInt(50, 99);
+                b = randInt(20, 49);
+            } else if (diffLevel === 2) {
+                // Level 2: 3-stellig - 2-stellig (456 - 78)
+                a = randInt(200, 700);
+                b = randInt(30, 99);
             } else {
+                // Level 3: 3-stellig - 3-stellig (654 - 287)
                 a = randInt(400, 999);
                 b = randInt(100, 400);
             }
 
             if (b >= a) {
-                [a, b] = [b + 100, a];
+                [a, b] = [b + 50, a];
             }
 
-            if ((a % 10) >= (b % 10) && (Math.floor(a/10) % 10) >= (Math.floor(b/10) % 10)) {
+            // Ensure there's at least one borrow operation for challenge
+            if (diffLevel >= 2 && (a % 10) >= (b % 10) && (Math.floor(a/10) % 10) >= (Math.floor(b/10) % 10)) {
                 b = b + 5;
                 if (b >= a) a = b + 50;
             }
@@ -2144,52 +3064,92 @@
 
             return {
                 key: `columnsub-${a}-${b}`,
-                text: 'Subtract these numbers:',
+                text: 'Subtrahiere diese Zahlen:',
                 type: 'numpad',
                 answer: answer,
                 columnLayout: { a, b, operation: '−' },
                 hasScratchPad: true,
                 hasHTOGrid: true,
-                hint1: 'Subtract each column from right to left. Borrow when needed.',
-                hint2: `If the top digit is smaller, borrow from the next column.`,
+                hint1: 'Subtrahiere jede Spalte von rechts nach links. Entbündeln wenn nötig!',
+                hint2: `Wenn die obere Ziffer kleiner ist, entbündele von der nächsten Spalte.`,
                 explanation: `${a} - ${b} = ${answer}`
             };
         }
 
         // --- Math Vocabulary ---
-        function createVocabularyQuestion(isEasy) {
-            const types = ['difference', 'sum', 'halve'];
-            const type = types[randInt(0, 2)];
+        function createVocabularyQuestion(diffLevel) {
+            let types, type;
+
+            if (diffLevel === 1) {
+                // Level 1: Basic terms (Differenz, Summe, Halbieren)
+                types = ['difference', 'sum', 'halve'];
+            } else if (diffLevel === 2) {
+                // Level 2: Extended terms (+ Verdoppeln, Produkt)
+                types = ['difference', 'sum', 'halve', 'double', 'product'];
+            } else {
+                // Level 3: All terms + word problems
+                types = ['difference', 'sum', 'halve', 'double', 'product', 'wordproblem'];
+            }
+
+            type = types[randInt(0, types.length - 1)];
 
             let a, b, answer, text, keyword;
 
             if (type === 'difference') {
-                a = isEasy ? randInt(30, 80) : randInt(50, 200);
-                b = isEasy ? randInt(10, 29) : randInt(20, 100);
+                a = diffLevel === 1 ? randInt(30, 80) : randInt(50, 200);
+                b = diffLevel === 1 ? randInt(10, 29) : randInt(20, 100);
                 if (b >= a) [a, b] = [b + 20, a];
                 answer = a - b;
-                keyword = 'DIFFERENCE';
-                text = `What is the <span class="keyword">${keyword}</span> of ${a} and ${b}?`;
+                keyword = 'DIFFERENZ';
+                text = `Wie groß ist die <span class="keyword">${keyword}</span> von ${a} und ${b}?`;
             } else if (type === 'sum') {
-                a = isEasy ? randInt(50, 150) : randInt(100, 500);
-                b = isEasy ? randInt(50, 150) : randInt(100, 500);
+                a = diffLevel === 1 ? randInt(50, 150) : randInt(100, 500);
+                b = diffLevel === 1 ? randInt(50, 150) : randInt(100, 500);
                 answer = a + b;
-                keyword = 'SUM';
-                text = `What is the <span class="keyword">${keyword}</span> of ${a} and ${b}?`;
-            } else {
-                a = (isEasy ? randInt(20, 50) : randInt(20, 100)) * 2;
+                keyword = 'SUMME';
+                text = `Wie groß ist die <span class="keyword">${keyword}</span> von ${a} und ${b}?`;
+            } else if (type === 'halve') {
+                a = (diffLevel === 1 ? randInt(20, 50) : randInt(50, 150)) * 2;
                 answer = a / 2;
-                keyword = 'HALVE';
+                keyword = 'HALBIERE';
                 text = `<span class="keyword">${keyword}</span> ${a}`;
+            } else if (type === 'double') {
+                a = diffLevel === 2 ? randInt(30, 150) : randInt(100, 400);
+                answer = a * 2;
+                keyword = 'VERDOPPELE';
+                text = `<span class="keyword">${keyword}</span> ${a}`;
+            } else if (type === 'product') {
+                a = randInt(5, 12);
+                b = randInt(5, 12);
+                answer = a * b;
+                keyword = 'PRODUKT';
+                text = `Wie groß ist das <span class="keyword">${keyword}</span> von ${a} und ${b}?`;
+            } else {
+                // Word problems
+                const problems = [
+                    { text: `Lisa hat ${a = randInt(50, 100)} Murmeln. Sie schenkt ${b = randInt(10, 30)} davon ihrer Freundin. Wie viele hat sie noch?`, answer: a - b, keyword: 'DIFFERENZ' },
+                    { text: `Ein Buch kostet ${a = randInt(10, 25)} €. Max kauft ${b = randInt(2, 5)} Bücher. Wie viel zahlt er insgesamt?`, answer: a * b, keyword: 'PRODUKT' },
+                    { text: `${a = randInt(40, 80) * 2} Kinder werden gleichmäßig auf 2 Gruppen verteilt. Wie viele sind in jeder Gruppe?`, answer: a / 2, keyword: 'HALBIERE' }
+                ];
+                const prob = problems[randInt(0, 2)];
+                text = prob.text;
+                answer = prob.answer;
+                keyword = prob.keyword;
             }
 
             let explanation;
             if (type === 'difference') {
-                explanation = `DIFFERENCE means subtract: ${a} - ${b} = ${answer}`;
+                explanation = `DIFFERENZ bedeutet subtrahieren: ${a} - ${b} = ${answer}`;
             } else if (type === 'sum') {
-                explanation = `SUM means add: ${a} + ${b} = ${answer}`;
+                explanation = `SUMME bedeutet addieren: ${a} + ${b} = ${answer}`;
+            } else if (type === 'halve') {
+                explanation = `HALBIEREN bedeutet durch 2 teilen: ${a} ÷ 2 = ${answer}`;
+            } else if (type === 'double') {
+                explanation = `VERDOPPELN bedeutet mal 2: ${a} × 2 = ${answer}`;
+            } else if (type === 'product') {
+                explanation = `PRODUKT bedeutet multiplizieren: ${a} × ${b} = ${answer}`;
             } else {
-                explanation = `HALVE means divide by 2: ${a} ÷ 2 = ${answer}`;
+                explanation = `Textaufgabe: ${keyword} = ${answer}`;
             }
 
             return {
@@ -2197,47 +3157,82 @@
                 text: text,
                 type: 'numpad',
                 answer: answer,
-                hint1: `${keyword} is a math vocabulary word.`,
-                hint2: type === 'difference' ? 'DIFFERENCE = subtraction' :
-                       type === 'sum' ? 'SUM = addition' :
-                       'HALVE = divide by 2',
+                hint1: `${keyword} ist ein mathematischer Fachbegriff.`,
+                hint2: type === 'difference' ? 'DIFFERENZ = Subtraktion' :
+                       type === 'sum' ? 'SUMME = Addition' :
+                       type === 'halve' ? 'HALBIEREN = durch 2 teilen' :
+                       type === 'double' ? 'VERDOPPELN = mal 2' :
+                       type === 'product' ? 'PRODUKT = Multiplikation' :
+                       'Lies die Aufgabe genau und überlege, welche Rechenart gebraucht wird.',
                 explanation: explanation
             };
         }
 
         // --- Rough Calculation ---
-        function createRoughCalcQuestion(isEasy) {
-            const types = isEasy ? ['addition', 'subtraction'] : ['addition', 'subtraction', 'threeSummands'];
-            const type = types[randInt(0, types.length - 1)];
-
-            let a, b, c, answer, roundedAnswer, text, hint2;
+        function createRoughCalcQuestion(diffLevel) {
+            let types, type;
             const roundToTen = (n) => Math.round(n / 10) * 10;
+            const roundToHundred = (n) => Math.round(n / 100) * 100;
+
+            if (diffLevel === 1) {
+                // Level 1: Round to tens, addition only (47 + 28 ≈ 80)
+                types = ['addition'];
+            } else if (diffLevel === 2) {
+                // Level 2: Round to tens, subtraction included (156 - 48 ≈ 110)
+                types = ['addition', 'subtraction'];
+            } else {
+                // Level 3: Round to hundreds, mixed operations (456 + 378 ≈ 800)
+                types = ['additionHundred', 'subtractionHundred', 'threeSummands'];
+            }
+
+            type = types[randInt(0, types.length - 1)];
+
+            let a, b, c, answer, roundedAnswer, text, hint2, tolerance;
 
             if (type === 'addition') {
-                a = isEasy ? randInt(100, 500) : randInt(100, 900);
-                b = isEasy ? randInt(100, 400) : randInt(100, 800);
+                a = diffLevel === 1 ? randInt(20, 80) : randInt(100, 500);
+                b = diffLevel === 1 ? randInt(20, 80) : randInt(100, 400);
                 roundedAnswer = roundToTen(a) + roundToTen(b);
-                text = `Estimate: ${a} + ${b} ≈ ?`;
+                text = `Überschlage: ${a} + ${b} ≈ ?`;
                 hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}\n${roundToTen(a)} + ${roundToTen(b)} = ${roundedAnswer}`;
                 answer = roundedAnswer;
+                tolerance = 10;
             } else if (type === 'subtraction') {
-                a = isEasy ? randInt(300, 800) : randInt(400, 999);
-                b = isEasy ? randInt(100, 300) : randInt(100, 500);
-                if (b >= a) {
-                    [a, b] = [a + 200, b];
-                }
+                a = randInt(150, 500);
+                b = randInt(30, 150);
+                if (b >= a) [a, b] = [a + 200, b];
                 roundedAnswer = roundToTen(a) - roundToTen(b);
-                text = `Estimate: ${a} − ${b} ≈ ?`;
+                text = `Überschlage: ${a} − ${b} ≈ ?`;
                 hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}\n${roundToTen(a)} − ${roundToTen(b)} = ${roundedAnswer}`;
                 answer = roundedAnswer;
-            } else {
-                a = randInt(100, 350);
-                b = randInt(100, 350);
-                c = randInt(100, 300);
-                roundedAnswer = roundToTen(a) + roundToTen(b) + roundToTen(c);
-                text = `Estimate: ${a} + ${b} + ${c} ≈ ?`;
-                hint2 = `${a} ≈ ${roundToTen(a)}, ${b} ≈ ${roundToTen(b)}, ${c} ≈ ${roundToTen(c)}\n${roundToTen(a)} + ${roundToTen(b)} + ${roundToTen(c)} = ${roundedAnswer}`;
+                tolerance = 10;
+            } else if (type === 'additionHundred') {
+                a = randInt(200, 700);
+                b = randInt(200, 700);
+                roundedAnswer = roundToHundred(a) + roundToHundred(b);
+                text = `Überschlage: ${a} + ${b} ≈ ?`;
+                hint2 = `${a} ≈ ${roundToHundred(a)}, ${b} ≈ ${roundToHundred(b)}\n${roundToHundred(a)} + ${roundToHundred(b)} = ${roundedAnswer}`;
                 answer = roundedAnswer;
+                tolerance = 100;
+            } else if (type === 'subtractionHundred') {
+                a = randInt(500, 999);
+                b = randInt(100, 400);
+                if (b >= a) [a, b] = [a + 300, b];
+                roundedAnswer = roundToHundred(a) - roundToHundred(b);
+                text = `Überschlage: ${a} − ${b} ≈ ?`;
+                hint2 = `${a} ≈ ${roundToHundred(a)}, ${b} ≈ ${roundToHundred(b)}\n${roundToHundred(a)} − ${roundToHundred(b)} = ${roundedAnswer}`;
+                answer = roundedAnswer;
+                tolerance = 100;
+            } else {
+                // threeSummands with hundred rounding
+                a = randInt(200, 500);
+                b = randInt(200, 500);
+                c = randInt(200, 400);
+                roundedAnswer = roundToHundred(a) + roundToHundred(b) + roundToHundred(c);
+                text = `Überschlage: ${a} + ${b} + ${c} ≈ ?`;
+                hint2 = `${a} ≈ ${roundToHundred(a)}, ${b} ≈ ${roundToHundred(b)}, ${c} ≈ ${roundToHundred(c)}\n${roundToHundred(a)} + ${roundToHundred(b)} + ${roundToHundred(c)} = ${roundedAnswer}`;
+                answer = roundedAnswer;
+                tolerance = 100;
             }
 
             return {
@@ -2245,11 +3240,11 @@
                 text: text,
                 type: 'numpad',
                 answer: answer,
-                tolerance: 20,
+                tolerance: tolerance,
                 hasScratchPad: true,
-                hint1: 'Round each number to the nearest ten first, then calculate.',
+                hint1: diffLevel < 3 ? 'Runde jede Zahl zuerst auf den nächsten Zehner.' : 'Runde jede Zahl auf den nächsten Hunderter.',
                 hint2: hint2,
-                explanation: `Round to nearest 10: ${hint2.split('\n')[0]}\nResult: ${answer}`
+                explanation: `Überschlag: ${hint2.split('\n')[0]}\nErgebnis: ${answer}`
             };
         }
 
@@ -2441,6 +3436,9 @@
 
         function handleCorrect() {
             state.correctAnswers++;
+            // Reset consecutive errors on correct answer
+            state.sessionState.consecutiveErrors = 0;
+
             const q = state.questions[state.currentQuestionIndex];
             const isGerman = q.topic?.lang === 'de';
 
@@ -2460,6 +3458,16 @@
                 setTimeout(() => display.classList.remove('shake'), 500);
             }
 
+            // Track consecutive errors for rage detection
+            state.sessionState.consecutiveErrors++;
+
+            // Check if rage stop should be triggered (3 consecutive errors, not already triggered)
+            if (state.sessionState.consecutiveErrors >= 3 && !state.sessionState.rageModeTriggered) {
+                state.sessionState.rageModeTriggered = true;
+                showRageStop();
+                return;
+            }
+
             if (showSolution) {
                 showFeedback(false, 'Schau dir die Lösung an:');
                 showExplanation();
@@ -2473,6 +3481,84 @@
             fb.className = 'feedback visible ' + (correct ? 'correct' : 'incorrect');
             fb.textContent = message || (correct ? 'Richtig!' : 'Falsch!');
         }
+
+        // ====== RAGE STOP ======
+        function showRageStop() {
+            // Select a random unlocked character (not secret)
+            const unlockedChars = NORSE_UNLOCKS.filter(u =>
+                u.type === 'character' &&
+                state.unlockedIds.includes(u.id) &&
+                !u.secret
+            );
+
+            let selectedChar;
+            if (unlockedChars.length > 0) {
+                selectedChar = unlockedChars[Math.floor(Math.random() * unlockedChars.length)];
+            } else {
+                // Fallback to default
+                selectedChar = { id: 'default', emoji: '✨', name: 'Die Götter' };
+            }
+
+            // Get random message for character
+            const messages = RAGE_MESSAGES[selectedChar.id] || RAGE_MESSAGES['default'];
+            const message = messages[Math.floor(Math.random() * messages.length)];
+
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'rage-overlay';
+            overlay.id = 'rage-overlay';
+            overlay.innerHTML = `
+                <div class="rage-character">${selectedChar.emoji}</div>
+                <div class="rage-name">${selectedChar.name}</div>
+                <div class="rage-message">${message}</div>
+                <div class="rage-timer-container">
+                    <div class="rage-timer-text">Die Götter geben dir 30 Sekunden Auszeit...</div>
+                    <div class="rage-timer-bar">
+                        <div class="rage-timer-fill" id="rage-timer-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button class="rage-button" id="rage-button" onclick="closeRageStop()">Ich bin bereit! ⚡</button>
+            `;
+            document.body.appendChild(overlay);
+
+            // Animate timer
+            let elapsed = 0;
+            const duration = 30000; // 30 seconds
+            const enableAt = 15000; // Enable button after 15 seconds
+            const timerFill = document.getElementById('rage-timer-fill');
+            const rageButton = document.getElementById('rage-button');
+
+            const timerInterval = setInterval(() => {
+                elapsed += 100;
+                const progress = (elapsed / duration) * 100;
+                timerFill.style.width = `${Math.min(progress, 100)}%`;
+
+                if (elapsed >= enableAt && !rageButton.classList.contains('active')) {
+                    rageButton.classList.add('active');
+                }
+
+                if (elapsed >= duration) {
+                    clearInterval(timerInterval);
+                    rageButton.classList.add('active');
+                }
+            }, 100);
+
+            overlay.dataset.timerInterval = timerInterval;
+        }
+        window.showRageStop = showRageStop;
+
+        function closeRageStop() {
+            const overlay = document.getElementById('rage-overlay');
+            if (overlay) {
+                if (overlay.dataset.timerInterval) {
+                    clearInterval(parseInt(overlay.dataset.timerInterval));
+                }
+                overlay.remove();
+            }
+            // Reset consecutive errors after rage stop
+            state.sessionState.consecutiveErrors = 0;
+        }
+        window.closeRageStop = closeRageStop;
 
         function showExplanation() {
             const q = state.questions[state.currentQuestionIndex];
@@ -2663,41 +3749,93 @@
 
             const score = state.correctAnswers;
             const total = state.questions.length;
-            const percentage = (score / total) * 100;
+            const percentage = Math.round((score / total) * 100);
+            const isExam = state.isExamMode;
 
+            // Update topic performance
+            if (!isExam && state.currentTopic) {
+                const topicId = state.currentTopic.id;
+                if (!state.topicPerformance[topicId]) {
+                    state.topicPerformance[topicId] = {
+                        sessions: 0,
+                        totalCorrect: 0,
+                        totalQuestions: 0,
+                        lastScore: 0,
+                        highScore: 0,
+                        played: false,
+                        recentScores: []
+                    };
+                }
+                const perf = state.topicPerformance[topicId];
+                perf.sessions++;
+                perf.totalCorrect += score;
+                perf.totalQuestions += total;
+                perf.lastScore = percentage;
+                perf.highScore = Math.max(perf.highScore, percentage);
+                perf.played = true;
+
+                // Track recent scores for difficulty adjustment (newest first, max 3)
+                if (!perf.recentScores) perf.recentScores = [];
+                perf.recentScores.unshift(percentage);
+                if (perf.recentScores.length > 3) {
+                    perf.recentScores = perf.recentScores.slice(0, 3);
+                }
+
+                // Check if all topics have been played
+                if (!state.allTopicsPlayedOnce && checkAllTopicsPlayed()) {
+                    state.allTopicsPlayedOnce = true;
+                }
+
+                // Adjust difficulty based on performance (after save)
+                setTimeout(() => adjustDifficulty(topicId, percentage), 500);
+            }
+
+            // Update streak
+            if (percentage === 100) {
+                state.streakCount++;
+            } else {
+                state.streakCount = 0;
+            }
+
+            // Update exam high scores
+            if (isExam) {
+                const examId = 'exam_' + Date.now();
+                state.examHighScores[examId] = percentage;
+            }
+
+            await saveProgress();
+
+            // Update UI
+            document.getElementById('end-title').textContent = isExam ? 'Prüfung abgeschlossen!' : 'Thema abgeschlossen!';
+            document.getElementById('end-score').textContent = `${score} von ${total} richtig (${percentage}%)`;
+
+            // Show streak if > 0
+            const streakHTML = state.streakCount > 0 ?
+                `<div class="streak-display"><span class="streak-fire">🔥</span><span class="streak-text">${state.streakCount} Session${state.streakCount !== 1 ? 's' : ''} in Folge perfekt!</span></div>` : '';
+
+            // Calculate overall progress
+            const overallAvg = getOverallAverage();
+            document.getElementById('end-total-stars').innerHTML = `Gesamtdurchschnitt: ${overallAvg}%${streakHTML}`;
+
+            // Star display based on percentage
             let stars = 0;
             if (percentage >= 90) stars = 3;
             else if (percentage >= 80) stars = 2;
             else if (percentage >= 60) stars = 1;
-
-            if (!state.isExamMode && state.currentTopic) {
-                const topicId = state.currentTopic.id;
-                if (!state.topicStars[topicId] || stars > state.topicStars[topicId]) {
-                    state.topicStars[topicId] = stars;
-                    await saveProgress();
-                }
-            }
-
-            const totalStars = getTotalStars();
-            const isExam = state.isExamMode;
-
-            document.getElementById('end-title').textContent = isExam ? 'Prüfung abgeschlossen!' : 'Thema abgeschlossen!';
             document.getElementById('end-stars').innerHTML = '⭐'.repeat(stars) + '<span class="star-empty">' + '☆'.repeat(3 - stars) + '</span>';
-            document.getElementById('end-score').textContent = `${score} von ${total} richtig`;
-            document.getElementById('end-total-stars').textContent = `Gesamt: ${totalStars} / 33 ⭐`;
 
             // Next unlock info
             const nextUnlock = getNextUnlock();
             const nextUnlockEl = document.getElementById('end-next-unlock');
             if (nextUnlock) {
-                const starsNeeded = nextUnlock.starsRequired - totalStars;
-                nextUnlockEl.innerHTML = `Noch ${starsNeeded} Stern${starsNeeded !== 1 ? 'e' : ''} bis <strong>${nextUnlock.name}</strong> ${nextUnlock.emoji}`;
+                const conditionText = getConditionText(nextUnlock);
+                nextUnlockEl.innerHTML = `${nextUnlock.emoji} <strong>${nextUnlock.name}</strong>: ${conditionText}`;
             } else {
                 nextUnlockEl.innerHTML = 'Alle Götter freigeschaltet! ✨';
             }
 
             const messageEl = document.getElementById('end-message');
-            if (isExam && score >= 18) {
+            if (isExam && percentage >= 80) {
                 messageEl.className = 'end-message special';
                 messageEl.textContent = 'Du bist BEREIT für die Prüfung! Die Götter sind mit dir! ⚡';
             } else if (percentage >= 90) {
@@ -2721,20 +3859,22 @@
         }
 
         function getNextUnlock() {
-            const totalStars = getTotalStars();
+            // Find first unlock that is not yet unlocked and not secret
             const notUnlocked = NORSE_UNLOCKS
-                .filter(u => !state.unlockedIds.includes(u.id) && !u.secret)
-                .sort((a, b) => a.starsRequired - b.starsRequired);
+                .filter(u => !state.unlockedIds.includes(u.id) && !u.secret && !u.fullyHidden);
             return notUnlocked[0] || null;
         }
 
         // ====== UNLOCK SYSTEM ======
         async function checkAndUnlock() {
-            const totalStars = getTotalStars();
             const newUnlocks = [];
 
             for (const unlock of NORSE_UNLOCKS) {
-                if (unlock.starsRequired <= totalStars && !state.unlockedIds.includes(unlock.id)) {
+                // Skip if already unlocked
+                if (state.unlockedIds.includes(unlock.id)) continue;
+
+                // Check condition
+                if (checkCondition(unlock)) {
                     state.unlockedIds.push(unlock.id);
                     newUnlocks.push(unlock);
                 }
@@ -2796,11 +3936,12 @@
         window.showHallScreen = showHallScreen;
 
         function renderHall() {
-            const totalStars = getTotalStars();
-            const maxStars = 33;
+            const overallAvg = getOverallAverage();
+            const unlockedCount = state.unlockedIds.length;
+            const totalUnlocks = NORSE_UNLOCKS.length;
 
-            document.getElementById('hall-progress-text').textContent = `Du hast ${totalStars} von ${maxStars} Sternen gesammelt`;
-            document.getElementById('hall-progress-fill').style.width = `${(totalStars / maxStars) * 100}%`;
+            document.getElementById('hall-progress-text').textContent = `Gesamtdurchschnitt: ${overallAvg}% | ${unlockedCount} Freischaltungen`;
+            document.getElementById('hall-progress-fill').style.width = `${Math.min(overallAvg, 100)}%`;
 
             const grid = document.getElementById('hall-grid');
             const characters = NORSE_UNLOCKS.filter(u => u.type === 'character');
@@ -2820,20 +3961,42 @@
                             ${item ? `
                                 <div class="item-badge ${itemUnlocked ? '' : 'locked'}"
                                      ${itemUnlocked ? `onclick="show3DViewer('${item.id}')"` : ''}>
-                                    ${item.emoji} ${item.name}
+                                    ${item.emoji} ${item.name}${itemUnlocked ? ' (3D)' : ''}
                                 </div>
                             ` : ''}
                         </div>
                     `;
                 } else {
-                    const starsNeeded = char.starsRequired - totalStars;
-                    return `
-                        <div class="character-card locked">
-                            <div class="lock-icon">🔒</div>
-                            <div class="char-name">${char.secret ? '???' : char.name}</div>
-                            <div class="lock-text">${char.secret ? '???' : `${starsNeeded} ⭐ für Freischaltung`}</div>
-                        </div>
-                    `;
+                    // Locked character - show different info based on secret status
+                    if (char.fullyHidden) {
+                        // Fully hidden - show nothing
+                        return `
+                            <div class="character-card locked">
+                                <div class="lock-icon">❓</div>
+                                <div class="char-name">???</div>
+                                <div class="lock-text">???</div>
+                            </div>
+                        `;
+                    } else if (char.secret) {
+                        // Secret but not fully hidden - show hint
+                        return `
+                            <div class="character-card locked">
+                                <div class="lock-icon">🔒</div>
+                                <div class="char-name">${char.name}</div>
+                                <div class="char-condition">Im Prüfungsmodus verdienen</div>
+                            </div>
+                        `;
+                    } else {
+                        // Normal locked - show condition
+                        const conditionText = getConditionText(char);
+                        return `
+                            <div class="character-card locked">
+                                <div class="lock-icon">🔒</div>
+                                <div class="char-name">${char.name}</div>
+                                <div class="char-condition">${char.emoji} ${conditionText}</div>
+                            </div>
+                        `;
+                    }
                 }
             }).join('');
         }
