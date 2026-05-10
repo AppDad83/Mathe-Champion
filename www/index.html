@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Mathe-Champion</title>
@@ -16,6 +16,12 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Prevent zoom on button tap */
+        button, input, select, textarea {
+            font-size: 16px;
+            touch-action: manipulation;
         }
 
         :root {
@@ -619,16 +625,26 @@
             font-weight: 600;
         }
 
-        .scratch-clear {
+        .scratch-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .scratch-clear, .scratch-undo {
             background: var(--error);
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 12px;
+            padding: 8px 14px;
+            font-size: 14px;
             cursor: pointer;
             font-family: 'Nunito', sans-serif;
             font-weight: 600;
+            touch-action: manipulation;
+        }
+
+        .scratch-undo {
+            background: var(--primary-light);
         }
 
         .scratch-canvas {
@@ -639,6 +655,139 @@
             border: 2px solid var(--scratch-line);
             touch-action: none;
             cursor: crosshair;
+        }
+
+        /* Answer Input with S-Pen */
+        .answer-input-container {
+            margin: 0 auto;
+            max-width: 320px;
+        }
+
+        .input-mode-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .mode-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--scratch-line);
+            color: var(--text-light);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--background);
+        }
+
+        .pen-input-area {
+            background: var(--scratch-bg);
+            border-radius: 12px;
+            border: 2px solid var(--scratch-line);
+            padding: 12px;
+        }
+
+        .pen-input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .pen-input-label {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .pen-input-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .pen-input-btn {
+            background: var(--primary-light);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            touch-action: manipulation;
+        }
+
+        .pen-input-btn.clear {
+            background: var(--error);
+        }
+
+        .pen-input-canvas {
+            width: 100%;
+            height: 120px;
+            background: var(--background);
+            border-radius: 8px;
+            border: 2px solid var(--accent);
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        .recognized-answer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 2px solid var(--scratch-line);
+        }
+
+        .recognized-label {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .recognized-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .recognized-value.error {
+            color: var(--error-light);
+            font-size: 14px;
+        }
+
+        .pen-input-submit {
+            width: 100%;
+            margin-top: 12px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .pen-input-submit:hover {
+            background: var(--success-light);
         }
 
         /* Numpad */
@@ -1811,7 +1960,10 @@
             <div class="scratch-pad" id="scratch-pad" style="display: none;">
                 <div class="scratch-pad-header">
                     <span class="scratch-pad-title">Rechenfläche (S-Pen)</span>
-                    <button class="scratch-clear" onclick="clearScratchPad()">Löschen 🗑</button>
+                    <div class="scratch-buttons">
+                        <button class="scratch-undo" onpointerdown="undoScratchPad(event); return false;">↩ Undo</button>
+                        <button class="scratch-clear" onpointerdown="clearScratchPad(); return false;">Löschen 🗑</button>
+                    </div>
                 </div>
                 <canvas id="scratch-canvas" class="scratch-canvas"></canvas>
             </div>
@@ -2247,7 +2399,9 @@
             // Weak topics to highlight on home screen
             highlightWeakTopics: [],
             // Last exam weak topics for spaced repetition
-            lastExamWeakTopics: []
+            lastExamWeakTopics: [],
+            // Input mode for numpad questions (pen or numpad)
+            inputMode: 'pen'
         };
 
         // Topic Rune Icons
@@ -3552,17 +3706,48 @@
 
             switch (q.type) {
                 case 'numpad':
+                    // Default to pen input mode
+                    const defaultMode = state.inputMode || 'pen';
                     inputArea.innerHTML = `
-                        <div class="answer-display" id="answer-display"></div>
-                        <div class="numpad">
-                            ${[1,2,3,4,5,6,7,8,9].map(n =>
-                                `<button class="numpad-key" onclick="pressKey('${n}')">${n}</button>`
-                            ).join('')}
-                            <button class="numpad-key backspace" onclick="pressKey('back')">⌫</button>
-                            <button class="numpad-key" onclick="pressKey('0')">0</button>
-                            <button class="numpad-key confirm" onclick="submitNumpad()">✓</button>
+                        <div class="answer-input-container">
+                            <div class="input-mode-toggle">
+                                <button class="mode-btn ${defaultMode === 'pen' ? 'active' : ''}" onclick="setInputMode('pen')">✏️ S-Pen</button>
+                                <button class="mode-btn ${defaultMode === 'numpad' ? 'active' : ''}" onclick="setInputMode('numpad')">🔢 Ziffern</button>
+                            </div>
+                            <div id="pen-input-container" style="display: ${defaultMode === 'pen' ? 'block' : 'none'};">
+                                <div class="pen-input-area">
+                                    <div class="pen-input-header">
+                                        <span class="pen-input-label">Antwort schreiben:</span>
+                                        <div class="pen-input-buttons">
+                                            <button class="pen-input-btn" onpointerdown="undoAnswerPad(event); return false;">↩ Undo</button>
+                                            <button class="pen-input-btn clear" onpointerdown="clearAnswerPad(); return false;">🗑</button>
+                                        </div>
+                                    </div>
+                                    <canvas id="answer-canvas" class="pen-input-canvas"></canvas>
+                                    <div class="recognized-answer" id="recognized-answer">
+                                        <span class="recognized-label">Erkannt:</span>
+                                        <span class="recognized-value" id="recognized-value">-</span>
+                                    </div>
+                                </div>
+                                <button class="pen-input-submit" onclick="submitAnswerPad()">Antwort prüfen ✓</button>
+                            </div>
+                            <div id="numpad-container" style="display: ${defaultMode === 'numpad' ? 'block' : 'none'};">
+                                <div class="answer-display" id="answer-display"></div>
+                                <div class="numpad">
+                                    ${[1,2,3,4,5,6,7,8,9].map(n =>
+                                        `<button class="numpad-key" onclick="pressKey('${n}')">${n}</button>`
+                                    ).join('')}
+                                    <button class="numpad-key backspace" onclick="pressKey('back')">⌫</button>
+                                    <button class="numpad-key" onclick="pressKey('0')">0</button>
+                                    <button class="numpad-key confirm" onclick="submitNumpad()">✓</button>
+                                </div>
+                            </div>
                         </div>
                     `;
+                    // Initialize answer canvas if pen mode
+                    if (defaultMode === 'pen') {
+                        setTimeout(() => initAnswerPad(), 50);
+                    }
                     break;
 
                 case 'multichoice':
@@ -3967,16 +4152,37 @@
         let scratchCanvas, scratchCtx;
         let isDrawing = false;
         let lastX = 0, lastY = 0;
+        let scratchHistory = []; // Undo history for scratch pad
+        let currentScratchHTOGrid = false;
 
         function initScratchPad(showHTOGrid = false) {
             scratchCanvas = document.getElementById('scratch-canvas');
             scratchCtx = scratchCanvas.getContext('2d');
+            scratchHistory = []; // Clear history
+            currentScratchHTOGrid = showHTOGrid;
 
             const rect = scratchCanvas.getBoundingClientRect();
             scratchCanvas.width = rect.width * 2;
             scratchCanvas.height = rect.height * 2;
             scratchCtx.scale(2, 2);
 
+            drawScratchBackground(rect, showHTOGrid);
+
+            scratchCtx.strokeStyle = '#B8860B';
+            scratchCtx.lineWidth = 2.5;
+            scratchCtx.lineCap = 'round';
+            scratchCtx.lineJoin = 'round';
+
+            // Save initial state
+            saveToHistory(scratchCanvas, scratchHistory);
+
+            scratchCanvas.onpointerdown = (e) => startScratchDraw(e);
+            scratchCanvas.onpointermove = (e) => drawOnScratch(e);
+            scratchCanvas.onpointerup = () => stopScratchDraw();
+            scratchCanvas.onpointerleave = () => stopScratchDraw();
+        }
+
+        function drawScratchBackground(rect, showHTOGrid) {
             scratchCtx.fillStyle = '#152238';
             scratchCtx.fillRect(0, 0, rect.width, rect.height);
 
@@ -4014,26 +4220,20 @@
                     scratchCtx.stroke();
                 }
             }
-
-            scratchCtx.strokeStyle = '#B8860B';
-            scratchCtx.lineWidth = 2.5;
-            scratchCtx.lineCap = 'round';
-            scratchCtx.lineJoin = 'round';
-
-            scratchCanvas.onpointerdown = startDraw;
-            scratchCanvas.onpointermove = draw;
-            scratchCanvas.onpointerup = stopDraw;
-            scratchCanvas.onpointerleave = stopDraw;
         }
 
-        function startDraw(e) {
+        function startScratchDraw(e) {
             isDrawing = true;
             const rect = scratchCanvas.getBoundingClientRect();
             lastX = e.clientX - rect.left;
             lastY = e.clientY - rect.top;
+            scratchCtx.strokeStyle = '#B8860B';
+            scratchCtx.lineWidth = 2.5;
+            scratchCtx.lineCap = 'round';
+            scratchCtx.lineJoin = 'round';
         }
 
-        function draw(e) {
+        function drawOnScratch(e) {
             if (!isDrawing) return;
 
             const rect = scratchCanvas.getBoundingClientRect();
@@ -4049,15 +4249,321 @@
             lastY = y;
         }
 
-        function stopDraw() {
-            isDrawing = false;
+        function stopScratchDraw() {
+            if (isDrawing) {
+                isDrawing = false;
+                // Save state after stroke ends
+                saveToHistory(scratchCanvas, scratchHistory);
+            }
         }
+
+        function saveToHistory(canvas, history) {
+            // Limit history size
+            if (history.length > 50) {
+                history.shift();
+            }
+            history.push(canvas.toDataURL());
+        }
+
+        function undoScratchPad(e) {
+            if (e) e.preventDefault();
+
+            if (scratchHistory.length > 1) {
+                scratchHistory.pop(); // Remove current state
+                const prevState = scratchHistory[scratchHistory.length - 1];
+
+                // Restore with correct transform handling
+                const img = new Image();
+                img.onload = () => {
+                    scratchCtx.setTransform(1, 0, 0, 1, 0, 0);
+                    scratchCtx.clearRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+                    scratchCtx.drawImage(img, 0, 0);
+                    // Restore 2x scale
+                    scratchCtx.setTransform(2, 0, 0, 2, 0, 0);
+                    scratchCtx.strokeStyle = '#B8860B';
+                    scratchCtx.lineWidth = 2.5;
+                    scratchCtx.lineCap = 'round';
+                    scratchCtx.lineJoin = 'round';
+                };
+                img.src = prevState;
+            }
+        }
+        window.undoScratchPad = undoScratchPad;
 
         function clearScratchPad() {
             const q = state.questions[state.currentQuestionIndex];
             initScratchPad(q.hasHTOGrid);
         }
         window.clearScratchPad = clearScratchPad;
+
+        // ====== ANSWER PAD (S-Pen Input for Numbers) ======
+        let answerCanvas, answerCtx;
+        let answerHistory = []; // Canvas states for undo
+        let answerStrokes = []; // Array of stroke objects {x: [], y: []}
+        let currentStroke = null;
+        let isAnswerDrawing = false;
+        let answerLastX = 0, answerLastY = 0;
+        let recognizedAnswer = '';
+        let recognitionTimeout = null;
+
+        function initAnswerPad() {
+            answerCanvas = document.getElementById('answer-canvas');
+            if (!answerCanvas) return;
+
+            answerCtx = answerCanvas.getContext('2d');
+            answerHistory = [];
+            answerStrokes = [];
+            currentStroke = null;
+            recognizedAnswer = '';
+
+            const rect = answerCanvas.getBoundingClientRect();
+            answerCanvas.width = rect.width * 2;
+            answerCanvas.height = rect.height * 2;
+            answerCtx.scale(2, 2);
+
+            // Clear with background
+            answerCtx.fillStyle = '#0D1B2A';
+            answerCtx.fillRect(0, 0, rect.width, rect.height);
+
+            // Set drawing style
+            answerCtx.strokeStyle = '#B8860B';
+            answerCtx.lineWidth = 3;
+            answerCtx.lineCap = 'round';
+            answerCtx.lineJoin = 'round';
+
+            // Save initial state
+            answerHistory.push(answerCanvas.toDataURL());
+
+            // Update display
+            updateRecognizedDisplay('-');
+
+            answerCanvas.onpointerdown = startAnswerDraw;
+            answerCanvas.onpointermove = drawOnAnswer;
+            answerCanvas.onpointerup = stopAnswerDraw;
+            answerCanvas.onpointerleave = stopAnswerDraw;
+        }
+
+        function startAnswerDraw(e) {
+            e.preventDefault();
+            isAnswerDrawing = true;
+            const rect = answerCanvas.getBoundingClientRect();
+            answerLastX = e.clientX - rect.left;
+            answerLastY = e.clientY - rect.top;
+
+            // Start new stroke
+            currentStroke = { x: [answerLastX], y: [answerLastY] };
+
+            answerCtx.strokeStyle = '#B8860B';
+            answerCtx.lineWidth = 3;
+            answerCtx.lineCap = 'round';
+            answerCtx.lineJoin = 'round';
+        }
+
+        function drawOnAnswer(e) {
+            if (!isAnswerDrawing || !currentStroke) return;
+            e.preventDefault();
+
+            const rect = answerCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            answerCtx.beginPath();
+            answerCtx.moveTo(answerLastX, answerLastY);
+            answerCtx.lineTo(x, y);
+            answerCtx.stroke();
+
+            // Add point to current stroke
+            currentStroke.x.push(x);
+            currentStroke.y.push(y);
+
+            answerLastX = x;
+            answerLastY = y;
+        }
+
+        function stopAnswerDraw() {
+            if (isAnswerDrawing && currentStroke && currentStroke.x.length > 1) {
+                isAnswerDrawing = false;
+
+                // Save stroke as object
+                answerStrokes.push({ x: [...currentStroke.x], y: [...currentStroke.y] });
+
+                // Save canvas state
+                answerHistory.push(answerCanvas.toDataURL());
+
+                // Trigger recognition after a short delay
+                if (recognitionTimeout) clearTimeout(recognitionTimeout);
+                recognitionTimeout = setTimeout(() => recognizeHandwriting(), 400);
+            }
+            isAnswerDrawing = false;
+            currentStroke = null;
+        }
+
+        function updateRecognizedDisplay(value, isError = false) {
+            const el = document.getElementById('recognized-value');
+            if (el) {
+                el.textContent = value;
+                el.className = 'recognized-value' + (isError ? ' error' : '');
+            }
+        }
+
+        async function recognizeHandwriting() {
+            if (answerStrokes.length === 0) {
+                updateRecognizedDisplay('-');
+                recognizedAnswer = '';
+                return;
+            }
+
+            // Build ink data for Google Handwriting API
+            // Format: [[x1, x2, x3...], [y1, y2, y3...]] for each stroke
+            const ink = answerStrokes.map(stroke => [stroke.x, stroke.y]);
+
+            if (ink.length === 0) {
+                updateRecognizedDisplay('-');
+                return;
+            }
+
+            const rect = answerCanvas.getBoundingClientRect();
+            const requestData = {
+                options: "enable_pre_space",
+                requests: [{
+                    writing_guide: {
+                        writing_area_width: rect.width,
+                        writing_area_height: rect.height
+                    },
+                    ink: ink,
+                    language: "de"
+                }]
+            };
+
+            try {
+                const response = await fetch('https://inputtools.google.com/request?itc=de-t-i0-handwrit&app=translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                const data = await response.json();
+
+                if (data && data[0] === 'SUCCESS' && data[1] && data[1][0] && data[1][0][1]) {
+                    const candidates = data[1][0][1];
+                    // Find first numeric candidate
+                    for (const candidate of candidates) {
+                        const cleaned = candidate.replace(/[^0-9]/g, '');
+                        if (cleaned.length > 0) {
+                            recognizedAnswer = cleaned;
+                            updateRecognizedDisplay(cleaned);
+                            return;
+                        }
+                    }
+                    // If no numeric, show first candidate
+                    recognizedAnswer = candidates[0];
+                    updateRecognizedDisplay(candidates[0]);
+                } else {
+                    updateRecognizedDisplay('?', true);
+                    recognizedAnswer = '';
+                }
+            } catch (error) {
+                console.log('Handwriting recognition error:', error);
+                updateRecognizedDisplay('Offline', true);
+                recognizedAnswer = '';
+            }
+        }
+
+        function undoAnswerPad(e) {
+            if (e) e.preventDefault();
+
+            if (answerHistory.length > 1 && answerStrokes.length > 0) {
+                // Remove last stroke
+                answerStrokes.pop();
+                // Remove last canvas state
+                answerHistory.pop();
+
+                // Restore previous state - reset transform first
+                const prevState = answerHistory[answerHistory.length - 1];
+                const img = new Image();
+                img.onload = () => {
+                    // Reset transform, draw, then restore scale
+                    answerCtx.setTransform(1, 0, 0, 1, 0, 0);
+                    answerCtx.clearRect(0, 0, answerCanvas.width, answerCanvas.height);
+                    answerCtx.drawImage(img, 0, 0);
+                    // Restore 2x scale for future drawing
+                    answerCtx.setTransform(2, 0, 0, 2, 0, 0);
+                    answerCtx.strokeStyle = '#B8860B';
+                    answerCtx.lineWidth = 3;
+                    answerCtx.lineCap = 'round';
+                    answerCtx.lineJoin = 'round';
+                };
+                img.src = prevState;
+
+                // Re-recognize
+                if (recognitionTimeout) clearTimeout(recognitionTimeout);
+                if (answerStrokes.length > 0) {
+                    recognitionTimeout = setTimeout(() => recognizeHandwriting(), 400);
+                } else {
+                    updateRecognizedDisplay('-');
+                    recognizedAnswer = '';
+                }
+            }
+        }
+        window.undoAnswerPad = undoAnswerPad;
+
+        function clearAnswerPad() {
+            initAnswerPad();
+        }
+        window.clearAnswerPad = clearAnswerPad;
+
+        function submitAnswerPad() {
+            // Use recognized answer
+            if (recognizedAnswer && recognizedAnswer !== '-' && recognizedAnswer !== '?') {
+                const num = parseInt(recognizedAnswer);
+                if (!isNaN(num)) {
+                    const q = state.questions[state.currentQuestionIndex];
+                    checkAnswer(num, q.answer);
+                    return;
+                }
+            }
+
+            // Fallback: ask user
+            const answer = prompt('Zahl nicht erkannt. Bitte eingeben:');
+            if (answer !== null && answer.trim() !== '') {
+                const num = parseInt(answer.trim());
+                if (!isNaN(num)) {
+                    const q = state.questions[state.currentQuestionIndex];
+                    checkAnswer(num, q.answer);
+                }
+            }
+        }
+        window.submitAnswerPad = submitAnswerPad;
+
+        // ====== INPUT MODE TOGGLE ======
+        function setInputMode(mode) {
+            state.inputMode = mode;
+
+            const penContainer = document.getElementById('pen-input-container');
+            const numpadContainer = document.getElementById('numpad-container');
+            const modeButtons = document.querySelectorAll('.mode-btn');
+
+            modeButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes('S-Pen') && mode === 'pen') {
+                    btn.classList.add('active');
+                } else if (btn.textContent.includes('Ziffern') && mode === 'numpad') {
+                    btn.classList.add('active');
+                }
+            });
+
+            if (mode === 'pen') {
+                penContainer.style.display = 'block';
+                numpadContainer.style.display = 'none';
+                setTimeout(() => initAnswerPad(), 50);
+            } else {
+                penContainer.style.display = 'none';
+                numpadContainer.style.display = 'block';
+            }
+        }
+        window.setInputMode = setInputMode;
 
         // ====== ANIMATIONS ======
         function showStarBurst() {
