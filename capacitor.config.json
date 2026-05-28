@@ -7,7 +7,7 @@
   },
   "plugins": {
     "Preferences": {
-      "group": "SophiaMathPrefs"
+      "group": "SophiaSharedPrefs"
     }
   }
 }
